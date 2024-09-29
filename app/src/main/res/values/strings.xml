@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">PurrfectFinder</string>
+    <string name="title">Purrfect Finder</string>
+
+    <!--Splash Screen-->
+
+    <string name="splashDesc">Ваш помощник в поиске пушистых друзей</string>
+
+    <!--On Boarding-->
+
+    <string name="obTitle1">Коты ищут заботливые руки!</string>
+    <string name="obDesc1">Не упустите шанс подарить им любовь</string>
+
+    <string name="obTitle2">Не беспокойтесь при продаже</string>
+    <string name="obDesc2">Наши пользователи в ответе за тех, кого приручили!</string>
+
+    <string name="obTitle3">Ваш идеальный кот рядом!</string>
+    <string name="obDesc3">Найдите верного пушистика, используя персональный подбор</string>
+
+    <string name="ob_progress_lines">Линии прогресса</string>
+    <string name="ob_happy_man_with_cat">Счастливый мужчина с котом</string>
+    <string name="happy_woman_with_cat">Счастливая женщина с котом</string>
+
+    <string name="next">Далее</string>
+    <string name="prev">Назад</string>
+
+    <string name="btnNextTextOB3">Найти кота!</string>
+
+<!--Authorization Page-->
+
+    <string name="auth">Войти</string>
+    <string name="registration">Зарегистрироваться</string>
+
+</resources>
