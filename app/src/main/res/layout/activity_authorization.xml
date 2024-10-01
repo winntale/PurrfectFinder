@@ -18,6 +18,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <androidx.viewpager2.widget.ViewPager2
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    
     <TextView
         android:id="@+id/textView2"
         style="@style/RegularText"
@@ -41,7 +45,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <android.widget.Button
-        android:id="@+id/btnNext"
+        android:id="@+id/btnLogin"
         style="@style/ButtonLightText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -56,7 +60,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <android.widget.Button
-        android:id="@+id/btnPrev"
+        android:id="@+id/btnRegistration"
         style="@style/ButtonDarkText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -69,7 +73,7 @@
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnNext" />
+        app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

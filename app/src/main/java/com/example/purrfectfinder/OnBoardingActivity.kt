@@ -43,6 +43,7 @@ class OnBoardingActivity : AppCompatActivity() {
     }
 
 
+
     private fun changeOnBoarding() {
 
         with(binding) {

@@ -46,4 +46,13 @@
         <item name="android:textFontWeight">600</item>
         <item name="android:textColor">@color/textColor</item>
     </style>
+
+    <style name="TextInputBox" parent="TextAppearance.AppCompat">
+        <item name="boxCornerRadiusBottomEnd">15dp</item>
+        <item name="boxCornerRadiusBottomStart">15dp</item>
+        <item name="boxCornerRadiusTopStart">15dp</item>
+        <item name="boxCornerRadiusTopEnd">15dp</item>
+        <item name="boxStrokeColor">@color/textInputColor</item>
+        <item name="expandedHintEnabled">false</item>
+    </style>
 </resources>

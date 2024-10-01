@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Registration.RegistrationActivity">
+
+    <!--Хэдер-->
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.widget.Button
+            android:layout_width="11dp"
+            android:layout_height="21dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="90dp"
+            android:background="@drawable/ic_back"
+            android:fontFamily="@font/comfortaa"
+            android:textColor="@color/textColor" />
+
+        <TextView
+            android:id="@+id/textView"
+            style="@style/SemiBoldText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="81dp"
+            android:text="@string/create_account"
+            android:textAlignment="center"
+            android:textSize="23sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </FrameLayout>
+
+<!--Электронная почта-->
+
+    <TextView
+        android:id="@+id/tvEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="171dp"
+        android:layout_marginStart="29dp"
+        android:text="@string/email"
+        style="@style/RegularText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/frameLayout" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/l_email"
+        style="@style/TextInputBox"
+        android:layout_width="342dp"
+        android:layout_marginStart="29dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvEmail"
+        app:placeholderText="@string/input_email"
+        app:boxStrokeErrorColor="@color/errorColor"
+        app:helperText="@string/error_email"
+        app:helperTextEnabled="false"
+        app:helperTextTextColor="@color/errorColor"
+        app:placeholderTextAppearance="@font/comfortaa"
+        app:placeholderTextColor="@color/textInputColor">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/comfortaa"
+            android:inputType="textEmailAddress"
+            android:textColor="#525252"
+            android:textSize="14sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+<!--Придумайте пароль-->
+
+    <TextView
+        android:id="@+id/tvPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="29dp"
+        android:text="@string/thinkup_password"
+        style="@style/RegularText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/l_email" />
+
+
+    <FrameLayout
+        android:id="@+id/frame_thinkup_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvPassword">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/l_password"
+            style="@style/TextInputBox"
+            android:layout_width="342dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="29dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvPassword"
+            app:placeholderText="@string/input_password"
+            app:boxStrokeErrorColor="@color/errorColor"
+            app:helperText="@string/error_password"
+            app:helperTextEnabled="false"
+            app:helperTextTextColor="@color/errorColor"
+            app:placeholderTextAppearance="@font/comfortaa"
+            app:placeholderTextColor="@color/textInputColor">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/comfortaa"
+                android:inputType="textPassword"
+                android:textColor="#525252"
+                android:textSize="14sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <android.widget.Button
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="14dp"
+            android:background="@drawable/ic_show_password" />
+
+    </FrameLayout>
+
+    <!--Повторите пароль-->
+
+    <TextView
+        android:id="@+id/tvRepeatPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="29dp"
+        android:text="@string/repeat_password"
+        style="@style/RegularText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/frame_thinkup_password" />
+
+    <FrameLayout
+        android:id="@+id/frameLayout2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvRepeatPassword">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/l_repeat_password"
+            style="@style/TextInputBox"
+            android:layout_width="342dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="29dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvRepeatPassword"
+            app:placeholderText="@string/input_password"
+            app:boxStrokeErrorColor="@color/errorColor"
+            app:helperText="@string/different_passwords"
+            app:helperTextEnabled="false"
+            app:helperTextTextColor="@color/errorColor"
+            app:placeholderTextAppearance="@font/comfortaa"
+            app:placeholderTextColor="@color/textInputColor">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_repeat_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/comfortaa"
+                android:inputType="textPassword"
+                android:textColor="#525252"
+                android:textSize="14sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <android.widget.Button
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="14dp"
+            android:background="@drawable/ic_show_password" />
+
+    </FrameLayout>
+
+<!--Чекбокс-->
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="27dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout2">
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/cbConfPolicy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            app:buttonTint="@color/checkBoxColor"/>
+
+        <TextView
+            android:layout_width="305dp"
+            android:layout_height="wrap_content"
+            style="@style/RegularText"
+            android:textSize="12sp"
+            android:layout_gravity="center"
+            android:text="@string/conf_policy" />
+    </LinearLayout>
+
+
+
+
+    <!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@drawable/shape_dropshadow"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        /> -->
+</androidx.constraintlayout.widget.ConstraintLayout>

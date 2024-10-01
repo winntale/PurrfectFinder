@@ -5,4 +5,13 @@
     <color name="textColor">#595959</color>
     <color name="lightTextColor">#E6E6E6</color>
     <color name="lightButtonColor">#CDCDCD</color>
+    <color name="skipBtnColor">#007AFF</color>
+    <color name="checkBoxColor">#A2A2A2</color>
+    <color name="errorColor">#F82E2E</color>
+
+<!--DropShadow Colors-->
+    <color name="shadowEndColor">#992e3436</color>
+    <color name="shadowStartColor">#002e3436</color>
+
+    <color name="textInputColor">#BCBEC5</color>
 </resources>

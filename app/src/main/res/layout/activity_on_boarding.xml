@@ -18,7 +18,7 @@
         android:fontFamily="@font/comfortaa"
         android:text="Пропустить"
         android:textAllCaps="false"
-        android:textColor="#007AFF"
+        android:textColor="@color/skipBtnColor"
         android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

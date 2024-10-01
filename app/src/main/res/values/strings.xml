@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">PurrfectFinder</string>
-    <string name="title">Purrfect Finder</string>
+    <string name="app_name" translatable="false">PurrfectFinder</string>
+    <string name="title" translatable="false">Purrfect Finder</string>
 
     <!--Splash Screen-->
 
@@ -26,9 +26,24 @@
 
     <string name="btnNextTextOB3">Найти кота!</string>
 
-<!--Authorization Page-->
+    <!--Authorization Page-->
 
     <string name="auth">Войти</string>
     <string name="registration">Зарегистрироваться</string>
+
+    <!--Registration-->
+
+    <string name="create_account">Создать аккаунт</string>
+    <string name="email">Электронная почта</string>
+    <string name="input_email">Введите электронную почту</string>
+    <string name="error_email">Некорректная электронная почта</string>
+
+    <string name="thinkup_password">Придумайте пароль</string>
+    <string name="repeat_password">Повторите пароль</string>
+    <string name="input_password">Введите пароль</string>
+    <string name="error_password">Некорректный пароль</string>
+    <string name="different_passwords">Пароли не совпадают</string>
+
+    <string name="conf_policy">Я согласен с условиями обслуживания и политикой конфиденциальности</string>
 
 </resources>
