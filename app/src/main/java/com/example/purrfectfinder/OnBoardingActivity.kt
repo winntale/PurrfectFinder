@@ -29,6 +29,8 @@ class OnBoardingActivity : AppCompatActivity() {
             insets
         }
 
+        binding.btnPrev.visibility = INVISIBLE
+
         binding.btnNext.setOnClickListener {
             changeOnBoarding()
         }

@@ -14,4 +14,5 @@
     <color name="shadowStartColor">#002e3436</color>
 
     <color name="textInputColor">#BCBEC5</color>
+    <color name="passToggleColor">#D0D5DD</color>
 </resources>

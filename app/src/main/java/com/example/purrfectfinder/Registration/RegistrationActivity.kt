@@ -1,14 +1,23 @@
 package com.example.purrfectfinder.Registration
 
+import android.content.Intent
 import android.os.Bundle
+import android.renderscript.ScriptGroup.Input
+import android.text.InputType
 import android.text.Spannable
 import android.text.SpannableString
+import android.widget.EditText
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
+import com.example.purrfectfinder.AuthorizationActivity
+import com.example.purrfectfinder.DbHelper
 import com.example.purrfectfinder.R
+import com.example.purrfectfinder.User
 import com.example.purrfectfinder.databinding.ActivityOnBoardingBinding
 import com.example.purrfectfinder.databinding.ActivityRegistrationBinding
 
@@ -16,6 +25,8 @@ class RegistrationActivity : AppCompatActivity() {
     private var _binding : ActivityRegistrationBinding? = null
     private val binding
         get() = _binding ?: throw IllegalStateException("Binding for ActivityAuthorizationBinding must not be null")
+
+    private var userBundle = Bundle()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +39,107 @@ class RegistrationActivity : AppCompatActivity() {
             insets
         }
 
+
+        binding.btnPrev.setOnClickListener {
+            val intent = Intent(this@RegistrationActivity, AuthorizationActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.btnNext.setOnClickListener {
+            val email = binding.etEmail.text.toString().trim()
+            val password = binding.etPassword.text.toString().trim()
+            val passwordConfirm = binding.etRepeatPassword.text.toString().trim()
+
+            if (isFieldsValid(email, password, passwordConfirm)) {
+                val user = User(email, password)
+
+                val db = DbHelper(this, null)
+                db.addUser(user)
+
+                Toast.makeText(this, "Пользователь $email добавлен", Toast.LENGTH_LONG).show()
+
+                userBundle.putString("EMAIL", user.email)
+                userBundle.putString("PASSWORD", user.password)
+
+                val intent = Intent(this@RegistrationActivity, RegistrationActivity2::class.java)
+                intent.putExtra("BUNDLE", userBundle)
+                startActivity(intent)
+            }
+
+        }
+    }
+
+    private fun isFieldsValid(email: String, password: String, passwordConfirm : String) : Boolean {
+        with(binding) {
+
+            if (email == "") {
+                lEmail.helperText = ContextCompat.getString(
+                    this@RegistrationActivity,
+                    R.string.error_email
+                )
+            }
+            else {
+                lEmail.helperText = ""
+            }
+
+            if (password == "" && passwordConfirm == "") {
+                lPassword.helperText = ContextCompat.getString(
+                    this@RegistrationActivity,
+                    R.string.error_password
+                )
+                lRepeatPassword.helperText = ContextCompat.getString(
+                    this@RegistrationActivity,
+                    R.string.error_password
+                )
+
+                return false
+            }
+
+            if (password == "") {
+                lPassword.helperText = ContextCompat.getString(
+                    this@RegistrationActivity,
+                    R.string.error_password
+                )
+
+                return false
+            }
+            else {
+                lPassword.helperText = ""
+            }
+
+            if (passwordConfirm == "") {
+                lRepeatPassword.helperText = ContextCompat.getString(
+                    this@RegistrationActivity,
+                    R.string.error_password
+                )
+
+                return false
+            }
+            else {
+                lRepeatPassword.helperText = ""
+            }
+
+            if (password != passwordConfirm) {
+                lPassword.helperText = ContextCompat.getString(
+                    this@RegistrationActivity,
+                    R.string.different_passwords
+                )
+                lRepeatPassword.helperText = ContextCompat.getString(
+                    this@RegistrationActivity,
+                    R.string.different_passwords
+                )
+            }
+            else {
+                lPassword.helperText = ""
+                lRepeatPassword.helperText = ""
+            }
+
+            if (!cbConfPolicy.isChecked) {
+                return false
+            }
+        }
+
+        return true
     }
 
 

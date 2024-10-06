@@ -18,6 +18,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <android.widget.Button
+            android:id="@+id/btnPrev"
             android:layout_width="11dp"
             android:layout_height="21dp"
             android:layout_marginStart="30dp"
@@ -52,6 +53,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/frameLayout" />
 
+    <!--app:helperText="@string/error_email"-->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/l_email"
         style="@style/TextInputBox"
@@ -62,8 +64,7 @@
         app:layout_constraintTop_toBottomOf="@id/tvEmail"
         app:placeholderText="@string/input_email"
         app:boxStrokeErrorColor="@color/errorColor"
-        app:helperText="@string/error_email"
-        app:helperTextEnabled="false"
+        app:errorEnabled="true"
         app:helperTextTextColor="@color/errorColor"
         app:placeholderTextAppearance="@font/comfortaa"
         app:placeholderTextColor="@color/textInputColor">
@@ -91,7 +92,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/l_email" />
 
-
     <FrameLayout
         android:id="@+id/frame_thinkup_password"
         android:layout_width="wrap_content"
@@ -99,6 +99,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvPassword">
 
+<!--        app:helperText="@string/error_password"-->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/l_password"
             style="@style/TextInputBox"
@@ -109,11 +110,16 @@
             app:layout_constraintTop_toBottomOf="@+id/tvPassword"
             app:placeholderText="@string/input_password"
             app:boxStrokeErrorColor="@color/errorColor"
-            app:helperText="@string/error_password"
-            app:helperTextEnabled="false"
+            app:errorEnabled="true"
             app:helperTextTextColor="@color/errorColor"
             app:placeholderTextAppearance="@font/comfortaa"
-            app:placeholderTextColor="@color/textInputColor">
+            app:placeholderTextColor="@color/textInputColor"
+
+            app:endIconMode="password_toggle"
+            app:endIconTint="@color/passToggleColor"
+
+            app:counterEnabled="true"
+            app:counterMaxLength="20">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_password"
@@ -126,13 +132,6 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <android.widget.Button
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center_vertical|end"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="14dp"
-            android:background="@drawable/ic_show_password" />
 
     </FrameLayout>
 
@@ -155,6 +154,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvRepeatPassword">
 
+<!--        app:helperText="@string/different_passwords"-->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/l_repeat_password"
             style="@style/TextInputBox"
@@ -165,11 +165,16 @@
             app:layout_constraintTop_toBottomOf="@+id/tvRepeatPassword"
             app:placeholderText="@string/input_password"
             app:boxStrokeErrorColor="@color/errorColor"
-            app:helperText="@string/different_passwords"
-            app:helperTextEnabled="false"
             app:helperTextTextColor="@color/errorColor"
+            app:errorEnabled="true"
             app:placeholderTextAppearance="@font/comfortaa"
-            app:placeholderTextColor="@color/textInputColor">
+            app:placeholderTextColor="@color/textInputColor"
+
+            app:endIconMode="password_toggle"
+            app:endIconTint="@color/passToggleColor"
+
+            app:counterEnabled="true"
+            app:counterMaxLength="20">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_repeat_password"
@@ -182,23 +187,16 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <android.widget.Button
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center_vertical|end"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="14dp"
-            android:background="@drawable/ic_show_password" />
-
     </FrameLayout>
 
 <!--Чекбокс-->
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginTop="27dp"
+        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/frameLayout2">
 
@@ -207,17 +205,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            app:buttonTint="@color/checkBoxColor"/>
+            app:buttonTint="@color/checkBoxColor" />
 
         <TextView
+            style="@style/RegularText"
             android:layout_width="305dp"
             android:layout_height="wrap_content"
-            style="@style/RegularText"
-            android:textSize="12sp"
             android:layout_gravity="center"
-            android:text="@string/conf_policy" />
+            android:text="@string/conf_policy"
+            android:textSize="12sp" />
     </LinearLayout>
 
+    <android.widget.Button
+        android:id="@+id/btnNext"
+        style="@style/ButtonLightText"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/shape_button_body"
+        android:paddingVertical="13dp"
+        android:text="@string/next"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
 
 
