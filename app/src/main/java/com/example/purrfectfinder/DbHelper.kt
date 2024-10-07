@@ -9,7 +9,8 @@ class DbHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
     SQLiteOpenHelper(context, "PurffectFinderDB", factory, 1) {
 
     override fun onCreate(db: SQLiteDatabase?) {
-        val query = "CREATE TABLE users (id INT PRIMARY KEY, email TEXT, pass TEXT)"
+        val query = "CREATE TABLE users (id INT PRIMARY KEY, email TEXT, pass TEXT, secondmame TEXT," +
+                "firstname TEXT, middlename TEXT, birtday TEXT, role TEXT, gender TEXT)"
         db!!.execSQL(query)
     }
 
@@ -21,7 +22,13 @@ class DbHelper(val context: Context, val factory: SQLiteDatabase.CursorFactory?)
     fun addUser(user: User) {
         val values = ContentValues()
         values.put("EMAIL", user.email)
-        values.put("PASSWORD", user.password)
+        values.put("PASS", user.password)
+        values.put("SECONDNAME", user.secondName)
+        values.put("FIRSTNAME", user.firstName)
+        values.put("MIDDLENAME", user.middleName)
+        values.put("BIRTHDAY", user.birthday)
+        values.put("ROLE", user.role)
+        values.put("GENDER", user.gender)
 
         val db = this.writableDatabase
         db.insert("users", null, values)

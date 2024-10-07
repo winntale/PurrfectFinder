@@ -57,9 +57,10 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/l_email"
         style="@style/TextInputBox"
-        android:layout_width="342dp"
-        android:layout_marginStart="29dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="29dp"
+        android:layout_marginEnd="31dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvEmail"
         app:placeholderText="@string/input_email"
@@ -92,48 +93,39 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/l_email" />
 
-    <FrameLayout
-        android:id="@+id/frame_thinkup_password"
-        android:layout_width="wrap_content"
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/l_password"
+        style="@style/TextInputBox"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="29dp"
+        android:layout_marginEnd="31dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvPassword">
+        app:layout_constraintTop_toBottomOf="@+id/tvPassword"
+        app:placeholderText="@string/input_password"
+        app:boxStrokeErrorColor="@color/errorColor"
+        app:errorEnabled="true"
+        app:helperTextTextColor="@color/errorColor"
+        app:placeholderTextAppearance="@font/comfortaa"
+        app:placeholderTextColor="@color/textInputColor"
 
-<!--        app:helperText="@string/error_password"-->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/l_password"
-            style="@style/TextInputBox"
-            android:layout_width="342dp"
+        app:endIconMode="password_toggle"
+        app:endIconTint="@color/passToggleColor"
+
+        app:counterEnabled="true"
+        app:counterMaxLength="20">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_password"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="29dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvPassword"
-            app:placeholderText="@string/input_password"
-            app:boxStrokeErrorColor="@color/errorColor"
-            app:errorEnabled="true"
-            app:helperTextTextColor="@color/errorColor"
-            app:placeholderTextAppearance="@font/comfortaa"
-            app:placeholderTextColor="@color/textInputColor"
+            android:fontFamily="@font/comfortaa"
+            android:inputType="textPassword"
+            android:textColor="#525252"
+            android:textSize="14sp" />
 
-            app:endIconMode="password_toggle"
-            app:endIconTint="@color/passToggleColor"
-
-            app:counterEnabled="true"
-            app:counterMaxLength="20">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/comfortaa"
-                android:inputType="textPassword"
-                android:textColor="#525252"
-                android:textSize="14sp" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-    </FrameLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <!--Повторите пароль-->
 
@@ -145,49 +137,40 @@
         android:text="@string/repeat_password"
         style="@style/RegularText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/frame_thinkup_password" />
+        app:layout_constraintTop_toBottomOf="@id/l_password" />
 
-    <FrameLayout
-        android:id="@+id/frameLayout2"
-        android:layout_width="wrap_content"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/l_repeat_password"
+        style="@style/TextInputBox"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="29dp"
+        android:layout_marginEnd="31dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvRepeatPassword">
+        app:layout_constraintTop_toBottomOf="@+id/tvRepeatPassword"
+        app:placeholderText="@string/input_password"
+        app:boxStrokeErrorColor="@color/errorColor"
+        app:helperTextTextColor="@color/errorColor"
+        app:errorEnabled="true"
+        app:placeholderTextAppearance="@font/comfortaa"
+        app:placeholderTextColor="@color/textInputColor"
 
-<!--        app:helperText="@string/different_passwords"-->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/l_repeat_password"
-            style="@style/TextInputBox"
-            android:layout_width="342dp"
+        app:endIconMode="password_toggle"
+        app:endIconTint="@color/passToggleColor"
+
+        app:counterEnabled="true"
+        app:counterMaxLength="20">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_repeat_password"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="29dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvRepeatPassword"
-            app:placeholderText="@string/input_password"
-            app:boxStrokeErrorColor="@color/errorColor"
-            app:helperTextTextColor="@color/errorColor"
-            app:errorEnabled="true"
-            app:placeholderTextAppearance="@font/comfortaa"
-            app:placeholderTextColor="@color/textInputColor"
+            android:fontFamily="@font/comfortaa"
+            android:inputType="textPassword"
+            android:textColor="#525252"
+            android:textSize="14sp" />
 
-            app:endIconMode="password_toggle"
-            app:endIconTint="@color/passToggleColor"
-
-            app:counterEnabled="true"
-            app:counterMaxLength="20">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_repeat_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/comfortaa"
-                android:inputType="textPassword"
-                android:textColor="#525252"
-                android:textSize="14sp" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-    </FrameLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
 <!--Чекбокс-->
 
@@ -198,7 +181,7 @@
         android:layout_marginTop="27dp"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frameLayout2">
+        app:layout_constraintTop_toBottomOf="@+id/l_repeat_password">
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/cbConfPolicy"
@@ -221,6 +204,7 @@
         style="@style/ButtonLightText"
         android:layout_width="320dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="83dp"
         android:layout_gravity="center"
         android:background="@drawable/shape_button_body"
         android:paddingVertical="13dp"

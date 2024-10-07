@@ -2,23 +2,16 @@ package com.example.purrfectfinder.Registration
 
 import android.content.Intent
 import android.os.Bundle
-import android.renderscript.ScriptGroup.Input
-import android.text.InputType
-import android.text.Spannable
-import android.text.SpannableString
-import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.isVisible
 import com.example.purrfectfinder.AuthorizationActivity
 import com.example.purrfectfinder.DbHelper
 import com.example.purrfectfinder.R
 import com.example.purrfectfinder.User
-import com.example.purrfectfinder.databinding.ActivityOnBoardingBinding
 import com.example.purrfectfinder.databinding.ActivityRegistrationBinding
 
 class RegistrationActivity : AppCompatActivity() {
@@ -51,20 +44,14 @@ class RegistrationActivity : AppCompatActivity() {
             val passwordConfirm = binding.etRepeatPassword.text.toString().trim()
 
             if (isFieldsValid(email, password, passwordConfirm)) {
-                val user = User(email, password)
+                userBundle.putString("EMAIL", email)
+                userBundle.putString("PASSWORD", password)
 
-                val db = DbHelper(this, null)
-                db.addUser(user)
-
-                Toast.makeText(this, "Пользователь $email добавлен", Toast.LENGTH_LONG).show()
-
-                userBundle.putString("EMAIL", user.email)
-                userBundle.putString("PASSWORD", user.password)
-
-                val intent = Intent(this@RegistrationActivity, RegistrationActivity2::class.java)
                 intent.putExtra("BUNDLE", userBundle)
-                startActivity(intent)
             }
+
+            val intent = Intent(this@RegistrationActivity, Registration2Activity::class.java)
+            startActivity(intent)
 
         }
     }
@@ -72,14 +59,21 @@ class RegistrationActivity : AppCompatActivity() {
     private fun isFieldsValid(email: String, password: String, passwordConfirm : String) : Boolean {
         with(binding) {
 
-            if (email == "") {
+            if (email == "" && password == "" && passwordConfirm == "") {
                 lEmail.helperText = ContextCompat.getString(
                     this@RegistrationActivity,
                     R.string.error_email
                 )
-            }
-            else {
-                lEmail.helperText = ""
+                lPassword.helperText = ContextCompat.getString(
+                    this@RegistrationActivity,
+                    R.string.error_password
+                )
+                lRepeatPassword.helperText = ContextCompat.getString(
+                    this@RegistrationActivity,
+                    R.string.error_password
+                )
+
+                return false
             }
 
             if (password == "" && passwordConfirm == "") {
@@ -93,6 +87,16 @@ class RegistrationActivity : AppCompatActivity() {
                 )
 
                 return false
+            }
+
+            if (email == "") {
+                lEmail.helperText = ContextCompat.getString(
+                    this@RegistrationActivity,
+                    R.string.error_email
+                )
+            }
+            else {
+                lEmail.helperText = ""
             }
 
             if (password == "") {

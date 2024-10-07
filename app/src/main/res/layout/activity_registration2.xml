@@ -5,19 +5,288 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Registration.RegistrationActivity2">
+    tools:context=".Registration.Registration2Activity">
+
+    <!--Хэдер-->
+
+    <FrameLayout
+        android:id="@+id/LayoutHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.widget.Button
+            android:id="@+id/btnPrev"
+            android:layout_width="11dp"
+            android:layout_height="21dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="90dp"
+            android:background="@drawable/ic_back"
+            android:fontFamily="@font/comfortaa"
+            android:textColor="@color/textColor" />
+
+        <TextView
+            android:id="@+id/textView"
+            style="@style/SemiBoldText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="81dp"
+            android:text="@string/create_account"
+            android:textAlignment="center"
+            android:textSize="23sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </FrameLayout>
+
+    <!--Фамилия-->
 
     <TextView
-        android:id="@+id/tvEmail"
+        android:id="@+id/tvSecondName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:layout_marginStart="29dp"
+        android:text="@string/second_name"
+        style="@style/RegularText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/LayoutHeader" />
+
+    <!--app:helperText="@string/error_email"-->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/l_second_name"
+        style="@style/TextInputBox"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintStart_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="parent" />
+        android:layout_marginStart="29dp"
+        android:layout_marginEnd="31dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvSecondName"
+        app:placeholderText="@string/input_second_name"
+        app:boxStrokeErrorColor="@color/errorColor"
+        app:errorEnabled="true"
+        app:helperTextTextColor="@color/errorColor"
+        app:placeholderTextAppearance="@font/comfortaa"
+        app:placeholderTextColor="@color/textInputColor">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_second_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/comfortaa"
+            android:inputType="textPersonName"
+            android:textColor="#525252"
+            android:textSize="14sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!--Имя-->
 
     <TextView
-        android:id="@+id/tvPassword"
+        android:id="@+id/tvFirstName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="29dp"
+        android:text="@string/first_name"
+        style="@style/RegularText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/l_second_name" />
+
+    <!--        app:helperText="@string/error_password"-->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/l_first_name"
+        style="@style/TextInputBox"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintEnd_toStartOf="@+id/tvEmail"
-        app:layout_constraintTop_toBottomOf="parent" />
+        android:layout_marginStart="29dp"
+        android:layout_marginEnd="31dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvFirstName"
+        app:placeholderText="@string/input_first_name"
+        app:boxStrokeErrorColor="@color/errorColor"
+        app:errorEnabled="true"
+        app:helperTextTextColor="@color/errorColor"
+        app:placeholderTextAppearance="@font/comfortaa"
+        app:placeholderTextColor="@color/textInputColor">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_first_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/comfortaa"
+            android:inputType="textPersonName"
+            android:textColor="#525252"
+            android:textSize="14sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!--Отчество -->
+
+    <TextView
+        android:id="@+id/tvMiddleName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="29dp"
+        android:text="@string/middle_name"
+        style="@style/RegularText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/l_first_name" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/l_middle_name"
+        style="@style/TextInputBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="29dp"
+        android:layout_marginEnd="31dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvMiddleName"
+        app:placeholderText="@string/input_middle_name"
+        app:boxStrokeErrorColor="@color/errorColor"
+        app:helperTextTextColor="@color/errorColor"
+        app:errorEnabled="true"
+        app:placeholderTextAppearance="@font/comfortaa"
+        app:placeholderTextColor="@color/textInputColor">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_middle_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/comfortaa"
+            android:inputType="textPersonName"
+            android:textColor="#525252"
+            android:textSize="14sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!--День рождения-->
+
+    <TextView
+        android:id="@+id/tvBirthday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="29dp"
+        android:text="@string/birthday"
+        style="@style/RegularText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/l_middle_name" />
+
+    <!--        app:helperText="@string/different_passwords"-->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/l_birthday"
+        style="@style/TextInputBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="29dp"
+        android:layout_marginEnd="31dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvBirthday"
+        app:placeholderText="@string/placeholder_birthday"
+        app:boxStrokeErrorColor="@color/errorColor"
+        app:helperTextTextColor="@color/errorColor"
+        app:errorEnabled="true"
+        app:placeholderTextAppearance="@font/comfortaa"
+        app:placeholderTextColor="@color/textInputColor">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_birthday"
+            android:drawableStart="@drawable/ic_calendar"
+            android:drawablePadding="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/comfortaa"
+            android:inputType="date"
+            android:textColor="#525252"
+            android:textSize="14sp"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!--Роль-->
+
+    <TextView
+        android:id="@+id/tvRole"
+        style="@style/RegularText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="29dp"
+        android:text="@string/your_role"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/l_birthday" />
+
+    <Spinner
+        android:id="@+id/role_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_marginStart="29dp"
+        android:layout_marginEnd="31dp"
+        android:layout_marginTop="5dp"
+        android:foreground="@drawable/shape_spinner_stroke"
+        android:paddingHorizontal="10dp"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvRole" />
+
+    <TextView
+        android:id="@+id/tvGender"
+        style="@style/RegularText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="29dp"
+        android:text="@string/gender"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/role_spinner" />
+
+    <!--Пол-->
+
+    <RadioGroup
+        android:id="@+id/radioGender"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="29dp"
+
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvGender">
+
+        <RadioButton
+            android:id="@+id/radio_man"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/gender_man"
+            android:fontFamily="@font/comfortaa"
+            android:checked="true" />
+
+        <RadioButton
+            android:id="@+id/radio_woman"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:text="@string/gender_woman"
+            android:fontFamily="@font/comfortaa"/>
+    </RadioGroup>
+
+    <android.widget.Button
+        android:id="@+id/btnNext"
+        style="@style/ButtonLightText"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/shape_button_body"
+        android:paddingVertical="13dp"
+        android:text="@string/next"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioGender" />
+
+
+<!--        <com.google.android.material.bottomnavigation.BottomNavigationView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:background="@drawable/shape_dropshadow"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"/>-->
 </androidx.constraintlayout.widget.ConstraintLayout>

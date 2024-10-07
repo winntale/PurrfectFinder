@@ -46,4 +46,27 @@
 
     <string name="conf_policy">Я согласен с условиями обслуживания и политикой конфиденциальности</string>
 
+    <string name="second_name">Фамилия</string>
+    <string name="input_second_name">Введите фамилию</string>
+    <string name="error_second_name">Некорректная фамилия</string>
+
+    <string name="first_name">Имя</string>
+    <string name="input_first_name">Введите имя</string>
+    <string name="error_first_name">Некорректное имя</string>
+
+    <string name="middle_name">Отчество (при наличии)</string>
+    <string name="input_middle_name">Введите отчество</string>
+
+    <string name="birthday">День рождения</string>
+    <string name="placeholder_birthday">ДД/ММ/ГГГГ</string>
+
+    <string name="your_role">Ваша роль</string>
+    <string-array name="roles_array">
+        <item>Покупатель</item>
+        <item>Продавец</item>
+    </string-array>
+
+    <string name="gender">Пол</string>
+    <string name="gender_man">Мужской</string>
+    <string name="gender_woman">Женский</string>
 </resources>
