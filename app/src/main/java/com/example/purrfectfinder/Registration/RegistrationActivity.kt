@@ -2,6 +2,7 @@ package com.example.purrfectfinder.Registration
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +11,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.purrfectfinder.AuthorizationActivity
 import com.example.purrfectfinder.DbHelper
+import com.example.purrfectfinder.Login.LoginActivity
 import com.example.purrfectfinder.R
 import com.example.purrfectfinder.User
 import com.example.purrfectfinder.databinding.ActivityRegistrationBinding
@@ -17,7 +19,7 @@ import com.example.purrfectfinder.databinding.ActivityRegistrationBinding
 class RegistrationActivity : AppCompatActivity() {
     private var _binding : ActivityRegistrationBinding? = null
     private val binding
-        get() = _binding ?: throw IllegalStateException("Binding for ActivityAuthorizationBinding must not be null")
+        get() = _binding ?: throw IllegalStateException("Binding for ActivityRegistrationBinding must not be null")
 
     private var userBundle = Bundle()
 
@@ -47,12 +49,20 @@ class RegistrationActivity : AppCompatActivity() {
                 userBundle.putString("EMAIL", email)
                 userBundle.putString("PASSWORD", password)
 
+                Log.d("USER USER", "${userBundle.getString("EMAIL")}")
+
+                val intent = Intent(this@RegistrationActivity, Registration2Activity::class.java)
                 intent.putExtra("BUNDLE", userBundle)
+                startActivity(intent)
             }
 
-            val intent = Intent(this@RegistrationActivity, Registration2Activity::class.java)
-            startActivity(intent)
 
+
+        }
+
+        binding.btnAccountExists.setOnClickListener {
+            val intent = Intent(this@RegistrationActivity, LoginActivity::class.java)
+            startActivity(intent)
         }
     }
 

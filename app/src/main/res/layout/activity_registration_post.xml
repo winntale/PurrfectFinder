@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Registration.RegistrationPostActivity">
+
+    <!--Хэдер-->
+
+    <FrameLayout
+        android:id="@+id/LayoutHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.widget.Button
+            android:id="@+id/btnPrev"
+            android:layout_width="11dp"
+            android:layout_height="21dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="90dp"
+            android:background="@drawable/ic_back"
+            android:fontFamily="@font/comfortaa"
+            android:textColor="@color/textColor" />
+
+        <TextView
+            android:id="@+id/tvCreateAccount"
+            style="@style/SemiBoldText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="81dp"
+            android:text="@string/create_account"
+            android:textAlignment="center"
+            android:textSize="23sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </FrameLayout>
+
+    <!--pfp-->
+
+    <TextView
+        style="@style/SemiBoldText"
+        android:id="@+id/tvCatAddQuestion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="179dp"
+        android:text="@string/cat_add_question"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/LayoutHeader" />
+
+    <ImageView
+        android:id="@+id/ivPFP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="17dp"
+        android:src="@drawable/ic_cat_smile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvCatAddQuestion" />
+
+    <TextView
+        android:id="@+id/tvPFPDesc"
+        style="@style/RegularText"
+        android:layout_width="290dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/add_cat_desc"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivPFP" />
+
+    <android.widget.Button
+        android:id="@+id/btnAddPost"
+        style="@style/ButtonLightText"
+        android:layout_width="305dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="175dp"
+        android:background="@drawable/shape_button_body"
+        android:paddingVertical="13dp"
+        android:text="@string/add_post"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvPFPDesc" />
+
+    <android.widget.Button
+        android:id="@+id/btnSkip"
+        style="@style/ButtonDarkText"
+        android:textFontWeight="300"
+        android:layout_width="305dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@android:color/transparent"
+        android:layout_marginTop="10dp"
+        android:text="@string/skip"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnAddPost" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

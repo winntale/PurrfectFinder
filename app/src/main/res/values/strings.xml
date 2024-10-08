@@ -23,12 +23,14 @@
 
     <string name="next">Далее</string>
     <string name="prev">Назад</string>
+    <string name="skip">Пропустить</string>
 
     <string name="btnNextTextOB3">Найти кота!</string>
 
     <!--Authorization Page-->
 
     <string name="auth">Войти</string>
+    <string name="auth_google">Войти через Google</string>
     <string name="registration">Зарегистрироваться</string>
 
     <!--Registration-->
@@ -69,4 +71,25 @@
     <string name="gender">Пол</string>
     <string name="gender_man">Мужской</string>
     <string name="gender_woman">Женский</string>
+
+
+    <string name="pfp_description">Добавление фотографии поможет покупателям и владельцам котов узнать друг друга при встрече</string>
+    <string name="verif_description">Рекомендуем пройти тест для получения значка проверенного пользователя (можно сделать это позже)</string>
+
+    <string name="start_test">Пройти тест</string>
+    <string name="cat_add_question">У вас есть котики?</string>
+    <string name="add_cat_desc">Вы можете начать вести блог о своих котах. Так, если Вам захочется отдать пушистика, желающие смогут познакомиться с ним поближе</string>
+    <string name="add_post">Добавить пост</string>
+    <string name="done">Готово</string>
+    <string name="reg_done">Завершение регистрации</string>
+    <string name="congrats">Поздравляем!</string>
+    <string name="success_reg">Вы успешно зарегистрировались</string>
+    <string name="log_in_account">Войдите в аккаунт</string>
+    <string name="please_login">Пожалуйста, введите свои данные</string>
+    <string name="password">Пароль</string>
+    <string name="forgot_password">Забыли пароль?</string>
+    <string name="account_exists">Уже есть аккаунт?</string>
+    <string name="no_connection_title">Нет подключения к интернету</string>
+    <string name="no_connection_description">Проверьте подключение и повторите попытку</string>
+    <string name="retry">Повторить попытку</string>
 </resources>

@@ -46,7 +46,7 @@
         android:id="@+id/tvEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="171dp"
+        android:layout_marginTop="121dp"
         android:layout_marginStart="29dp"
         android:text="@string/email"
         style="@style/RegularText"
@@ -172,6 +172,20 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <android.widget.Button
+        android:id="@+id/btnAccountExists"
+        style="@style/ButtonDarkText"
+        android:textFontWeight="300"
+        android:layout_width="305dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@android:color/transparent"
+        android:text="@string/account_exists"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/l_repeat_password" />
+
 <!--Чекбокс-->
 
     <LinearLayout
@@ -181,7 +195,7 @@
         android:layout_marginTop="27dp"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/l_repeat_password">
+        app:layout_constraintTop_toBottomOf="@+id/btnAccountExists">
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/cbConfPolicy"

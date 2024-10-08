@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Registration.RegistrationFinishActivity">
+
+    <!--Хэдер-->
+
+    <TextView
+        android:id="@+id/tvRegDone"
+        style="@style/SemiBoldText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="81dp"
+        android:text="@string/reg_done"
+        android:textAlignment="center"
+        android:textSize="23sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!--pfp-->
+
+
+
+    <ImageView
+        android:id="@+id/ivKissCat"
+        android:layout_width="160dp"
+        android:layout_height="154dp"
+        android:layout_marginTop="217dp"
+        android:src="@drawable/ic_cat_kiss"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvRegDone" />
+
+    <TextView
+        style="@style/SemiBoldText"
+        android:textSize="22sp"
+        android:id="@+id/tvRegDoneTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/congrats"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivKissCat" />
+
+    <TextView
+        android:id="@+id/tvRegDoneDesc"
+        style="@style/RegularText"
+        android:layout_width="290dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="9dp"
+        android:gravity="center"
+        android:text="@string/success_reg"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvRegDoneTitle" />
+
+    <android.widget.Button
+        android:id="@+id/btnDone"
+        style="@style/ButtonLightText"
+        android:layout_width="305dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="233dp"
+        android:background="@drawable/shape_button_body"
+        android:paddingVertical="13dp"
+        android:text="@string/done"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvRegDoneDesc" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

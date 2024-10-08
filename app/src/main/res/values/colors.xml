@@ -5,7 +5,9 @@
     <color name="textColor">#595959</color>
     <color name="lightTextColor">#E6E6E6</color>
     <color name="lightButtonColor">#CDCDCD</color>
+    <color name="darkTextButtonColor">#717171</color>
     <color name="skipBtnColor">#007AFF</color>
+    <color name="greenBtnColor">#14AE5C</color>
     <color name="checkBoxColor">#A2A2A2</color>
     <color name="errorColor">#F82E2E</color>
     <color name="strokeColor">#9D9D9D</color>

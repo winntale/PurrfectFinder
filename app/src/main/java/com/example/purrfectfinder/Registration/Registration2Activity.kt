@@ -1,6 +1,7 @@
 package com.example.purrfectfinder.Registration
 
 import android.content.Intent
+import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
@@ -32,7 +33,10 @@ class Registration2Activity : AppCompatActivity() {
         }
 
         val bundleReceived = intent.getBundleExtra("BUNDLE")
+        val emailReceived = bundleReceived?.getString("EMAIL") ?: ""
+        val passwordReceived = bundleReceived?.getString("PASSWORD") ?: ""
 
+        Log.d("USER USER", "$emailReceived $passwordReceived")
         binding.btnPrev.setOnClickListener {
             val intentToFirstPage = Intent(this@Registration2Activity, RegistrationActivity::class.java)
             startActivity(intentToFirstPage)
@@ -77,6 +81,9 @@ class Registration2Activity : AppCompatActivity() {
 
                 Toast.makeText(this, "Пользователь $secondName $firstName добавлен", Toast.LENGTH_LONG).show()
             }
+
+            val intent = Intent(this@Registration2Activity, RegistrationTestActivity::class.java)
+            startActivity(intent)
 
         }
     }
