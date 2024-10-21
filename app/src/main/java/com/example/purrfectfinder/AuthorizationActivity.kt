@@ -6,6 +6,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.purrfectfinder.Login.LoginActivity
 import com.example.purrfectfinder.Registration.RegistrationActivity
 import com.example.purrfectfinder.databinding.ActivityAuthorizationBinding
 
@@ -23,6 +24,11 @@ class AuthorizationActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+
+        binding.btnLogin.setOnClickListener {
+            val intent = Intent(this@AuthorizationActivity, LoginActivity::class.java)
+            startActivity(intent)
         }
 
         binding.btnRegistration.setOnClickListener {

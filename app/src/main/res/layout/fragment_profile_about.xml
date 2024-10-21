@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Fragments.ProfileAboutFragment">
+
+
+    <!--Интересы, увлечения-->
+
+    <TextView
+        android:id="@+id/tvHobbies"
+        style="@style/RegularText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="29dp"
+        android:text="Интересы, увлечения"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/l_hobbies"
+        style="@style/TextInputBox"
+        android:layout_width="match_parent"
+        android:layout_marginStart="29dp"
+        android:layout_marginEnd="31dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvHobbies"
+        app:placeholderText="Поделитесь, чем вы увлекаетесь"
+        app:placeholderTextAppearance="@font/comfortaa"
+        app:placeholderTextColor="@color/textInputColor">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_hobbies"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/comfortaa"
+            android:inputType="textPersonName"
+            android:textColor="#525252"
+            android:textSize="14sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!--Город-->
+
+    <TextView
+        android:id="@+id/tvCity"
+        style="@style/RegularText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="29dp"
+        android:text="Город"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/l_hobbies" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/l_city"
+        style="@style/TextInputBox"
+        android:layout_width="match_parent"
+        android:layout_marginStart="29dp"
+        android:layout_marginEnd="31dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvCity"
+        app:placeholderText="Москва"
+        app:placeholderTextAppearance="@font/comfortaa"
+        app:placeholderTextColor="@color/textInputColor">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_city"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/comfortaa"
+            android:inputType="textPersonName"
+            android:textColor="#525252"
+            android:textSize="14sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!--Тип личности-->
+
+    <LinearLayout
+        android:id="@+id/llMBTI"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="29dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/l_city">
+
+        <TextView
+            android:id="@+id/tvMBTI"
+            style="@style/RegularText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Тип личности" />
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginStart="6dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_info"/>
+
+    </LinearLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/l_MBTI"
+        style="@style/TextInputBox"
+        android:layout_width="match_parent"
+        android:layout_marginStart="29dp"
+        android:layout_marginEnd="31dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/llMBTI"
+        app:placeholderText="ENFJ"
+        app:placeholderTextAppearance="@font/comfortaa"
+        app:placeholderTextColor="@color/textInputColor">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_MBTI"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/comfortaa"
+            android:inputType="textPersonName"
+            android:textColor="#525252"
+            android:textSize="14sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!--Контактные данные-->
+
+    <TextView
+        android:id="@+id/tvContactInfo"
+        style="@style/RegularText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="29dp"
+        android:text="Контактные данные"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/l_MBTI" />
+
+    <LinearLayout
+        android:id="@+id/llPhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="29dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvContactInfo">
+
+        <ImageView
+            android:id="@+id/ivPhone"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="2dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_phone"/>
+
+        <TextView
+            android:id="@+id/tvPhone"
+            style="@style/RegularText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_gravity="center_vertical"
+            android:text="(скрыт)"
+            android:textSize="10sp"
+            android:textStyle="italic"/>
+
+    </LinearLayout>
+
+    <!--Почта-->
+
+    <LinearLayout
+        android:id="@+id/llEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="29dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/llPhone">
+
+        <ImageView
+            android:id="@+id/ivEmail"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="2dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_mail"/>
+
+        <TextView
+            android:id="@+id/tvEmail"
+            style="@style/RegularText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_gravity="center_vertical"
+            android:text="egorova.e.p@yandex.ru"
+            android:textSize="10sp"/>
+    </LinearLayout>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

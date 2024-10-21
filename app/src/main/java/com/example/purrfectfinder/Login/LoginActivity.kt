@@ -10,7 +10,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.purrfectfinder.DbHelper
 import com.example.purrfectfinder.MainActivity
-import com.example.purrfectfinder.NetworkAvailability
 import com.example.purrfectfinder.R
 import com.example.purrfectfinder.Registration.RegistrationActivity
 import com.example.purrfectfinder.databinding.ActivityLoginBinding
@@ -55,6 +54,10 @@ class LoginActivity : AppCompatActivity() {
                 else {
                     Toast.makeText(this, "Что-то пошло не так, проверьте введенные данные", Toast.LENGTH_LONG).show()
                 }
+            }
+            else {
+                val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                startActivity(intent)
             }
         }
     }

@@ -55,4 +55,13 @@
         <item name="boxStrokeColor">@color/textInputColor</item>
         <item name="expandedHintEnabled">false</item>
     </style>
+
+    <style name="ButtonBackReversed" parent="TextAppearance.AppCompat">
+        <item name="android:layout_width">11dp</item>
+        <item name="android:layout_height">21dp</item>
+        <item name="android:layout_gravity">center_vertical|end</item>
+        <item name="android:layout_marginEnd">35dp</item>
+        <item name="android:background">@drawable/ic_back</item>
+        <item name="android:rotation">180</item>
+    </style>
 </resources>

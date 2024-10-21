@@ -22,7 +22,7 @@
             android:layout_width="11dp"
             android:layout_height="21dp"
             android:layout_marginStart="30dp"
-            android:layout_marginTop="90dp"
+            android:layout_marginTop="35dp"
             android:background="@drawable/ic_back"
             android:fontFamily="@font/comfortaa"
             android:textColor="@color/textColor" />
@@ -32,7 +32,7 @@
             style="@style/SemiBoldText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="81dp"
+            android:layout_marginTop="26dp"
             android:text="@string/create_account"
             android:textAlignment="center"
             android:textSize="23sp"
@@ -53,7 +53,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/LayoutHeader" />
 
-    <!--app:helperText="@string/error_email"-->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/l_second_name"
         style="@style/TextInputBox"
@@ -93,7 +92,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/l_second_name" />
 
-    <!--        app:helperText="@string/error_password"-->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/l_first_name"
         style="@style/TextInputBox"
@@ -172,7 +170,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/l_middle_name" />
 
-    <!--        app:helperText="@string/different_passwords"-->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/l_birthday"
         style="@style/TextInputBox"
@@ -281,12 +278,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/radioGender" />
 
-
-<!--        <com.google.android.material.bottomnavigation.BottomNavigationView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:background="@drawable/shape_dropshadow"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"/>-->
 </androidx.constraintlayout.widget.ConstraintLayout>

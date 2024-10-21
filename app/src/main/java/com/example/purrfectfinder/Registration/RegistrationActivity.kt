@@ -17,9 +17,10 @@ import com.example.purrfectfinder.User
 import com.example.purrfectfinder.databinding.ActivityRegistrationBinding
 
 class RegistrationActivity : AppCompatActivity() {
-    private var _binding : ActivityRegistrationBinding? = null
+    private var _binding: ActivityRegistrationBinding? = null
     private val binding
-        get() = _binding ?: throw IllegalStateException("Binding for ActivityRegistrationBinding must not be null")
+        get() = _binding
+            ?: throw IllegalStateException("Binding for ActivityRegistrationBinding must not be null")
 
     private var userBundle = Bundle()
 
@@ -46,7 +47,7 @@ class RegistrationActivity : AppCompatActivity() {
             val passwordConfirm = binding.etRepeatPassword.text.toString().trim()
 
             if (isFieldsValid(email, password, passwordConfirm)) {
-                userBundle.putString("EMAIL", email)
+                userBundle.putString(Registration2Activity.EMAIL, email)
                 userBundle.putString("PASSWORD", password)
 
                 Log.d("USER USER", "${userBundle.getString("EMAIL")}")
@@ -57,7 +58,6 @@ class RegistrationActivity : AppCompatActivity() {
             }
 
 
-
         }
 
         binding.btnAccountExists.setOnClickListener {
@@ -66,7 +66,7 @@ class RegistrationActivity : AppCompatActivity() {
         }
     }
 
-    private fun isFieldsValid(email: String, password: String, passwordConfirm : String) : Boolean {
+    private fun isFieldsValid(email: String, password: String, passwordConfirm: String): Boolean {
         with(binding) {
 
             if (email == "" && password == "" && passwordConfirm == "") {
@@ -104,8 +104,7 @@ class RegistrationActivity : AppCompatActivity() {
                     this@RegistrationActivity,
                     R.string.error_email
                 )
-            }
-            else {
+            } else {
                 lEmail.helperText = ""
             }
 
@@ -116,8 +115,7 @@ class RegistrationActivity : AppCompatActivity() {
                 )
 
                 return false
-            }
-            else {
+            } else {
                 lPassword.helperText = ""
             }
 
@@ -128,8 +126,7 @@ class RegistrationActivity : AppCompatActivity() {
                 )
 
                 return false
-            }
-            else {
+            } else {
                 lRepeatPassword.helperText = ""
             }
 
@@ -142,8 +139,9 @@ class RegistrationActivity : AppCompatActivity() {
                     this@RegistrationActivity,
                     R.string.different_passwords
                 )
-            }
-            else {
+
+                return false
+            } else {
                 lPassword.helperText = ""
                 lRepeatPassword.helperText = ""
             }

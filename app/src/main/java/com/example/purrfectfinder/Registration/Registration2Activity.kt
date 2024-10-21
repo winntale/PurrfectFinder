@@ -17,9 +17,10 @@ import com.example.purrfectfinder.User
 import com.example.purrfectfinder.databinding.ActivityRegistration2Binding
 
 class Registration2Activity : AppCompatActivity() {
-    private var _binding : ActivityRegistration2Binding? = null
+    private var _binding: ActivityRegistration2Binding? = null
     private val binding
-        get() = _binding ?: throw IllegalStateException("Binding for ActivityRegistration2Binding must not be null")
+        get() = _binding
+            ?: throw IllegalStateException("Binding for ActivityRegistration2Binding must not be null")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,12 +34,13 @@ class Registration2Activity : AppCompatActivity() {
         }
 
         val bundleReceived = intent.getBundleExtra("BUNDLE")
-        val emailReceived = bundleReceived?.getString("EMAIL") ?: ""
-        val passwordReceived = bundleReceived?.getString("PASSWORD") ?: ""
+        val emailReceived = bundleReceived?.getString(EMAIL) ?: ""
+        val passwordReceived = bundleReceived?.getString(PASSWORD) ?: ""
 
         Log.d("USER USER", "$emailReceived $passwordReceived")
         binding.btnPrev.setOnClickListener {
-            val intentToFirstPage = Intent(this@Registration2Activity, RegistrationActivity::class.java)
+            val intentToFirstPage =
+                Intent(this@Registration2Activity, RegistrationActivity::class.java)
             startActivity(intentToFirstPage)
         }
 
@@ -74,12 +76,25 @@ class Registration2Activity : AppCompatActivity() {
                 else "Женский"
 
             if (isFieldsValid(secondName, firstName, middleName, birthday)) {
-                val user = User(emailReceived, passwordReceived, secondName, firstName, middleName, birthday, role, gender)
+                val user = User(
+                    emailReceived,
+                    passwordReceived,
+                    secondName,
+                    firstName,
+                    middleName,
+                    birthday,
+                    role,
+                    gender
+                )
 
                 val db = DbHelper(this, null)
                 db.addUser(user)
 
-                Toast.makeText(this, "Пользователь $secondName $firstName добавлен", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this,
+                    "Пользователь $secondName $firstName добавлен",
+                    Toast.LENGTH_LONG
+                ).show()
             }
 
             val intent = Intent(this@Registration2Activity, RegistrationTestActivity::class.java)
@@ -88,7 +103,12 @@ class Registration2Activity : AppCompatActivity() {
         }
     }
 
-    private fun isFieldsValid(secondName : String, firstName : String, middleName : String?, birthday : String) : Boolean {
+    private fun isFieldsValid(
+        secondName: String,
+        firstName: String,
+        middleName: String?,
+        birthday: String
+    ): Boolean {
         with(binding) {
 
             if (secondName == "" && firstName == "") {
@@ -111,8 +131,7 @@ class Registration2Activity : AppCompatActivity() {
                 )
 
                 return false
-            }
-            else {
+            } else {
                 lSecondName.helperText = ""
             }
 
@@ -123,13 +142,17 @@ class Registration2Activity : AppCompatActivity() {
                 )
 
                 return false
-            }
-            else {
+            } else {
                 lFirstName.helperText = ""
             }
 
         }
 
         return true
+    }
+
+    companion object {
+        const val EMAIL = "EMAIL"
+        const val PASSWORD = "PASSWORD"
     }
 }
