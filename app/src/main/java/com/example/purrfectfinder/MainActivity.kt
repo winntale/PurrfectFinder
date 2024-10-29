@@ -14,6 +14,8 @@ import android.view.View.GONE
 import androidx.core.content.ContextCompat
 import androidx.core.view.marginTop
 import androidx.core.view.updatePadding
+import com.example.purrfectfinder.Fragments.ProfileDescHorizontalFragment
+import com.example.purrfectfinder.Fragments.ProfileDescriptionFragment
 import com.example.purrfectfinder.Fragments.SettingsFragment
 
 class MainActivity : AppCompatActivity() {
@@ -29,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportFragmentManager
             .beginTransaction().apply {
+                replace(R.id.profileLayout, ProfileDescriptionFragment.newInstance())
                 replace(R.id.fragmentLayout, ProfileFragment.newInstance())
                 commit()
             }
@@ -36,24 +39,6 @@ class MainActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
-        }
-
-        binding.btnEdit.setOnClickListener{
-            binding.btnPrev.visibility = VISIBLE
-            binding.btnSettings.visibility = GONE
-
-            binding.tvWinTitle.text = ContextCompat.getString(
-                this@MainActivity,
-                R.string.edit_profile
-            )
-            binding.tvWinTitle.textSize = 17f
-            binding.tvWinTitle.setPadding(0, 13,0,0)
-
-            supportFragmentManager
-                .beginTransaction().apply {
-                    replace(R.id.fragmentLayout, ProfileEditFragment.newInstance())
-                    commit()
-                }
         }
 
         binding.btnPrev.setOnClickListener{
@@ -69,6 +54,7 @@ class MainActivity : AppCompatActivity() {
 
             supportFragmentManager
                 .beginTransaction().apply {
+                    replace(R.id.profileLayout, ProfileDescriptionFragment.newInstance())
                     replace(R.id.fragmentLayout, ProfileFragment.newInstance())
                     commit()
                 }
@@ -87,6 +73,7 @@ class MainActivity : AppCompatActivity() {
 
             supportFragmentManager
                 .beginTransaction().apply {
+                    replace(R.id.profileLayout, ProfileDescHorizontalFragment.newInstance())
                     replace(R.id.fragmentLayout, SettingsFragment.newInstance())
                     commit()
                 }
@@ -99,5 +86,17 @@ class MainActivity : AppCompatActivity() {
         }
 
 //        supportActionBar?.hide()
+    }
+
+    fun updateHeaderOnEdit() {
+        binding.btnPrev.visibility = VISIBLE
+        binding.btnSettings.visibility = GONE
+
+        binding.tvWinTitle.text = ContextCompat.getString(
+            this@MainActivity,
+            R.string.edit_profile
+        )
+        binding.tvWinTitle.textSize = 17f
+        binding.tvWinTitle.setPadding(0, 13,0,0)
     }
 }

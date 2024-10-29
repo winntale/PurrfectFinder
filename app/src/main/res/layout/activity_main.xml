@@ -10,7 +10,7 @@
     <!--Хэдер-->
 
     <FrameLayout
-        android:id="@+id/LayoutHeader"
+        android:id="@+id/flHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -52,87 +52,16 @@
             app:layout_constraintTop_toTopOf="parent" />
     </FrameLayout>
 
-    <!--pfp-->
+    <!--profileLayout-->
 
     <FrameLayout
-        android:id="@+id/frameLayout2"
-        android:layout_width="wrap_content"
+        android:id="@+id/profileLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="43dp"
+        android:layout_marginTop="26dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LayoutHeader">
-
-        <ImageView
-            android:layout_width="117dp"
-            android:layout_height="117dp"
-            android:src="@drawable/ic_pfp" />
-
-        <android.widget.Button
-            android:id="@+id/btnEdit"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_gravity="bottom|end"
-            android:background="@drawable/ic_edit" />
-
-    </FrameLayout>
-
-    <!--pfname-->
-
-    <LinearLayout
-        android:id="@+id/flPFName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frameLayout2">
-
-        <TextView
-            android:id="@+id/tvProfileName"
-            style="@style/SemiBoldText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="90dp"
-            android:text="Егорова Елена"
-            android:textAlignment="center"
-            android:textSize="23sp" />
-
-        <ImageView
-            android:layout_width="28dp"
-            android:layout_height="31dp"
-            android:layout_gravity="center_vertical|end"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="80dp"
-            android:src="@drawable/ic_verified" />
-
-    </LinearLayout>
-
-    <!--date descs-->
-
-    <TextView
-        android:id="@+id/tvRegDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        style="@style/RegularText"
-        android:textSize="11sp"
-        android:text="С нами с 19 сентября 2024 года"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/flPFName" />
-
-    <TextView
-        android:id="@+id/tvVerifDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/RegularText"
-        android:textSize="11sp"
-        android:text="Получила верификацию 22 сентября 2024 года"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvRegDate" />
+        app:layout_constraintTop_toBottomOf="@+id/flHeader" />
 
     <!--fragmentlayout-->
 
@@ -143,7 +72,7 @@
         android:layout_marginTop="26dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvVerifDate" />
+        app:layout_constraintTop_toBottomOf="@+id/profileLayout" />
 
     <!--тень для боттом меню бара-->
 
