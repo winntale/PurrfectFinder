@@ -21,9 +21,10 @@ import com.example.purrfectfinder.Login.LoginActivity
 import com.example.purrfectfinder.databinding.ActivityOnBoardingBinding
 
 class OnBoardingActivity : AppCompatActivity() {
-    private var _binding : ActivityOnBoardingBinding? = null
+    private var _binding: ActivityOnBoardingBinding? = null
     private val binding
-        get() = _binding ?: throw IllegalStateException("Binding for ActivityOnBoardingBinding must not be null")
+        get() = _binding
+            ?: throw IllegalStateException("Binding for ActivityOnBoardingBinding must not be null")
 
     private lateinit var networkChangeReceiver: BroadcastReceiver
 
@@ -78,11 +79,14 @@ class OnBoardingActivity : AppCompatActivity() {
 
     // Метод для проверки наличия подключения к интернету
     private fun isInternetAvailable(context: Context): Boolean {
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val network = connectivityManager.activeNetwork ?: return false
             val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
-            return capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
+            return capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || capabilities.hasTransport(
+                NetworkCapabilities.TRANSPORT_CELLULAR
+            )
         } else {
             val networkInfo = connectivityManager.activeNetworkInfo ?: return false
             return networkInfo.isConnected
@@ -123,9 +127,7 @@ class OnBoardingActivity : AppCompatActivity() {
 
                 btnPrev.isVisible = true
 
-            }
-
-            else if (ivOnBoardingProgressLines.tag == "pl2") {
+            } else if (ivOnBoardingProgressLines.tag == "pl2") {
 
                 ivOnBoardingPicture.setImageDrawable(
                     ContextCompat.getDrawable(
@@ -160,14 +162,11 @@ class OnBoardingActivity : AppCompatActivity() {
 
                 btnSkip.visibility = INVISIBLE
 
-            }
-
-            else if (ivOnBoardingProgressLines.tag == "pl3") {
+            } else if (ivOnBoardingProgressLines.tag == "pl3") {
                 gotoRegPage()
             }
 
         }
-
 
 
     }
@@ -211,9 +210,7 @@ class OnBoardingActivity : AppCompatActivity() {
                 ivOnBoardingProgressLines.tag = "pl2"
 
                 btnSkip.visibility = VISIBLE
-            }
-
-            else if (ivOnBoardingProgressLines.tag == "pl2") {
+            } else if (ivOnBoardingProgressLines.tag == "pl2") {
 
                 ivOnBoardingPicture.setImageDrawable(
                     ContextCompat.getDrawable(
