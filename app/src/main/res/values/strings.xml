@@ -40,6 +40,8 @@
     <string name="input_email">Введите электронную почту</string>
     <string name="error_email">Некорректная электронная почта</string>
 
+    <string name="user_exist">Email уже используется</string>
+
     <string name="thinkup_password">Придумайте пароль</string>
     <string name="repeat_password">Повторите пароль</string>
     <string name="input_password">Введите пароль</string>

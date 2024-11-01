@@ -11,10 +11,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.purrfectfinder.DbHelper
 import com.example.purrfectfinder.R
 import com.example.purrfectfinder.User
 import com.example.purrfectfinder.databinding.ActivityRegistration2Binding
+import io.github.jan.supabase.postgrest.postgrest
+import kotlinx.coroutines.launch
 
 class Registration2Activity : AppCompatActivity() {
     private var _binding: ActivityRegistration2Binding? = null
@@ -81,14 +84,21 @@ class Registration2Activity : AppCompatActivity() {
                     passwordReceived,
                     secondName,
                     firstName,
-                    middleName,
+                    middleName ?: "",
                     birthday,
                     role,
                     gender
                 )
 
-                val db = DbHelper(this, null)
-                db.addUser(user)
+                lifecycleScope.launch {
+                    val db = DbHelper()
+                    db.insertUser(user)
+                    val client = db.getClient()
+                    val supabaseResponse = client.postgrest["Users"].select()
+                    val data = supabaseResponse.decodeList<User>()
+                    Log.e("supabase", data.toString())
+                    Log.e("userdata", user.toString())
+                }
 
                 Toast.makeText(
                     this,

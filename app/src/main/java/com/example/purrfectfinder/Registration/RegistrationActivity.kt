@@ -3,18 +3,22 @@ package com.example.purrfectfinder.Registration
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.util.Patterns
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.purrfectfinder.AuthorizationActivity
 import com.example.purrfectfinder.DbHelper
 import com.example.purrfectfinder.Login.LoginActivity
 import com.example.purrfectfinder.R
 import com.example.purrfectfinder.User
 import com.example.purrfectfinder.databinding.ActivityRegistrationBinding
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 
 class RegistrationActivity : AppCompatActivity() {
     private var _binding: ActivityRegistrationBinding? = null
@@ -46,16 +50,31 @@ class RegistrationActivity : AppCompatActivity() {
             val password = binding.etPassword.text.toString().trim()
             val passwordConfirm = binding.etRepeatPassword.text.toString().trim()
 
-            if (isFieldsValid(email, password, passwordConfirm)) {
-                userBundle.putString(Registration2Activity.EMAIL, email)
-                userBundle.putString("PASSWORD", password)
+            lifecycleScope.launch {
+                val db = DbHelper()
+                val user = db.getUser(email, password)
 
-                Log.d("USER USER", "${userBundle.getString("EMAIL")}")
+                if (isFieldsValid(email, password, passwordConfirm)) {
+                    if (user != null) {
+                        binding.lEmail.helperText = ContextCompat.getString(
+                            this@RegistrationActivity,
+                            R.string.user_exist
+                        )
+                    }
+                    else {
+                        userBundle.putString(Registration2Activity.EMAIL, email)
+                        userBundle.putString("PASSWORD", password)
 
-                val intent = Intent(this@RegistrationActivity, Registration2Activity::class.java)
-                intent.putExtra("BUNDLE", userBundle)
-                startActivity(intent)
+                        val intent = Intent(this@RegistrationActivity, Registration2Activity::class.java)
+                        intent.putExtra("BUNDLE", userBundle)
+                        startActivity(intent)
+                    }
+                }
+
+
             }
+
+
 
 
         }
@@ -104,7 +123,8 @@ class RegistrationActivity : AppCompatActivity() {
                     this@RegistrationActivity,
                     R.string.error_email
                 )
-            } else {
+            }
+            else {
                 lEmail.helperText = ""
             }
 
@@ -115,7 +135,8 @@ class RegistrationActivity : AppCompatActivity() {
                 )
 
                 return false
-            } else {
+            }
+            else {
                 lPassword.helperText = ""
             }
 
@@ -126,7 +147,8 @@ class RegistrationActivity : AppCompatActivity() {
                 )
 
                 return false
-            } else {
+            }
+            else {
                 lRepeatPassword.helperText = ""
             }
 
@@ -141,9 +163,19 @@ class RegistrationActivity : AppCompatActivity() {
                 )
 
                 return false
-            } else {
+            }
+            else {
                 lPassword.helperText = ""
                 lRepeatPassword.helperText = ""
+            }
+
+            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                lEmail.helperText = ContextCompat.getString(
+                    this@RegistrationActivity,
+                    R.string.error_email
+                )
+
+                return false
             }
 
             if (!cbConfPolicy.isChecked) {

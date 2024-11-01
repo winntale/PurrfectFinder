@@ -4,7 +4,9 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.MeasureSpec
 import android.view.ViewGroup
+import androidx.viewpager2.widget.ViewPager2
 import com.example.purrfectfinder.R
 import com.example.purrfectfinder.TabsPagerAdapter
 import com.example.purrfectfinder.databinding.ActivityMainBinding
@@ -53,6 +55,26 @@ class ProfileFragment : Fragment() {
                 }
             }
         }.attach()
+
+        binding.tabsViewpager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+
+                val view = // get the view
+                    view.post {
+                        val wMeasureSpec = MeasureSpec.makeMeasureSpec(view.width, MeasureSpec.EXACTLY)
+                        val hMeasureSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
+                        view.measure(wMeasureSpec, hMeasureSpec)
+
+                        if (binding.tabsViewpager.layoutParams.height != view.measuredHeight) {
+                            // ParentViewGroup is, for example, LinearLayout
+                            // ... or whatever the parent of the ViewPager2 is
+                            binding.tabsViewpager.layoutParams = (binding.tabsViewpager.layoutParams as ViewGroup.LayoutParams)
+                                .also { lp -> lp.height = view.measuredHeight }
+                        }
+                    }
+            }
+        })
     }
 
     companion object {

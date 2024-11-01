@@ -1,22 +1,26 @@
 package com.example.purrfectfinder
 
 import android.os.Bundle
+import android.util.Log
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.purrfectfinder.Fragments.ProfileEditFragment
-import com.example.purrfectfinder.Fragments.ProfileFragment
-import com.example.purrfectfinder.databinding.ActivityMainBinding
-import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
-import android.view.View.GONE
-import androidx.core.content.ContextCompat
-import androidx.core.view.marginTop
 import androidx.core.view.updatePadding
+import androidx.lifecycle.lifecycleScope
 import com.example.purrfectfinder.Fragments.ProfileDescHorizontalFragment
 import com.example.purrfectfinder.Fragments.ProfileDescriptionFragment
+import com.example.purrfectfinder.Fragments.ProfileFragment
 import com.example.purrfectfinder.Fragments.SettingsFragment
+import com.example.purrfectfinder.databinding.ActivityMainBinding
+import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.createSupabaseClient
+import io.github.jan.supabase.postgrest.Postgrest
+import io.github.jan.supabase.postgrest.postgrest
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
@@ -26,6 +30,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val db = DbHelper()
+
+        getData(db)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         enableEdgeToEdge()
         setContentView(binding.root)
@@ -41,7 +49,7 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        binding.btnPrev.setOnClickListener{
+        binding.btnPrev.setOnClickListener {
             binding.btnPrev.visibility = GONE
             binding.btnSettings.visibility = VISIBLE
 
@@ -50,7 +58,7 @@ class MainActivity : AppCompatActivity() {
                 R.string.your_profile
             )
             binding.tvWinTitle.textSize = 23f
-            binding.tvWinTitle.setPadding(0, 0,0,0)
+            binding.tvWinTitle.setPadding(0, 0, 0, 0)
 
             supportFragmentManager
                 .beginTransaction().apply {
@@ -60,7 +68,7 @@ class MainActivity : AppCompatActivity() {
                 }
         }
 
-        binding.btnSettings.setOnClickListener{
+        binding.btnSettings.setOnClickListener {
             binding.btnPrev.visibility = VISIBLE
             binding.btnSettings.visibility = GONE
 
@@ -69,7 +77,7 @@ class MainActivity : AppCompatActivity() {
                 R.string.settings
             )
             binding.tvWinTitle.textSize = 23f
-            binding.tvWinTitle.setPadding(0, 0,0,0)
+            binding.tvWinTitle.setPadding(0, 0, 0, 0)
 
             supportFragmentManager
                 .beginTransaction().apply {
@@ -97,6 +105,15 @@ class MainActivity : AppCompatActivity() {
             R.string.edit_profile
         )
         binding.tvWinTitle.textSize = 17f
-        binding.tvWinTitle.setPadding(0, 13,0,0)
+        binding.tvWinTitle.setPadding(0, 13, 0, 0)
+    }
+
+    private fun getData(db : DbHelper) {
+        lifecycleScope.launch {
+            val client = db.getClient()
+            val supabaseResponse = client.postgrest["Users"].select()
+            val data = supabaseResponse.decodeList<User>()
+            Log.e("supabase", data.toString())
+        }
     }
 }

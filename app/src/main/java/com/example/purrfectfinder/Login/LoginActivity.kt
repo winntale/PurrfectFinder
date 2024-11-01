@@ -2,17 +2,23 @@ package com.example.purrfectfinder.Login
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.provider.FontsContractCompat.Columns
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.purrfectfinder.DbHelper
 import com.example.purrfectfinder.MainActivity
 import com.example.purrfectfinder.R
 import com.example.purrfectfinder.Registration.RegistrationActivity
+import com.example.purrfectfinder.User
 import com.example.purrfectfinder.databinding.ActivityLoginBinding
+import io.github.jan.supabase.postgrest.postgrest
+import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
     private var _binding : ActivityLoginBinding? = null
@@ -40,20 +46,21 @@ class LoginActivity : AppCompatActivity() {
             val password = binding.etPassword.text.toString().trim()
 
             if (isFieldsValid(email, password)) {
-                val db = DbHelper(this, null)
-                val isAuth = db.getUser(email, password)
+                val db = DbHelper()
 
-                if (isAuth) {
-                    Toast.makeText(this, "Успешная авторизация", Toast.LENGTH_LONG).show()
-                    binding.etEmail.text?.clear()
-                    binding.etPassword.text?.clear()
+                lifecycleScope.launch {
+                    val client = db.getClient()
+                    val isAuth = db.getUser(email, password)
 
-                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                    startActivity(intent)
+                    if (isAuth != null) {
+                        successfulAuth()
+                    }
+                    else {
+                        unsuccessfulAuth()
+                    }
                 }
-                else {
-                    Toast.makeText(this, "Что-то пошло не так, проверьте введенные данные", Toast.LENGTH_LONG).show()
-                }
+
+
             }
             else {
                 val intent = Intent(this@LoginActivity, MainActivity::class.java)
@@ -104,5 +111,18 @@ class LoginActivity : AppCompatActivity() {
         }
 
         return true
+    }
+
+    private fun successfulAuth() {
+        Toast.makeText(this, "Успешная авторизация", Toast.LENGTH_LONG).show()
+        binding.etEmail.text?.clear()
+        binding.etPassword.text?.clear()
+
+        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun unsuccessfulAuth() {
+        Toast.makeText(this, "Что-то пошло не так, проверьте введенные данные", Toast.LENGTH_LONG).show()
     }
 }
