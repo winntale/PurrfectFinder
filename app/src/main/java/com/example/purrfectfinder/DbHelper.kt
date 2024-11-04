@@ -36,7 +36,9 @@ class DbHelper () {
                         "middleName" to user.middleName,
                         "birthday" to user.birthday,
                         "role" to user.role,
-                        "gender" to user.gender
+                        "gender" to user.gender,
+                        "createdAt" to user.createdAt,
+                        "pfp" to user.pfp
                     )
                 ) // Вставляем объект user
 
@@ -78,14 +80,14 @@ class DbHelper () {
         }
     }
 
-    suspend inline fun <reified T : Any> getData(tableName: String) : List<T> {
+    suspend inline fun <reified T : Any> getData(tableName: String): List<T> {
         val client = getClient()
         val supabaseResponse = client.postgrest[tableName].select()
         Log.e("supabase", supabaseResponse.decodeList<T>().toString())
         return supabaseResponse.decodeList<T>()
     }
 
-    suspend fun getUser(email : String, password : String) : Int? {
+    suspend fun getUser(email: String, password: String): User? {
         val client = getClient()
         return client.postgrest["Users"]
             .select()
@@ -94,12 +96,14 @@ class DbHelper () {
                     eq("email", email)
                     eq("password", password)
                 }
-            }.decodeSingleOrNull<UserId>()
-            ?.id
+            }.decodeSingleOrNull<User>()
     }
 
-    suspend fun getAllFavAds(id: Int) : List<Int> {
+    var listEQs: MutableList<Unit>? = null
+
+    suspend fun getAllFavAds(id: Int): List<Int> {
         val client = getClient()
+//        listEQs.add(eq())
         val data = client.postgrest["Favourites"]
             .select(columns = Columns.list("advertisementId"))
             {
@@ -113,7 +117,20 @@ class DbHelper () {
         return data
     }
 
-}
+    suspend fun getAllBreeds(): List<String> {
+        var client = getClient()
 
-@kotlinx.serialization.Serializable
-data class UserId(val id: Int?)
+        val data = client.postgrest["Breeds"]
+            .select(columns = Columns.list("name"))
+            .decodeList<Map<String, String>>()
+            .mapNotNull { it["name"] }
+
+        Log.e("BREEDS", data.toString())
+        return data
+    }
+
+//    suspend fun addEQs(columnsMap: Map<String, String>): List<Unit>? {
+//
+//    }
+
+}

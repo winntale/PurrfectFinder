@@ -17,6 +17,9 @@ import com.example.purrfectfinder.SerializableDataClasses.User
 import com.example.purrfectfinder.databinding.ActivityRegistration2Binding
 import io.github.jan.supabase.postgrest.postgrest
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class Registration2Activity : AppCompatActivity() {
     private var _binding: ActivityRegistration2Binding? = null
@@ -77,8 +80,14 @@ class Registration2Activity : AppCompatActivity() {
                 if (binding.radioMan.isChecked) "Мужской"
                 else "Женский"
 
+            val calendar = Calendar.getInstance()
+            val dateFormat = SimpleDateFormat("d MMMM yyyy года", Locale("ru"))
+            val formattedDate: String = dateFormat.format(calendar.time)
+
+
             if (isFieldsValid(secondName, firstName, middleName, birthday)) {
                 val user = User(
+                    null,
                     emailReceived,
                     passwordReceived,
                     secondName,
@@ -86,7 +95,9 @@ class Registration2Activity : AppCompatActivity() {
                     middleName ?: "",
                     birthday,
                     role,
-                    gender
+                    gender,
+                    formattedDate,
+                    null
                 )
 
                 lifecycleScope.launch {

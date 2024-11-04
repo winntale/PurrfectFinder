@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         style="@style/BoldText"
         android:textSize="15dp"
-        android:text="Найдено объявлений в г. Москва: "
+        android:text="Найдено объявлений: "
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="27dp"
@@ -29,15 +29,5 @@
         app:layout_constraintTop_toBottomOf="@id/tvAdsFound"
         tools:listitem="@layout/ad_item"
         android:visibility="gone"/>
-
-    <FrameLayout
-        android:id="@+id/loadingLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="visible"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,6 @@
 package com.example.purrfectfinder.Fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
 import com.example.purrfectfinder.MainActivity
 import com.example.purrfectfinder.R
 import com.example.purrfectfinder.databinding.ActivityMainBinding
@@ -30,11 +32,21 @@ class ProfileDescriptionFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.tvProfileName.text = "${MainActivity.currentUserSecondName} ${MainActivity.currentUserFirstName}"
+        binding.tvRegDate.text = "С нами с ${MainActivity.currentUserCreatedAt}"
+
+        if (MainActivity.currentUserPFP != null) {
+            Glide.with(binding.ivPFP)
+                .load(MainActivity.currentUserPFP) // Загрузка изображения по ссылке
+                .into(binding.ivPFP) // Установка изображения в ImageView
+        }
+
         binding.btnEdit.setOnClickListener{
-            (activity as? MainActivity)?.updateHeaderOnEdit()
+            (activity as? MainActivity)?.updateHeaderOnEdit("ProfileEdit")
 
             parentFragmentManager
                 .beginTransaction().apply {

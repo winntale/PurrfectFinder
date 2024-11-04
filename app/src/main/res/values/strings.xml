@@ -99,5 +99,10 @@
     <string name="edit_profile">Редактировать профиль</string>
     <string name="settings">Настройки</string>
 
+    <string name="advertisements">Объявления</string>
     <string name="ad_found">Найдено объявлений</string>
+
+    <string name="loading_text">Загрузка</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

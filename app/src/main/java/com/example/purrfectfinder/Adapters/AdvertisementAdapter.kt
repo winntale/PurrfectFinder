@@ -1,23 +1,22 @@
-package com.example.purrfectfinder
+package com.example.purrfectfinder.Adapters
 
 import android.annotation.SuppressLint
-import android.graphics.Outline
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewOutlineProvider
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.purrfectfinder.Fragments.FavouriteActionListener
+import com.example.purrfectfinder.MainActivity
+import com.example.purrfectfinder.R
 import com.example.purrfectfinder.SerializableDataClasses.Advertisement
 
 class AdvertisementAdapter(
     private var mAdvertisements: List<Advertisement>,
-    private var allFavs: List<Int>?,
+    private var allFavs: List<Int>,
     private val listener: FavouriteActionListener
 ) : RecyclerView.Adapter<AdvertisementAdapter.ViewHolder>() {
 
@@ -40,14 +39,17 @@ class AdvertisementAdapter(
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val advertisement: Advertisement = mAdvertisements[position]
 
-        if (allFavs != null) {
-            if (allFavs!!.contains(advertisement.id)) {
-                // Если да, устанавливаем активную иконку
-                viewHolder.isFavButton.setBackgroundResource(R.drawable.ic_fav_icon_active)
-            } else {
-                // Если нет, устанавливаем неактивную иконку
-                viewHolder.isFavButton.setBackgroundResource(R.drawable.ic_fav_icon_inactive)
-            }
+        // пустой список для сравнения
+        val emptyList: List<Int> = emptyList()
+
+        // первоначальный рендер ресайклера, основанный на актуальной информации в бд
+        if (allFavs != emptyList && allFavs.contains(advertisement.id)) {
+            // устанавливаем активную иконку
+            viewHolder.isFavButton.setBackgroundResource(R.drawable.ic_fav_icon_active)
+        }
+        else {
+            // Если нет, устанавливаем неактивную иконку
+            viewHolder.isFavButton.setBackgroundResource(R.drawable.ic_fav_icon_inactive)
         }
 
         viewHolder.nameTextView.text = advertisement.name
@@ -57,21 +59,22 @@ class AdvertisementAdapter(
             .load(advertisement.picture) // Загрузка изображения по ссылке
             .into(viewHolder.pictureImageView) // Установка изображения в ImageView
 
-
         viewHolder.isFavButton.setOnClickListener {
-            if (allFavs != null) {
-                if (allFavs!!.contains(advertisement.id)) {
-                    // Если да, устанавливаем активную иконку
-                    listener.onRemoveFromFavourites(advertisement.id!!, viewHolder)
-                } else {
-                    // Если нет, устанавливаем неактивную иконку
-                    listener.onAddToFavourites(advertisement.id!!, viewHolder)
-                }
-                allFavs = MainActivity.allFavs
-
-                Log.e("current advertisement", advertisement.id.toString())
-                Log.e("AllFavs", allFavs.toString())
+            // если список не пуст и содержит айди текущего объявления
+            if (allFavs != emptyList && allFavs.contains(advertisement.id)) {
+                // устанавливаем активную иконку и меняем бд с помощью слушателя
+                listener.onRemoveFromFavourites(advertisement.id!!, viewHolder)
+            } else {
+                // Если нет, устанавливаем неактивную иконку
+                listener.onAddToFavourites(advertisement.id!!, viewHolder)
             }
+
+            // в любом случае вносим изменения в текущий список,
+            // берем актуальный из компэниона в мэйн активити, так как обновили бд
+            allFavs = MainActivity.allFavs
+
+            Log.e("current advertisement", advertisement.id.toString())
+            Log.e("AllFavs", allFavs.toString())
         }
     }
 
@@ -104,7 +107,7 @@ class AdvertisementAdapter(
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateData(newAds: List<Advertisement>, newFavAds: List<Int>?) {
+    fun updateData(newAds: List<Advertisement>, newFavAds: List<Int>) {
         mAdvertisements = newAds
         allFavs = newFavAds
         notifyDataSetChanged()

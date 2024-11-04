@@ -17,10 +17,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivPFP"
             android:layout_width="117dp"
             android:layout_height="117dp"
-            android:src="@drawable/ic_pfp" />
+            android:src="@drawable/ic_user_pfp"
+            app:shapeAppearanceOverlay="@style/CircleCorners"/>
 
         <android.widget.Button
             android:id="@+id/btnEdit"
@@ -83,7 +85,7 @@
         android:layout_height="wrap_content"
         style="@style/RegularText"
         android:textSize="11sp"
-        android:text="Получила верификацию 22 сентября 2024 года"
+        android:text="Верификация получена 4 ноября 2024 года"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvRegDate" />

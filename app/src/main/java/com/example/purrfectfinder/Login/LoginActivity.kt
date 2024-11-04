@@ -48,11 +48,17 @@ class LoginActivity : AppCompatActivity() {
                 val db = DbHelper()
 
                 lifecycleScope.launch {
-                    val userId = db.getUser(email, password)
+                    val user = db.getUser(email, password)
 
-                    Log.e("userid", userId.toString())
-                    if (userId != null) {
-                        userBundle.putInt(MainActivity.ID, userId)
+                    Log.e("userid", user?.id.toString())
+                    Log.e("user", user.toString())
+                    if (user != null) {
+                        userBundle.putInt(MainActivity.ID, user.id!!)
+                        userBundle.putString(MainActivity.EMAIL, user.email)
+                        userBundle.putString(MainActivity.SECONDNAME, user.secondName)
+                        userBundle.putString(MainActivity.FIRSTNAME, user.firstName)
+                        userBundle.putString(MainActivity.CREATEDAT, user.createdAt)
+                        userBundle.putString(MainActivity.PFP, user.pfp)
                         successfulAuth()
                     }
                     else {
@@ -63,8 +69,7 @@ class LoginActivity : AppCompatActivity() {
 
             }
             else {
-                val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                startActivity(intent)
+                unsuccessfulAuth()
             }
         }
     }

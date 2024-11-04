@@ -14,59 +14,83 @@ import com.example.purrfectfinder.GridSpacingItemDecoration
 import com.example.purrfectfinder.MainActivity
 import com.example.purrfectfinder.R
 import com.example.purrfectfinder.SerializableDataClasses.Advertisement
-import com.example.purrfectfinder.databinding.FragmentAdvertisementsBinding
+import com.example.purrfectfinder.databinding.FragmentFavouriteAdvertisementsBinding
+import io.github.jan.supabase.postgrest.postgrest
+import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.launch
 
-interface FavouriteActionListener {
-    fun onAddToFavourites(advertisementId: Int, viewHolder: AdvertisementAdapter.ViewHolder)
-    fun onRemoveFromFavourites(advertisementId: Int, viewHolder: AdvertisementAdapter.ViewHolder)
-}
+class FavouriteAdvertisementsFragment : Fragment(), FavouriteActionListener {
 
-class AdvertisementsFragment : Fragment(), FavouriteActionListener {
-
-    private var _binding: FragmentAdvertisementsBinding? = null
+    private var _binding: FragmentFavouriteAdvertisementsBinding? = null
     private val binding
         get() = _binding
-            ?: throw IllegalStateException("Binding for FragmentAdvertisementsBinding must not be null")
+            ?: throw IllegalStateException("Binding for FragmentFavouriteAdvertisementsBinding must not be null")
 
     private lateinit var adAdapter: AdvertisementAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentAdvertisementsBinding.inflate(inflater, container, false)
+    ): View? {
+        _binding = FragmentFavouriteAdvertisementsBinding.inflate(inflater, container, false)
         // Inflate the layout for this fragment
         return binding.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Инициализируем RecyclerView и адаптер
         adAdapter = AdvertisementAdapter(emptyList(), MainActivity.allFavs, this)
-        binding.rvAds.apply {
+        binding.rvFavAds.apply {
             layoutManager = GridLayoutManager(context, 2)
             adapter = adAdapter
             addItemDecoration(GridSpacingItemDecoration(2, 25, false))
         }
 
-        val db = DbHelper()
-
         showLoadingScreen(true)
+
+        val db = DbHelper()
+        val userId = MainActivity.currentUserId!!
 
         lifecycleScope.launch {
             try {
-                val data = db.getData<Advertisement>("Advertisements")
+                val client = db.getClient()
+
+//                val data = client.postgrest["Favourites"]
+//                    .select(columns = Columns.list("advertisementId", "advertisement(*)")) {
+//                        filter {
+//                            eq("userId", userId)
+//                        }
+//                    }.decodeList<Map<String, Any>>()
+//                    .mapNotNull { it["advertisement"] as? Advertisement }
+
+                val allFavs = client.postgrest["Favourites"]
+                    .select(columns = Columns.list("advertisementId")) {
+                        filter {
+                            eq("userId", userId)
+                        }
+                    }
+                    .decodeList<Map<String, Int>>() // декодируем как список мапов
+                    .mapNotNull { it["advertisementId"] } // извлекаем только advertisementId
+
+                // Получаем все объявления, которые совпадают с advertisementId
+                val data = client.postgrest["Advertisements"]
+                    .select() {
+                        filter {
+                            isIn("id", allFavs) // фильтруем по списку advertisementId
+                        }
+                    }
+                    .decodeList<Advertisement>()
+
                 adAdapter.updateData(data, MainActivity.allFavs)
-                binding.tvAdsFound.text = "Найдено объявлений: " + adAdapter.itemCount.toString()
+
             } catch (e: Exception) {
                 Log.e("Error", "Failed to load data: ${e.message}")
             } finally {
                 showLoadingScreen(false)
             }
         }
+
     }
 
     override fun onAddToFavourites(advertisementId: Int, viewHolder: AdvertisementAdapter.ViewHolder) {
@@ -88,22 +112,18 @@ class AdvertisementsFragment : Fragment(), FavouriteActionListener {
         }
     }
 
-    // Функция для показа/скрытия загрузочного экрана
     private fun showLoadingScreen(isLoading: Boolean) {
         (activity as MainActivity).showLoadingScreen(isLoading)
 
         if (isLoading) {
-            binding.tvAdsFound.visibility = View.GONE
-            binding.rvAds.visibility = View.GONE
+            binding.rvFavAds.visibility = View.GONE
         } else {
-            binding.tvAdsFound.visibility = View.VISIBLE
-            binding.rvAds.visibility = View.VISIBLE
+            binding.rvFavAds.visibility = View.VISIBLE
         }
     }
 
     companion object {
         @JvmStatic
-        fun newInstance() = AdvertisementsFragment()
+        fun newInstance() = FavouriteAdvertisementsFragment()
     }
 }
-
