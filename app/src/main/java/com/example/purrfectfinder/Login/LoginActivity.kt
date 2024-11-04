@@ -7,7 +7,6 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.provider.FontsContractCompat.Columns
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
@@ -15,15 +14,15 @@ import com.example.purrfectfinder.DbHelper
 import com.example.purrfectfinder.MainActivity
 import com.example.purrfectfinder.R
 import com.example.purrfectfinder.Registration.RegistrationActivity
-import com.example.purrfectfinder.User
 import com.example.purrfectfinder.databinding.ActivityLoginBinding
-import io.github.jan.supabase.postgrest.postgrest
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
     private var _binding : ActivityLoginBinding? = null
     private val binding
         get() = _binding ?: throw IllegalStateException("Binding for ActivityLoginBinding must not be null")
+
+    private var userBundle = Bundle()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,10 +48,11 @@ class LoginActivity : AppCompatActivity() {
                 val db = DbHelper()
 
                 lifecycleScope.launch {
-                    val client = db.getClient()
-                    val isAuth = db.getUser(email, password)
+                    val userId = db.getUser(email, password)
 
-                    if (isAuth != null) {
+                    Log.e("userid", userId.toString())
+                    if (userId != null) {
+                        userBundle.putInt(MainActivity.ID, userId)
                         successfulAuth()
                     }
                     else {
@@ -119,6 +119,7 @@ class LoginActivity : AppCompatActivity() {
         binding.etPassword.text?.clear()
 
         val intent = Intent(this@LoginActivity, MainActivity::class.java)
+        intent.putExtra("BUNDLE", userBundle)
         startActivity(intent)
     }
 

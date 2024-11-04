@@ -64,4 +64,9 @@
         <item name="android:background">@drawable/ic_back</item>
         <item name="android:rotation">180</item>
     </style>
+
+    <style name="RoundedCorners">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
 </resources>

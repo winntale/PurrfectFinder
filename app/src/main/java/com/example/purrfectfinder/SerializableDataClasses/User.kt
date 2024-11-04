@@ -1,4 +1,4 @@
-package com.example.purrfectfinder
+package com.example.purrfectfinder.SerializableDataClasses
 
 @kotlinx.serialization.Serializable
 data class User(val email: String = "",

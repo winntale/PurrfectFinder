@@ -1,7 +1,6 @@
 package com.example.purrfectfinder.Registration
 
 import android.content.Intent
-import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
@@ -14,7 +13,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.purrfectfinder.DbHelper
 import com.example.purrfectfinder.R
-import com.example.purrfectfinder.User
+import com.example.purrfectfinder.SerializableDataClasses.User
 import com.example.purrfectfinder.databinding.ActivityRegistration2Binding
 import io.github.jan.supabase.postgrest.postgrest
 import kotlinx.coroutines.launch

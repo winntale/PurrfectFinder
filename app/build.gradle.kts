@@ -59,4 +59,8 @@ dependencies {
     implementation(libs.postgrest.kt)
     implementation(libs.kotlinx.serialization.json)
     implementation("io.ktor:ktor-client-cio:3.0.0")
+
+    implementation("com.github.bumptech.glide:glide:4.12.0")
+
+    implementation("pl.droidsonroids.gif:android-gif-drawable:1.2.19")
 }

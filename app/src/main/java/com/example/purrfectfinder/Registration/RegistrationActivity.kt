@@ -2,9 +2,7 @@ package com.example.purrfectfinder.Registration
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.util.Patterns
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -15,9 +13,7 @@ import com.example.purrfectfinder.AuthorizationActivity
 import com.example.purrfectfinder.DbHelper
 import com.example.purrfectfinder.Login.LoginActivity
 import com.example.purrfectfinder.R
-import com.example.purrfectfinder.User
 import com.example.purrfectfinder.databinding.ActivityRegistrationBinding
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 class RegistrationActivity : AppCompatActivity() {
