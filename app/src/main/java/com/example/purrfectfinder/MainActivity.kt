@@ -134,7 +134,7 @@ class MainActivity : AppCompatActivity() {
                     binding.btnPrev.visibility = GONE
                     binding.btnSettings.visibility = GONE
 
-                    binding.profileLayout.visibility = GONE
+                    setFragment(R.id.profileLayout, null)
                     setFragment(R.id.fragmentLayout, FavouriteAdvertisementsFragment.newInstance())
                 }
                 R.id.petshop -> {
@@ -146,11 +146,12 @@ class MainActivity : AppCompatActivity() {
                     binding.btnPrev.visibility = GONE
                     binding.btnSettings.visibility = GONE
 
-                    binding.profileLayout.visibility = GONE
+                    setFragment(R.id.profileLayout, null)
                     setFragment(R.id.fragmentLayout, AdvertisementsFragment.newInstance())
                 }
                 R.id.clips -> {
                     binding.tvWinTitle.text = "Котоклипы"
+
                     setFragment(R.id.profileLayout, null)
                     setFragment(R.id.fragmentLayout, null)
                 }
@@ -163,7 +164,6 @@ class MainActivity : AppCompatActivity() {
                     binding.btnPrev.visibility = GONE
                     binding.btnSettings.visibility = VISIBLE
 
-                    binding.profileLayout.visibility = VISIBLE
                     setFragment(R.id.profileLayout, ProfileDescriptionFragment.newInstance())
                     setFragment(R.id.fragmentLayout, ProfileFragment.newInstance())
                 }

@@ -10,8 +10,8 @@
         android:id="@+id/llVerifiedBreed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="90dp"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="90dp"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -38,9 +38,9 @@
         android:id="@+id/llBreed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
         android:layout_marginTop="10dp"
         android:orientation="horizontal"
-        android:layout_marginStart="25dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/llVerifiedBreed">
 
@@ -48,23 +48,35 @@
             android:layout_width="16dp"
             android:layout_height="32dp"
             android:background="@drawable/ic_back"
-            android:rotation="180"/>
+            android:rotation="180" />
 
         <TextView
+            style="@style/RegularText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Порода"
-            android:layout_marginStart="16dp"
             android:layout_gravity="center"
-            style="@style/RegularText"/>
+            android:layout_marginStart="16dp"
+            android:text="Порода" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvBreeds"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
         android:layout_marginStart="60dp"
+        android:layout_marginTop="25dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/llBreed" />
+
+    <android.widget.Button
+        android:id="@+id/btnConfirmFilters"
+        style="@style/ButtonLightText"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/shape_button_body"
+        android:text="Применить фильтры"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

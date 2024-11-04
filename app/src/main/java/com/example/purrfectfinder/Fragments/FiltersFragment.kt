@@ -52,12 +52,18 @@ class FiltersFragment : Fragment() {
 
         lifecycleScope.launch {
             try {
-                val data = db.getAllBreeds()
-                filtersAdapter.updateData(data)
+                val breeds = db.getAllBreeds()
+                filtersAdapter.updateData(breeds)
             } catch (e: Exception) {
                 Log.e("Error", "Failed to load data: ${e.message}")
             } finally {
                 showLoadingScreen(false)
+            }
+        }
+
+        binding.btnConfirmFilters.setOnClickListener{
+            lifecycleScope.launch {
+                filtersAdapter
             }
         }
     }

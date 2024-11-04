@@ -14,6 +14,8 @@ class FiltersAdapter(
     private var mFilters: List<String>
 ) : RecyclerView.Adapter<FiltersAdapter.ViewHolder>() {
 
+    var allCheckBoxes: MutableList<CheckBox> = mutableListOf()
+
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val nameTextView = itemView.findViewById<TextView>(R.id.tvBreedName)
         val checkBox = itemView.findViewById<CheckBox>(R.id.cbBreed)
@@ -34,7 +36,17 @@ class FiltersAdapter(
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         var filter = mFilters[position]
 
+        allCheckBoxes.add(viewHolder.checkBox)
+
         viewHolder.nameTextView.text = filter
+    }
+
+    fun getIfChecked(checkBox: CheckBox): Boolean {
+        if (allCheckBoxes.contains(checkBox)) {
+            return true
+        }
+        else return false
+
     }
 
     @SuppressLint("NotifyDataSetChanged")
