@@ -6,9 +6,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.purrfectfinder.AuthorizationActivity
 import com.example.purrfectfinder.R
-import com.example.purrfectfinder.databinding.ActivityRegistrationBinding
 import com.example.purrfectfinder.databinding.ActivityRegistrationTestBinding
 
 class RegistrationTestActivity : AppCompatActivity() {

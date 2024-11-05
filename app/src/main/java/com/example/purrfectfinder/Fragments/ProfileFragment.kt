@@ -7,9 +7,7 @@ import android.view.View
 import android.view.View.MeasureSpec
 import android.view.ViewGroup
 import androidx.viewpager2.widget.ViewPager2
-import com.example.purrfectfinder.R
 import com.example.purrfectfinder.TabsPagerAdapter
-import com.example.purrfectfinder.databinding.ActivityMainBinding
 import com.example.purrfectfinder.databinding.FragmentProfileBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -28,7 +26,7 @@ class ProfileFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         // Inflate the layout for this fragment
         return binding.root
@@ -78,7 +76,6 @@ class ProfileFragment : Fragment() {
     }
 
     companion object {
-        @JvmStatic
         fun newInstance() = ProfileFragment()
     }
 }

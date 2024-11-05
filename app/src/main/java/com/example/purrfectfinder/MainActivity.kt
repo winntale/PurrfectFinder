@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
         currentUserPFP = bundleReceived?.getString(PFP)
 
         lifecycleScope.launch {
-            allFavs = db.getAllFavAds(currentUserId!!)
+
             return@launch
         }
 
@@ -230,6 +230,5 @@ class MainActivity : AppCompatActivity() {
         var currentUserFirstName: String? = null
         var currentUserCreatedAt: String? = null
         var currentUserPFP: String? = null
-        var allFavs: List<Int> = emptyList()
     }
 }

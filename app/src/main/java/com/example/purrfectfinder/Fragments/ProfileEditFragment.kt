@@ -7,8 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.purrfectfinder.MainActivity
-import com.example.purrfectfinder.R
-import com.example.purrfectfinder.databinding.FragmentProfileDescriptionBinding
 import com.example.purrfectfinder.databinding.FragmentProfileEditBinding
 
 class ProfileEditFragment : Fragment() {
@@ -21,7 +19,7 @@ class ProfileEditFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentProfileEditBinding.inflate(inflater, container, false)
         // Inflate the layout for this fragment
         return binding.root
@@ -36,7 +34,6 @@ class ProfileEditFragment : Fragment() {
     }
 
     companion object {
-        @JvmStatic
         fun newInstance() = ProfileEditFragment()
     }
 }

@@ -8,7 +8,6 @@ import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.purrfectfinder.R
-import com.example.purrfectfinder.SerializableDataClasses.Filters
 
 class FiltersAdapter(
     private var mFilters: List<String>
@@ -38,15 +37,12 @@ class FiltersAdapter(
 
         allCheckBoxes.add(viewHolder.checkBox)
 
+
         viewHolder.nameTextView.text = filter
     }
 
-    fun getIfChecked(checkBox: CheckBox): Boolean {
-        if (allCheckBoxes.contains(checkBox)) {
-            return true
-        }
-        else return false
-
+    fun getCheckBoxes(): List<CheckBox> {
+        return allCheckBoxes
     }
 
     @SuppressLint("NotifyDataSetChanged")

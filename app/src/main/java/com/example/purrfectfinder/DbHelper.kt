@@ -1,15 +1,12 @@
 package com.example.purrfectfinder
 
 import android.util.Log
-import androidx.lifecycle.lifecycleScope
-import com.example.purrfectfinder.SerializableDataClasses.Advertisement
 import com.example.purrfectfinder.SerializableDataClasses.User
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
-import kotlinx.coroutines.launch
 
 
 class DbHelper () {
@@ -99,8 +96,6 @@ class DbHelper () {
             }.decodeSingleOrNull<User>()
     }
 
-    var listEQs: MutableList<Unit>? = null
-
     suspend fun getAllFavAds(id: Int): List<Int> {
         val client = getClient()
 //        listEQs.add(eq())
@@ -117,20 +112,16 @@ class DbHelper () {
         return data
     }
 
-    suspend fun getAllBreeds(): List<String> {
+    suspend fun getAllFilters(filterName: String): List<String> {
         var client = getClient()
 
-        val data = client.postgrest["Breeds"]
+        val data = client.postgrest[filterName]
             .select(columns = Columns.list("name"))
             .decodeList<Map<String, String>>()
             .mapNotNull { it["name"] }
 
-        Log.e("BREEDS", data.toString())
+        Log.e(filterName, data.toString())
         return data
     }
-
-//    suspend fun addEQs(columnsMap: Map<String, String>): List<Unit>? {
-//
-//    }
 
 }

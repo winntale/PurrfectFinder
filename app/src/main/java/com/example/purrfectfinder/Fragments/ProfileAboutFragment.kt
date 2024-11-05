@@ -17,7 +17,6 @@ class ProfileAboutFragment : Fragment() {
     }
 
     companion object {
-        @JvmStatic
         fun newInstance() = ProfileAboutFragment()
     }
 }

@@ -5,15 +5,10 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.example.purrfectfinder.MainActivity
 import com.example.purrfectfinder.R
-import com.example.purrfectfinder.databinding.ActivityMainBinding
-import com.example.purrfectfinder.databinding.FragmentProfileBinding
 import com.example.purrfectfinder.databinding.FragmentProfileDescriptionBinding
 
 class ProfileDescriptionFragment : Fragment() {
@@ -26,7 +21,7 @@ class ProfileDescriptionFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentProfileDescriptionBinding.inflate(inflater, container, false)
         return binding.root
@@ -58,7 +53,6 @@ class ProfileDescriptionFragment : Fragment() {
     }
 
     companion object {
-        @JvmStatic
         fun newInstance() = ProfileDescriptionFragment()
     }
 }

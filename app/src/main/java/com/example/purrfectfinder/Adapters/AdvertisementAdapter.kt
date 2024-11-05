@@ -48,7 +48,7 @@ class AdvertisementAdapter(
             viewHolder.isFavButton.setBackgroundResource(R.drawable.ic_fav_icon_active)
         }
         else {
-            // Если нет, устанавливаем неактивную иконку
+            // если нет, устанавливаем неактивную иконку
             viewHolder.isFavButton.setBackgroundResource(R.drawable.ic_fav_icon_inactive)
         }
 
@@ -63,15 +63,11 @@ class AdvertisementAdapter(
             // если список не пуст и содержит айди текущего объявления
             if (allFavs != emptyList && allFavs.contains(advertisement.id)) {
                 // устанавливаем активную иконку и меняем бд с помощью слушателя
-                listener.onRemoveFromFavourites(advertisement.id!!, viewHolder)
+                listener.onRemoveFromFavourites(advertisement.id!!, viewHolder, this)
             } else {
                 // Если нет, устанавливаем неактивную иконку
-                listener.onAddToFavourites(advertisement.id!!, viewHolder)
+                listener.onAddToFavourites(advertisement.id!!, viewHolder, this)
             }
-
-            // в любом случае вносим изменения в текущий список,
-            // берем актуальный из компэниона в мэйн активити, так как обновили бд
-            allFavs = MainActivity.allFavs
 
             Log.e("current advertisement", advertisement.id.toString())
             Log.e("AllFavs", allFavs.toString())

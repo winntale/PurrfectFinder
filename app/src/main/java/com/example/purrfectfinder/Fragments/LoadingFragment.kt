@@ -25,8 +25,6 @@ class LoadingFragment : Fragment() {
     }
 
     companion object {
-
-        @JvmStatic
         fun newInstance() = LoadingFragment()
     }
 }

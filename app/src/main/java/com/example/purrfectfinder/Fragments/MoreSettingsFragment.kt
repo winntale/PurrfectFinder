@@ -17,7 +17,6 @@ class MoreSettingsFragment : Fragment() {
     }
 
     companion object {
-        @JvmStatic
         fun newInstance() = MoreSettingsFragment()
     }
 }

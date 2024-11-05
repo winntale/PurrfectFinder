@@ -31,7 +31,7 @@ class FavouriteAdvertisementsFragment : Fragment(), FavouriteActionListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentFavouriteAdvertisementsBinding.inflate(inflater, container, false)
         // Inflate the layout for this fragment
         return binding.root
@@ -40,7 +40,7 @@ class FavouriteAdvertisementsFragment : Fragment(), FavouriteActionListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adAdapter = AdvertisementAdapter(emptyList(), MainActivity.allFavs, this)
+        adAdapter = AdvertisementAdapter(emptyList(), allFavs, this)
         binding.rvFavAds.apply {
             layoutManager = GridLayoutManager(context, 2)
             adapter = adAdapter
@@ -50,31 +50,15 @@ class FavouriteAdvertisementsFragment : Fragment(), FavouriteActionListener {
         showLoadingScreen(true)
 
         val db = DbHelper()
-        val userId = MainActivity.currentUserId!!
 
         lifecycleScope.launch {
             try {
                 val client = db.getClient()
 
-//                val data = client.postgrest["Favourites"]
-//                    .select(columns = Columns.list("advertisementId", "advertisement(*)")) {
-//                        filter {
-//                            eq("userId", userId)
-//                        }
-//                    }.decodeList<Map<String, Any>>()
-//                    .mapNotNull { it["advertisement"] as? Advertisement }
-
-                val allFavs = client.postgrest["Favourites"]
-                    .select(columns = Columns.list("advertisementId")) {
-                        filter {
-                            eq("userId", userId)
-                        }
-                    }
-                    .decodeList<Map<String, Int>>() // декодируем как список мапов
-                    .mapNotNull { it["advertisementId"] } // извлекаем только advertisementId
+                allFavs = db.getAllFavAds(MainActivity.currentUserId!!)
 
                 // Получаем все объявления, которые совпадают с advertisementId
-                val data = client.postgrest["Advertisements"]
+                data = client.postgrest["Advertisements"]
                     .select() {
                         filter {
                             isIn("id", allFavs) // фильтруем по списку advertisementId
@@ -82,7 +66,7 @@ class FavouriteAdvertisementsFragment : Fragment(), FavouriteActionListener {
                     }
                     .decodeList<Advertisement>()
 
-                adAdapter.updateData(data, MainActivity.allFavs)
+                adAdapter.updateData(data, allFavs)
 
             } catch (e: Exception) {
                 Log.e("Error", "Failed to load data: ${e.message}")
@@ -93,21 +77,23 @@ class FavouriteAdvertisementsFragment : Fragment(), FavouriteActionListener {
 
     }
 
-    override fun onAddToFavourites(advertisementId: Int, viewHolder: AdvertisementAdapter.ViewHolder) {
+    override fun onAddToFavourites(advertisementId: Int, viewHolder: AdvertisementAdapter.ViewHolder, currentAdapter: AdvertisementAdapter) {
         lifecycleScope.launch {
             val userId = MainActivity.currentUserId!!  // Метод получения текущего userId
             DbHelper().insertFavourite(userId, advertisementId)
-            MainActivity.allFavs = DbHelper().getAllFavAds(userId)
+            allFavs = DbHelper().getAllFavAds(userId)
+            currentAdapter.updateData(data, allFavs)
             viewHolder.isFavButton.setBackgroundResource(R.drawable.ic_fav_icon_active)
 
         }
     }
 
-    override fun onRemoveFromFavourites(advertisementId: Int, viewHolder: AdvertisementAdapter.ViewHolder) {
+    override fun onRemoveFromFavourites(advertisementId: Int, viewHolder: AdvertisementAdapter.ViewHolder, currentAdapter: AdvertisementAdapter) {
         lifecycleScope.launch {
             val userId = MainActivity.currentUserId!!  // Метод получения текущего userId
             DbHelper().deleteFavourite(userId, advertisementId)
-            MainActivity.allFavs = DbHelper().getAllFavAds(userId)
+            allFavs = DbHelper().getAllFavAds(userId)
+            currentAdapter.updateData(data, allFavs)
             viewHolder.isFavButton.setBackgroundResource(R.drawable.ic_fav_icon_inactive)
         }
     }
@@ -123,7 +109,8 @@ class FavouriteAdvertisementsFragment : Fragment(), FavouriteActionListener {
     }
 
     companion object {
-        @JvmStatic
+        var data: List<Advertisement> = emptyList()
+        var allFavs: List<Int> = emptyList()
         fun newInstance() = FavouriteAdvertisementsFragment()
     }
 }

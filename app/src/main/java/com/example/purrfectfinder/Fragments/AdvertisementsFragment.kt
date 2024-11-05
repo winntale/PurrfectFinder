@@ -18,8 +18,8 @@ import com.example.purrfectfinder.databinding.FragmentAdvertisementsBinding
 import kotlinx.coroutines.launch
 
 interface FavouriteActionListener {
-    fun onAddToFavourites(advertisementId: Int, viewHolder: AdvertisementAdapter.ViewHolder)
-    fun onRemoveFromFavourites(advertisementId: Int, viewHolder: AdvertisementAdapter.ViewHolder)
+    fun onAddToFavourites(advertisementId: Int, viewHolder: AdvertisementAdapter.ViewHolder, currentAdapter: AdvertisementAdapter)
+    fun onRemoveFromFavourites(advertisementId: Int, viewHolder: AdvertisementAdapter.ViewHolder, currentAdapter: AdvertisementAdapter)
 }
 
 class AdvertisementsFragment : Fragment(), FavouriteActionListener {
@@ -44,22 +44,24 @@ class AdvertisementsFragment : Fragment(), FavouriteActionListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Инициализируем RecyclerView и адаптер
-        adAdapter = AdvertisementAdapter(emptyList(), MainActivity.allFavs, this)
-        binding.rvAds.apply {
-            layoutManager = GridLayoutManager(context, 2)
-            adapter = adAdapter
-            addItemDecoration(GridSpacingItemDecoration(2, 25, false))
-        }
-
         val db = DbHelper()
 
-        showLoadingScreen(true)
-
         lifecycleScope.launch {
+            allFavs = db.getAllFavAds(MainActivity.currentUserId!!)
+
+            // Инициализируем RecyclerView и адаптер
+            adAdapter = AdvertisementAdapter(emptyList(), allFavs, newInstance())
+            binding.rvAds.apply {
+                layoutManager = GridLayoutManager(context, 2)
+                adapter = adAdapter
+                addItemDecoration(GridSpacingItemDecoration(2, 25, false))
+            }
+
+            showLoadingScreen(true)
+
             try {
-                val data = db.getData<Advertisement>("Advertisements")
-                adAdapter.updateData(data, MainActivity.allFavs)
+                data = db.getData<Advertisement>("Advertisements")
+                adAdapter.updateData(data, allFavs)
                 binding.tvAdsFound.text = "Найдено объявлений: " + adAdapter.itemCount.toString()
             } catch (e: Exception) {
                 Log.e("Error", "Failed to load data: ${e.message}")
@@ -69,21 +71,23 @@ class AdvertisementsFragment : Fragment(), FavouriteActionListener {
         }
     }
 
-    override fun onAddToFavourites(advertisementId: Int, viewHolder: AdvertisementAdapter.ViewHolder) {
+    override fun onAddToFavourites(advertisementId: Int, viewHolder: AdvertisementAdapter.ViewHolder, currentAdapter: AdvertisementAdapter) {
         lifecycleScope.launch {
             val userId = MainActivity.currentUserId!!  // Метод получения текущего userId
             DbHelper().insertFavourite(userId, advertisementId)
-            MainActivity.allFavs = DbHelper().getAllFavAds(userId)
+            allFavs = DbHelper().getAllFavAds(userId)
+            currentAdapter.updateData(data, allFavs)
             viewHolder.isFavButton.setBackgroundResource(R.drawable.ic_fav_icon_active)
 
         }
     }
 
-    override fun onRemoveFromFavourites(advertisementId: Int, viewHolder: AdvertisementAdapter.ViewHolder) {
+    override fun onRemoveFromFavourites(advertisementId: Int, viewHolder: AdvertisementAdapter.ViewHolder, currentAdapter: AdvertisementAdapter) {
         lifecycleScope.launch {
             val userId = MainActivity.currentUserId!!  // Метод получения текущего userId
             DbHelper().deleteFavourite(userId, advertisementId)
-            MainActivity.allFavs = DbHelper().getAllFavAds(userId)
+            allFavs = DbHelper().getAllFavAds(userId)
+            currentAdapter.updateData(data, allFavs)
             viewHolder.isFavButton.setBackgroundResource(R.drawable.ic_fav_icon_inactive)
         }
     }
@@ -102,7 +106,8 @@ class AdvertisementsFragment : Fragment(), FavouriteActionListener {
     }
 
     companion object {
-        @JvmStatic
+        var data: List<Advertisement> = emptyList()
+        var allFavs: List<Int> = emptyList()
         fun newInstance() = AdvertisementsFragment()
     }
 }

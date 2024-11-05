@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.purrfectfinder.R
-import com.example.purrfectfinder.databinding.ActivityRegistrationBinding
 import com.example.purrfectfinder.databinding.ActivityRegistrationPostBinding
 
 class RegistrationPostActivity : AppCompatActivity() {

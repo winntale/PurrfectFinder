@@ -18,7 +18,6 @@ class ProfilePhotoFragment : Fragment() {
 
 
     companion object {
-        @JvmStatic
         fun newInstance() = ProfilePhotoFragment()
     }
 }
