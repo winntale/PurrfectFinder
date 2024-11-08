@@ -41,13 +41,16 @@ class ProfileDescHorizontalFragment : Fragment() {
         }
 
         binding.btnEdit.setOnClickListener{
-            (activity as? MainActivity)?.updateHeaderOnEdit("ProfileEdit")
+            with(activity as? MainActivity) {
+                this?.updateHeaderOnEdit("Редактировать профиль")
+                this?.addFragment(R.id.fragmentLayout, ProfileEditFragment.newInstance(), null, MainActivity.titleChangesStack)
+            }
 
-            parentFragmentManager
-                .beginTransaction().apply {
-                    replace(R.id.fragmentLayout, ProfileEditFragment.newInstance())
-                    commit()
-                }
+//            parentFragmentManager
+//                .beginTransaction().apply {
+//                    replace(R.id.fragmentLayout, ProfileEditFragment.newInstance())
+//                    commit()
+//                }
         }
     }
 

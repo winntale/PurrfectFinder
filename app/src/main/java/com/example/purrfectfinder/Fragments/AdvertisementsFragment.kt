@@ -15,6 +15,7 @@ import com.example.purrfectfinder.MainActivity
 import com.example.purrfectfinder.R
 import com.example.purrfectfinder.SerializableDataClasses.Advertisement
 import com.example.purrfectfinder.databinding.FragmentAdvertisementsBinding
+import io.github.jan.supabase.postgrest.postgrest
 import kotlinx.coroutines.launch
 
 interface FavouriteActionListener {
@@ -44,7 +45,16 @@ class AdvertisementsFragment : Fragment(), FavouriteActionListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        var listDataIds: List<Int>? = null
+
+        parentFragmentManager.setFragmentResultListener("requestKey", this) { requestKey, bundle ->
+            var dataIds = bundle.getIntegerArrayList("filteredAds")
+            listDataIds = dataIds?.toList()
+        }
+
         val db = DbHelper()
+
+        showLoadingScreen(true)
 
         lifecycleScope.launch {
             allFavs = db.getAllFavAds(MainActivity.currentUserId!!)
@@ -57,16 +67,34 @@ class AdvertisementsFragment : Fragment(), FavouriteActionListener {
                 addItemDecoration(GridSpacingItemDecoration(2, 25, false))
             }
 
-            showLoadingScreen(true)
-
-            try {
-                data = db.getData<Advertisement>("Advertisements")
-                adAdapter.updateData(data, allFavs)
-                binding.tvAdsFound.text = "Найдено объявлений: " + adAdapter.itemCount.toString()
-            } catch (e: Exception) {
-                Log.e("Error", "Failed to load data: ${e.message}")
-            } finally {
-                showLoadingScreen(false)
+            if (listDataIds == null) {
+                try {
+                    data = db.getData<Advertisement>("Advertisements")
+                    adAdapter.updateData(data, allFavs)
+                    binding.tvAdsFound.text =
+                        "Найдено объявлений: " + adAdapter.itemCount.toString()
+                } catch (e: Exception) {
+                    Log.e("Error", "Failed to load data: ${e.message}")
+                } finally {
+                    showLoadingScreen(false)
+                }
+            }
+            else {
+                try {
+                    data = db.getClient().postgrest["Advertisements"]
+                        .select {
+                            filter {
+                                isIn("id", listDataIds!!)
+                            }
+                        }.decodeList<Advertisement>()
+                    adAdapter.updateData(data, allFavs)
+                    binding.tvAdsFound.text =
+                        "Найдено объявлений: " + adAdapter.itemCount.toString()
+                } catch (e: Exception) {
+                    Log.e("Error", "Failed to load data: ${e.message}")
+                } finally {
+                    showLoadingScreen(false)
+                }
             }
         }
     }

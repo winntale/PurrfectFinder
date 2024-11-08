@@ -1,8 +1,10 @@
 package com.example.purrfectfinder
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -32,14 +34,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setFragment(R.id.loadingLayout, LoadingFragment.newInstance())
-
-        val db = DbHelper()
-
-        lifecycleScope.launch {
-            db.getData<User>("Users")
-            return@launch
+        onBackPressedDispatcher.addCallback(this) {
+            // Обрабатываем кнопку "Назад"
+            handleBackPressed()
         }
+
+        setFragment(R.id.loadingLayout, LoadingFragment.newInstance())
 
         _binding = ActivityMainBinding.inflate(layoutInflater)
         enableEdgeToEdge()
@@ -51,6 +51,8 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        titleChangesStack.add(binding.tvWinTitle.text.toString())
+
         val bundleReceived = intent.getBundleExtra("BUNDLE")
         currentUserId = bundleReceived?.getInt(ID)
         currentUserEmail = bundleReceived?.getString(EMAIL)
@@ -59,24 +61,9 @@ class MainActivity : AppCompatActivity() {
         currentUserCreatedAt = bundleReceived?.getString(CREATEDAT)
         currentUserPFP = bundleReceived?.getString(PFP)
 
-        lifecycleScope.launch {
-
-            return@launch
-        }
 
         binding.btnPrev.setOnClickListener {
-            binding.btnPrev.visibility = GONE
-            binding.btnSettings.visibility = VISIBLE
-
-            binding.tvWinTitle.text = ContextCompat.getString(
-                this@MainActivity,
-                R.string.your_profile
-            )
-            binding.tvWinTitle.textSize = 23f
-            binding.tvWinTitle.setPadding(0, 0, 0, 0)
-
-            setFragment(R.id.profileLayout, ProfileDescriptionFragment.newInstance())
-            setFragment(R.id.fragmentLayout, ProfileFragment.newInstance())
+            handleBackPressed()
         }
 
         binding.btnSettings.setOnClickListener {
@@ -90,8 +77,12 @@ class MainActivity : AppCompatActivity() {
             binding.tvWinTitle.textSize = 23f
             binding.tvWinTitle.setPadding(0, 0, 0, 0)
 
-            setFragment(R.id.profileLayout, ProfileDescHorizontalFragment.newInstance())
-            setFragment(R.id.fragmentLayout, SettingsFragment.newInstance())
+            addFragment(
+                listOf(R.id.profileLayout, R.id.fragmentLayout),
+                listOf(ProfileDescHorizontalFragment.newInstance(), SettingsFragment.newInstance()),
+                "Настройки",
+                titleChangesStack
+            )
         }
 
         binding.btnFilters.setOnClickListener {
@@ -103,8 +94,15 @@ class MainActivity : AppCompatActivity() {
             binding.tvWinTitle.textSize = 23f
             binding.tvWinTitle.setPadding(0, 0, 0, 0)
 
-            setFragment(R.id.profileLayout, null)
-            setFragment(R.id.fragmentLayout, FiltersFragment.newInstance())
+            addFragment(
+                listOf(R.id.profileLayout, R.id.fragmentLayout),
+                listOf(null, FiltersFragment.newInstance()),
+                "Фильтры",
+                titleChangesStack
+            )
+
+//            setFragment(R.id.profileLayout, null)
+//            setFragment(R.id.fragmentLayout, FiltersFragment.newInstance())
         }
 
         // navigationview
@@ -117,13 +115,16 @@ class MainActivity : AppCompatActivity() {
         setFragment(R.id.fragmentLayout, AdvertisementsFragment.newInstance())
         binding.navigationView.selectedItemId = R.id.petshop
 
+
         binding.navigationView.setOnItemSelectedListener { item ->
             when(item.itemId) {
                 R.id.home -> {
                     binding.tvWinTitle.text = "Главная"
                     binding.btnFilters.visibility = GONE
-                    binding.btnPrev.visibility = GONE
                     binding.btnSettings.visibility = GONE
+
+                    titleChangesStack.removeLast()
+                    titleChangesStack.add(binding.tvWinTitle.text.toString())
 
                     setFragment(R.id.profileLayout, null)
                     setFragment(R.id.fragmentLayout, null)
@@ -131,8 +132,10 @@ class MainActivity : AppCompatActivity() {
                 R.id.favourites -> {
                     binding.tvWinTitle.text = "Избранное"
                     binding.btnFilters.visibility = VISIBLE
-                    binding.btnPrev.visibility = GONE
                     binding.btnSettings.visibility = GONE
+
+                    titleChangesStack.removeLast()
+                    titleChangesStack.add(binding.tvWinTitle.text.toString())
 
                     setFragment(R.id.profileLayout, null)
                     setFragment(R.id.fragmentLayout, FavouriteAdvertisementsFragment.newInstance())
@@ -143,17 +146,24 @@ class MainActivity : AppCompatActivity() {
                         R.string.advertisements
                     )
                     binding.btnFilters.visibility = VISIBLE
-                    binding.btnPrev.visibility = GONE
                     binding.btnSettings.visibility = GONE
+
+                    titleChangesStack.removeLast()
+                    titleChangesStack.add(binding.tvWinTitle.text.toString())
 
                     setFragment(R.id.profileLayout, null)
                     setFragment(R.id.fragmentLayout, AdvertisementsFragment.newInstance())
                 }
                 R.id.clips -> {
                     binding.tvWinTitle.text = "Котоклипы"
+                    binding.btnFilters.visibility = GONE
+                    binding.btnSettings.visibility = GONE
 
                     setFragment(R.id.profileLayout, null)
                     setFragment(R.id.fragmentLayout, null)
+
+                    titleChangesStack.removeLast()
+                    titleChangesStack.add(binding.tvWinTitle.text.toString())
                 }
                 R.id.profile -> {
                     binding.tvWinTitle.text = ContextCompat.getString(
@@ -161,8 +171,10 @@ class MainActivity : AppCompatActivity() {
                         R.string.your_profile
                     )
                     binding.btnFilters.visibility = GONE
-                    binding.btnPrev.visibility = GONE
                     binding.btnSettings.visibility = VISIBLE
+
+                    titleChangesStack.removeLast()
+                    titleChangesStack.add(binding.tvWinTitle.text.toString())
 
                     setFragment(R.id.profileLayout, ProfileDescriptionFragment.newInstance())
                     setFragment(R.id.fragmentLayout, ProfileFragment.newInstance())
@@ -174,25 +186,20 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun updateHeaderOnEdit(fragmentName: String) {
-        when(fragmentName) {
-            "ProfileEdit" -> {
-                binding.btnPrev.visibility = VISIBLE
-                binding.btnSettings.visibility = GONE
-                binding.btnFilters.visibility = GONE
+    fun updateHeaderOnEdit(titleName: String) {
+            binding.btnPrev.visibility = VISIBLE
+            binding.btnSettings.visibility = GONE
+            binding.btnFilters.visibility = GONE
 
-                binding.tvWinTitle.text = ContextCompat.getString(
-                    this@MainActivity,
-                    R.string.edit_profile
-                )
-                binding.tvWinTitle.textSize = 17f
-                binding.tvWinTitle.setPadding(0, 13, 0, 0)
-            }
-        }
+            binding.tvWinTitle.text = titleName
+            titleChangesStack.add(binding.tvWinTitle.text.toString())
+
+            binding.tvWinTitle.textSize = 17f
+            binding.tvWinTitle.setPadding(0, 13, 0, 0)
 
     }
 
-    fun setFragment(layout: Int, fragment: Fragment?) {
+    private fun setFragment(layout: Int, fragment: Fragment?) {
         supportFragmentManager
             .beginTransaction().apply {
                 if (fragment != null) {
@@ -207,12 +214,125 @@ class MainActivity : AppCompatActivity() {
             }
     }
 
+    fun addFragment(layout: Int, fragment: Fragment, newTitle: String?, titleChangesStack: MutableList<String>) {
+        supportFragmentManager
+            .beginTransaction().apply {
+                if (supportFragmentManager.findFragmentById(layout) != null) {
+                    hide(supportFragmentManager.findFragmentById(layout)!!)
+                }
+
+                add(layout, fragment)
+                addToBackStack(null)
+
+                if (newTitle != null)
+                    titleChangesStack.add(newTitle)
+
+                commit()
+            }
+    }
+
+    // перегрузка функции, для того, чтобы добавить в стэк один уровень,
+    // но отрисовать фрагменты на нескольких layouts
+    fun addFragment(layouts: List<Int>, fragments: List<Fragment?>, newTitle: String?, titleChangesStack: MutableList<String>) {
+        supportFragmentManager
+            .beginTransaction().apply {
+                for (i in 1..layouts.size) {
+                    // если текущий фрагмент рассматриваемого layout'а не null
+                    // прячем его
+                    if (supportFragmentManager.findFragmentById(layouts[i - 1]) != null) {
+                        hide(supportFragmentManager.findFragmentById(layouts[i - 1])!!)
+                    }
+
+                    // далее, если текущий фрагмент не null, добавляем его на текущий layout
+                    if (fragments[i - 1] != null)
+                        fragments[i - 1]?.let { add(layouts[i - 1], it) }
+                    // иначе удаляем текущий фрагмент
+                    else
+                        supportFragmentManager.findFragmentById(layouts[i - 1])?.let {
+                            remove(it)
+                        }
+                }
+                addToBackStack(null)
+
+                if (newTitle != null)
+                    titleChangesStack.add(newTitle)
+
+                commit()
+            }
+
+    }
+
     fun showLoadingScreen(isLoading: Boolean) {
         if (isLoading) {
             binding.loadingLayout.visibility = VISIBLE
         }
         else {
             binding.loadingLayout.visibility = GONE
+        }
+    }
+
+    private fun handleBackPressed() {
+        // Логика для того, что должно произойти при нажатии кнопки "Назад"
+
+        // Логируем количество элементов в стеке
+        Log.d("BackStack", "BackStackEntryCount: ${supportFragmentManager.backStackEntryCount}")
+
+        // Если в стеке только один фрагмент, скрываем кнопку "Назад"
+        if (supportFragmentManager.backStackEntryCount == 1) {
+            binding.btnPrev.visibility = GONE
+        }
+
+        binding.btnSettings.visibility = VISIBLE
+
+        // Удаляем последний элемент из списка заголовков
+        if (!titleChangesStack.isEmpty())
+            titleChangesStack.removeLast()
+
+        binding.tvWinTitle.text = titleChangesStack.last()
+
+        // Устанавливаем размер текста и отступы в зависимости от длины заголовка
+        if (binding.tvWinTitle.text.length < 20) {
+            binding.tvWinTitle.textSize = 23f
+            binding.tvWinTitle.setPadding(0, 0, 0, 0)
+        } else {
+            binding.tvWinTitle.textSize = 17f
+            binding.tvWinTitle.setPadding(0, 13, 0, 0)
+        }
+
+        // Обновляем видимость кнопок в зависимости от текущего заголовка
+        when (titleChangesStack.last()) {
+            "Главная" -> {
+                binding.btnFilters.visibility = GONE
+                binding.btnSettings.visibility = GONE
+            }
+            "Избранное" -> {
+                binding.btnFilters.visibility = VISIBLE
+                binding.btnSettings.visibility = GONE
+            }
+            "Объявления" -> {
+                binding.btnFilters.visibility = VISIBLE
+                binding.btnSettings.visibility = GONE
+            }
+            "Котоклипы" -> {
+                binding.btnFilters.visibility = GONE
+                binding.btnSettings.visibility = GONE
+            }
+            "Профиль" -> {
+                binding.btnFilters.visibility = GONE
+                binding.btnSettings.visibility = VISIBLE
+            }
+            "Фильтры" -> {
+                binding.btnFilters.visibility = GONE
+                binding.btnSettings.visibility = GONE
+            }
+        }
+
+        // Возврат на предыдущий фрагмент из стека
+        if (supportFragmentManager.backStackEntryCount > 0) {
+            supportFragmentManager.popBackStack()
+        } else {
+            // Важно вызвать super.onBackPressed(), чтобы сохранить стандартное поведение
+            super.onBackPressed() // В этом случае, если стек пуст, вызываем стандартное поведение для выхода из активности
         }
     }
 
@@ -230,5 +350,7 @@ class MainActivity : AppCompatActivity() {
         var currentUserFirstName: String? = null
         var currentUserCreatedAt: String? = null
         var currentUserPFP: String? = null
+
+        var titleChangesStack: MutableList<String> = mutableListOf()
     }
 }

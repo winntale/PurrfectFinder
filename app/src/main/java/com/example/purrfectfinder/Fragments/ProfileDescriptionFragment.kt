@@ -40,16 +40,26 @@ class ProfileDescriptionFragment : Fragment() {
                 .into(binding.ivPFP) // Установка изображения в ImageView
         }
 
-        binding.btnEdit.setOnClickListener{
-            (activity as? MainActivity)?.updateHeaderOnEdit("ProfileEdit")
-
-            parentFragmentManager
-                .beginTransaction().apply {
-                    replace(R.id.profileLayout, ProfileDescHorizontalFragment.newInstance())
-                    replace(R.id.fragmentLayout, ProfileEditFragment.newInstance())
-                    commit()
-                }
+        binding.btnEdit.setOnClickListener {
+            with(activity as? MainActivity) {
+                this?.updateHeaderOnEdit("Редактировать профиль")
+                this?.addFragment(
+                    listOf(R.id.profileLayout, R.id.fragmentLayout),
+                    listOf(ProfileDescHorizontalFragment.newInstance(), ProfileEditFragment.newInstance()),
+                    null,
+                    MainActivity.titleChangesStack
+                )
+            }
         }
+
+
+//            parentFragmentManager
+//                .beginTransaction().apply {
+//                    replace(R.id.profileLayout, ProfileDescHorizontalFragment.newInstance())
+//                    replace(R.id.fragmentLayout, ProfileEditFragment.newInstance())
+//                    commit()
+//                }
+
     }
 
     companion object {
