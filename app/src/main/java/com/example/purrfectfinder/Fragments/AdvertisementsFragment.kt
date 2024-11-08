@@ -47,12 +47,12 @@ class AdvertisementsFragment : Fragment(), FavouriteActionListener {
 
         var listDataIds: List<Int>? = null
 
-        parentFragmentManager.setFragmentResultListener("requestKey", this) { requestKey, bundle ->
-            var dataIds = bundle.getIntegerArrayList("filteredAds")
-            listDataIds = dataIds?.toList()
-        }
-
         val db = DbHelper()
+
+        parentFragmentManager.setFragmentResultListener("requestKey", this) { _, bundle ->
+            val dataIds = bundle.getIntegerArrayList("filteredAds")
+            listDataIds = dataIds?.toList()!!
+        }
 
         showLoadingScreen(true)
 
@@ -67,6 +67,8 @@ class AdvertisementsFragment : Fragment(), FavouriteActionListener {
                 addItemDecoration(GridSpacingItemDecoration(2, 25, false))
             }
 
+            Log.e("RECEIVED DATA", listDataIds.toString())
+            // для отрисовки всех объявлений
             if (listDataIds == null) {
                 try {
                     data = db.getData<Advertisement>("Advertisements")
@@ -79,6 +81,7 @@ class AdvertisementsFragment : Fragment(), FavouriteActionListener {
                     showLoadingScreen(false)
                 }
             }
+
             else {
                 try {
                     data = db.getClient().postgrest["Advertisements"]
@@ -100,6 +103,7 @@ class AdvertisementsFragment : Fragment(), FavouriteActionListener {
     }
 
     override fun onAddToFavourites(advertisementId: Int, viewHolder: AdvertisementAdapter.ViewHolder, currentAdapter: AdvertisementAdapter) {
+
         lifecycleScope.launch {
             val userId = MainActivity.currentUserId!!  // Метод получения текущего userId
             DbHelper().insertFavourite(userId, advertisementId)
@@ -111,6 +115,7 @@ class AdvertisementsFragment : Fragment(), FavouriteActionListener {
     }
 
     override fun onRemoveFromFavourites(advertisementId: Int, viewHolder: AdvertisementAdapter.ViewHolder, currentAdapter: AdvertisementAdapter) {
+
         lifecycleScope.launch {
             val userId = MainActivity.currentUserId!!  // Метод получения текущего userId
             DbHelper().deleteFavourite(userId, advertisementId)
@@ -136,6 +141,9 @@ class AdvertisementsFragment : Fragment(), FavouriteActionListener {
     companion object {
         var data: List<Advertisement> = emptyList()
         var allFavs: List<Int> = emptyList()
+
+        var favAds: MutableList<Map<Int, Int>> = mutableListOf()
+
         fun newInstance() = AdvertisementsFragment()
     }
 }

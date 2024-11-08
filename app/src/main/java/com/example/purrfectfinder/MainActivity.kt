@@ -12,7 +12,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import com.example.purrfectfinder.Fragments.AdvertisementsFragment
 import com.example.purrfectfinder.Fragments.FavouriteAdvertisementsFragment
 import com.example.purrfectfinder.Fragments.FiltersFragment
@@ -21,9 +20,8 @@ import com.example.purrfectfinder.Fragments.ProfileDescHorizontalFragment
 import com.example.purrfectfinder.Fragments.ProfileDescriptionFragment
 import com.example.purrfectfinder.Fragments.ProfileFragment
 import com.example.purrfectfinder.Fragments.SettingsFragment
-import com.example.purrfectfinder.SerializableDataClasses.User
 import com.example.purrfectfinder.databinding.ActivityMainBinding
-import kotlinx.coroutines.launch
+import java.io.File
 
 class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
@@ -44,6 +42,10 @@ class MainActivity : AppCompatActivity() {
         _binding = ActivityMainBinding.inflate(layoutInflater)
         enableEdgeToEdge()
         setContentView(binding.root)
+
+        // кэширование
+        val cacheDir = cacheDir
+        val file = File(cacheDir, "some data")
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -100,9 +102,6 @@ class MainActivity : AppCompatActivity() {
                 "Фильтры",
                 titleChangesStack
             )
-
-//            setFragment(R.id.profileLayout, null)
-//            setFragment(R.id.fragmentLayout, FiltersFragment.newInstance())
         }
 
         // navigationview
@@ -199,7 +198,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun setFragment(layout: Int, fragment: Fragment?) {
+    fun setFragment(layout: Int, fragment: Fragment?) {
         supportFragmentManager
             .beginTransaction().apply {
                 if (fragment != null) {
@@ -259,7 +258,6 @@ class MainActivity : AppCompatActivity() {
 
                 commit()
             }
-
     }
 
     fun showLoadingScreen(isLoading: Boolean) {
@@ -271,18 +269,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Логика для того, что должно произойти при нажатии кнопки "Назад"
     private fun handleBackPressed() {
-        // Логика для того, что должно произойти при нажатии кнопки "Назад"
-
-        // Логируем количество элементов в стеке
-        Log.d("BackStack", "BackStackEntryCount: ${supportFragmentManager.backStackEntryCount}")
 
         // Если в стеке только один фрагмент, скрываем кнопку "Назад"
         if (supportFragmentManager.backStackEntryCount == 1) {
             binding.btnPrev.visibility = GONE
         }
-
-        binding.btnSettings.visibility = VISIBLE
 
         // Удаляем последний элемент из списка заголовков
         if (!titleChangesStack.isEmpty())
@@ -317,7 +310,7 @@ class MainActivity : AppCompatActivity() {
                 binding.btnFilters.visibility = GONE
                 binding.btnSettings.visibility = GONE
             }
-            "Профиль" -> {
+            "Ваш профиль" -> {
                 binding.btnFilters.visibility = GONE
                 binding.btnSettings.visibility = VISIBLE
             }

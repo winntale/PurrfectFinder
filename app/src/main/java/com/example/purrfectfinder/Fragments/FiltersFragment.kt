@@ -55,10 +55,10 @@ class FiltersFragment : Fragment() {
             adapter = colorsAdapter
         }
 
+        showLoadingScreen(true)
         val db = DbHelper()
 
         // показываем экран загрузки
-        showLoadingScreen(true)
 
         lifecycleScope.launch {
             try {
@@ -68,14 +68,15 @@ class FiltersFragment : Fragment() {
                 // обновляем адаптеры с полученными данными
                 breedsAdapter.updateData(breeds)
                 colorsAdapter.updateData(colors)
+                // в конце корутины скрываем экран загрузки, делаем видимой кнопку "Подтвердить фильтры"
+                showLoadingScreen(false)
+                binding.btnConfirmFilters.visibility = View.VISIBLE
             } catch (e: Exception) {
                 Log.e("Error", "Failed to load data: ${e.message}")
             }
         }
 
-        // в конце корутины скрываем экран загрузки, делаем видимой кнопку "Подтвердить фильтры"
-        showLoadingScreen(false)
-        binding.btnConfirmFilters.visibility = View.VISIBLE
+
 
         // обработка нажатия на кнопку "Подтвердить фильтры"
         binding.btnConfirmFilters.setOnClickListener{
@@ -108,14 +109,15 @@ class FiltersFragment : Fragment() {
                     }.decodeList<Map<String, Int>>()
                     .mapNotNull { it["id"] }
 
-                Log.e("RESULT ADS", resultAds.toString())
+                Log.e("RESULT ADS", ArrayList(resultAds).toString())
 
                 parentFragmentManager.setFragmentResult("requestKey", bundleOf("filteredAds" to ArrayList(resultAds)))
-                parentFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.fragmentLayout, AdvertisementsFragment.newInstance())
-                    .commit()
+                parentFragmentManager.popBackStack()
+
+                (activity as? MainActivity)?.setFragment(R.id.fragmentLayout, null)
+                // (activity as? MainActivity)?.setFragment(R.id.fragmentLayout, AdvertisementsFragment.newInstance())
             }
+            showLoadingScreen(false)
         }
     }
 
