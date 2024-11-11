@@ -6,28 +6,31 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.purrfectfinder.Adapters.AdvertisementAdapter
+import com.example.purrfectfinder.DataModel
 import com.example.purrfectfinder.DbHelper
+import com.example.purrfectfinder.Fragments.FavouriteAdvertisementsFragment.Companion.allFavs
+import com.example.purrfectfinder.Fragments.FavouriteAdvertisementsFragment.Companion.data
 import com.example.purrfectfinder.GridSpacingItemDecoration
 import com.example.purrfectfinder.MainActivity
 import com.example.purrfectfinder.R
 import com.example.purrfectfinder.SerializableDataClasses.Advertisement
-import com.example.purrfectfinder.databinding.FragmentAdvertisementsBinding
+import com.example.purrfectfinder.databinding.FragmentFilteredAdvertisementsBinding
+import io.github.jan.supabase.postgrest.postgrest
 import kotlinx.coroutines.launch
 
-interface FavouriteActionListener {
-    fun onAddToFavourites(advertisementId: Int, viewHolder: AdvertisementAdapter.ViewHolder, currentAdapter: AdvertisementAdapter)
-    fun onRemoveFromFavourites(advertisementId: Int, viewHolder: AdvertisementAdapter.ViewHolder, currentAdapter: AdvertisementAdapter)
-}
+class FilteredAdvertisementsFragment : Fragment(), FavouriteActionListener {
+    private val dataModel: DataModel by activityViewModels()
 
-class AdvertisementsFragment : Fragment(), FavouriteActionListener {
-
-    private var _binding: FragmentAdvertisementsBinding? = null
+    private var _binding: FragmentFilteredAdvertisementsBinding? = null
     private val binding
         get() = _binding
-            ?: throw IllegalStateException("Binding for FragmentAdvertisementsBinding must not be null")
+            ?: throw IllegalStateException("Binding for FragmentFilteredAdvertisementsBinding must not be null")
 
     private lateinit var adAdapter: AdvertisementAdapter
 
@@ -35,40 +38,54 @@ class AdvertisementsFragment : Fragment(), FavouriteActionListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentAdvertisementsBinding.inflate(inflater, container, false)
+        _binding = FragmentFilteredAdvertisementsBinding.inflate(inflater, container, false)
         // Inflate the layout for this fragment
         return binding.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        adAdapter = AdvertisementAdapter(emptyList(), allFavs, this)
+        binding.rvFilteredAds.apply {
+            layoutManager = GridLayoutManager(context, 2)
+            adapter = adAdapter
+            addItemDecoration(GridSpacingItemDecoration(2, 25, false))
+        }
+
         val db = DbHelper()
 
-        lifecycleScope.launch {
-            allFavs = db.getAllFavAds(MainActivity.currentUserId!!)
-
-            // Инициализируем RecyclerView и адаптер
-            adAdapter = AdvertisementAdapter(emptyList(), allFavs, newInstance())
-            binding.rvAds.apply {
-                layoutManager = GridLayoutManager(context, 2)
-                adapter = adAdapter
-                addItemDecoration(GridSpacingItemDecoration(2, 25, false))
-            }
-
+        dataModel.filteredAds.observe(activity as LifecycleOwner) {
             showLoadingScreen(true)
 
-            try {
-                data = db.getData<Advertisement>("Advertisements")
-                adAdapter.updateData(data, allFavs)
-                binding.tvAdsFound.text = "Найдено объявлений: " + adAdapter.itemCount.toString()
-            } catch (e: Exception) {
-                Log.e("Error", "Failed to load data: ${e.message}")
-            } finally {
-                showLoadingScreen(false)
+            lifecycleScope.launch {
+                try {
+                    val client = db.getClient()
+
+                    allFavs = db.getAllFavAds(MainActivity.currentUserId!!)
+
+
+
+                    // Получаем все объявления, которые совпадают с advertisementId
+                    data = client.postgrest["Advertisements"]
+                        .select() {
+                            filter {
+                                isIn("id", it) // фильтруем по списку advertisementId
+                            }
+                        }
+                        .decodeList<Advertisement>()
+
+                    adAdapter.updateData(data, allFavs)
+
+                } catch (e: Exception) {
+                    Log.e("Error", "Failed to load data: ${e.message}")
+                } finally {
+                    showLoadingScreen(false)
+                }
             }
         }
+
+
     }
 
     override fun onAddToFavourites(advertisementId: Int, viewHolder: AdvertisementAdapter.ViewHolder, currentAdapter: AdvertisementAdapter) {
@@ -92,23 +109,19 @@ class AdvertisementsFragment : Fragment(), FavouriteActionListener {
         }
     }
 
-    // Функция для показа/скрытия загрузочного экрана
     private fun showLoadingScreen(isLoading: Boolean) {
-        (activity as MainActivity).showLoadingScreen(isLoading)
+        (activity as? MainActivity)?.showLoadingScreen(isLoading)
 
         if (isLoading) {
-            binding.tvAdsFound.visibility = View.GONE
-            binding.rvAds.visibility = View.GONE
+            binding.rvFilteredAds.visibility = View.GONE
         } else {
-            binding.tvAdsFound.visibility = View.VISIBLE
-            binding.rvAds.visibility = View.VISIBLE
+            binding.rvFilteredAds.visibility = View.VISIBLE
         }
     }
 
     companion object {
         var data: List<Advertisement> = emptyList()
         var allFavs: List<Int> = emptyList()
-        fun newInstance() = AdvertisementsFragment()
+        fun newInstance() = FilteredAdvertisementsFragment()
     }
 }
-

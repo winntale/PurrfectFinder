@@ -8,9 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.core.os.bundleOf
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.purrfectfinder.Adapters.FiltersAdapter
+import com.example.purrfectfinder.DataModel
 import com.example.purrfectfinder.DbHelper
 import com.example.purrfectfinder.MainActivity
 import com.example.purrfectfinder.R
@@ -22,6 +24,8 @@ import kotlinx.coroutines.launch
 import kotlin.reflect.jvm.internal.impl.util.Check
 
 class FiltersFragment : Fragment() {
+    private val dataModel: DataModel by activityViewModels()
+
     private var _binding: FragmentFiltersBinding? = null
     private val binding
         get() = _binding
@@ -111,10 +115,15 @@ class FiltersFragment : Fragment() {
 
                 Log.e("RESULT ADS", ArrayList(resultAds).toString())
 
-                parentFragmentManager.setFragmentResult("requestKey", bundleOf("filteredAds" to ArrayList(resultAds)))
-                parentFragmentManager.popBackStack()
+                dataModel.filteredAds.value = resultAds
 
-                (activity as? MainActivity)?.setFragment(R.id.fragmentLayout, null)
+//                parentFragmentManager.setFragmentResult("requestKey", bundleOf("filteredAds" to ArrayList(resultAds)))
+//                parentFragmentManager.beginTransaction().apply {
+//                    replace(R.id.fragmentLayout, AdvertisementsFragment.newInstance())
+//                    commit()
+//                }
+
+//                (activity as? MainActivity)?.setFragment(R.id.fragmentLayout, null)
                 // (activity as? MainActivity)?.setFragment(R.id.fragmentLayout, AdvertisementsFragment.newInstance())
             }
             showLoadingScreen(false)

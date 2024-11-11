@@ -52,15 +52,21 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation(libs.androidx.core.splashscreen)
 
+    // views
+    implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.viewpager2)
 
+    // DB
     implementation(libs.postgrest.kt)
     implementation(libs.kotlinx.serialization.json)
-    implementation("io.ktor:ktor-client-cio:3.0.0")
+    implementation(libs.ktor.client.cio)
 
-    implementation("com.github.bumptech.glide:glide:4.12.0")
+    // media features
+    implementation(libs.glide)
+    implementation(libs.android.gif.drawable)
 
-    implementation("pl.droidsonroids.gif:android-gif-drawable:1.2.19")
+    // MVVM
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
 }

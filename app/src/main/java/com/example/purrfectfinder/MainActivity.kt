@@ -1,11 +1,13 @@
 package com.example.purrfectfinder
 
 import android.os.Bundle
+import android.provider.ContactsContract.Data
 import android.util.Log
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -14,6 +16,7 @@ import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import com.example.purrfectfinder.Fragments.AdvertisementsFragment
 import com.example.purrfectfinder.Fragments.FavouriteAdvertisementsFragment
+import com.example.purrfectfinder.Fragments.FilteredAdvertisementsFragment
 import com.example.purrfectfinder.Fragments.FiltersFragment
 import com.example.purrfectfinder.Fragments.LoadingFragment
 import com.example.purrfectfinder.Fragments.ProfileDescHorizontalFragment
@@ -24,6 +27,8 @@ import com.example.purrfectfinder.databinding.ActivityMainBinding
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
+    private val dataModel: DataModel by viewModels()
+
     private var _binding: ActivityMainBinding? = null
     private val binding
         get() = _binding
@@ -43,10 +48,6 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(binding.root)
 
-        // кэширование
-        val cacheDir = cacheDir
-        val file = File(cacheDir, "some data")
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -63,6 +64,14 @@ class MainActivity : AppCompatActivity() {
         currentUserCreatedAt = bundleReceived?.getString(CREATEDAT)
         currentUserPFP = bundleReceived?.getString(PFP)
 
+        // navigationview
+        ViewCompat.setOnApplyWindowInsetsListener(binding.navigationView) { view, insets ->
+            view.updatePadding(bottom = 0)
+            insets
+        }
+
+        setFragment(R.id.fragmentLayout, AdvertisementsFragment.newInstance())
+        binding.navigationView.selectedItemId = R.id.petshop
 
         binding.btnPrev.setOnClickListener {
             handleBackPressed()
@@ -103,17 +112,6 @@ class MainActivity : AppCompatActivity() {
                 titleChangesStack
             )
         }
-
-        // navigationview
-
-        ViewCompat.setOnApplyWindowInsetsListener(binding.navigationView) { view, insets ->
-            view.updatePadding(bottom = 0)
-            insets
-        }
-
-        setFragment(R.id.fragmentLayout, AdvertisementsFragment.newInstance())
-        binding.navigationView.selectedItemId = R.id.petshop
-
 
         binding.navigationView.setOnItemSelectedListener { item ->
             when(item.itemId) {
@@ -182,6 +180,18 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
+        dataModel.filteredAds.observe(this) {
+            setFragment(R.id.fragmentLayout, FilteredAdvertisementsFragment.newInstance())
+            supportFragmentManager.beginTransaction().apply {
+                addToBackStack(null)
+                commit()
+            }
+
+            titleChangesStack.removeLast()
+            binding.tvWinTitle.text = "Результаты поиска"
+            titleChangesStack.add(binding.tvWinTitle.text.toString())
+        }
+
     }
 
 
@@ -211,6 +221,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 commit()
             }
+        Log.e("CURRENT BACKSTACK", supportFragmentManager.backStackEntryCount.toString())
     }
 
     fun addFragment(layout: Int, fragment: Fragment, newTitle: String?, titleChangesStack: MutableList<String>) {
@@ -228,6 +239,7 @@ class MainActivity : AppCompatActivity() {
 
                 commit()
             }
+        Log.e("CURRENT BACKSTACK", supportFragmentManager.backStackEntryCount.toString())
     }
 
     // перегрузка функции, для того, чтобы добавить в стэк один уровень,
@@ -258,6 +270,7 @@ class MainActivity : AppCompatActivity() {
 
                 commit()
             }
+        Log.e("CURRENT BACKSTACK", supportFragmentManager.backStackEntryCount.toString())
     }
 
     fun showLoadingScreen(isLoading: Boolean) {
@@ -272,6 +285,8 @@ class MainActivity : AppCompatActivity() {
     // Логика для того, что должно произойти при нажатии кнопки "Назад"
     private fun handleBackPressed() {
 
+        Log.e("CURRENT LIST OF TITLES", titleChangesStack.toString())
+        Log.e("CURRENT BACKSTACK", supportFragmentManager.backStackEntryCount.toString())
         // Если в стеке только один фрагмент, скрываем кнопку "Назад"
         if (supportFragmentManager.backStackEntryCount == 1) {
             binding.btnPrev.visibility = GONE
