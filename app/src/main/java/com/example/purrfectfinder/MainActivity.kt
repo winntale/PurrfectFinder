@@ -111,6 +111,8 @@ class MainActivity : AppCompatActivity() {
                 "Фильтры",
                 titleChangesStack
             )
+
+            Log.e("CURRENT BACKSTACK FILTERS", supportFragmentManager.backStackEntryCount.toString())
         }
 
         binding.navigationView.setOnItemSelectedListener { item ->
@@ -150,6 +152,8 @@ class MainActivity : AppCompatActivity() {
 
                     setFragment(R.id.profileLayout, null)
                     setFragment(R.id.fragmentLayout, AdvertisementsFragment.newInstance())
+
+                    Log.e("CURRENT BACKSTACK", supportFragmentManager.backStackEntryCount.toString())
                 }
                 R.id.clips -> {
                     binding.tvWinTitle.text = "Котоклипы"
@@ -182,10 +186,6 @@ class MainActivity : AppCompatActivity() {
 
         dataModel.filteredAds.observe(this) {
             setFragment(R.id.fragmentLayout, FilteredAdvertisementsFragment.newInstance())
-            supportFragmentManager.beginTransaction().apply {
-                addToBackStack(null)
-                commit()
-            }
 
             titleChangesStack.removeLast()
             binding.tvWinTitle.text = "Результаты поиска"
@@ -221,7 +221,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 commit()
             }
-        Log.e("CURRENT BACKSTACK", supportFragmentManager.backStackEntryCount.toString())
+//        Log.e("CURRENT BACKSTACK", supportFragmentManager.backStackEntryCount.toString())
     }
 
     fun addFragment(layout: Int, fragment: Fragment, newTitle: String?, titleChangesStack: MutableList<String>) {
@@ -239,7 +239,7 @@ class MainActivity : AppCompatActivity() {
 
                 commit()
             }
-        Log.e("CURRENT BACKSTACK", supportFragmentManager.backStackEntryCount.toString())
+//        Log.e("CURRENT BACKSTACK", supportFragmentManager.backStackEntryCount.toString())
     }
 
     // перегрузка функции, для того, чтобы добавить в стэк один уровень,
@@ -270,7 +270,7 @@ class MainActivity : AppCompatActivity() {
 
                 commit()
             }
-        Log.e("CURRENT BACKSTACK", supportFragmentManager.backStackEntryCount.toString())
+
     }
 
     fun showLoadingScreen(isLoading: Boolean) {

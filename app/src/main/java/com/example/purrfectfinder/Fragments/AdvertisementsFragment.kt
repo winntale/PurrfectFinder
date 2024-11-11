@@ -46,6 +46,8 @@ class AdvertisementsFragment : Fragment(), FavouriteActionListener {
 
         val db = DbHelper()
 
+        showLoadingScreen(true)
+
         lifecycleScope.launch {
             allFavs = db.getAllFavAds(MainActivity.currentUserId!!)
 
@@ -56,8 +58,6 @@ class AdvertisementsFragment : Fragment(), FavouriteActionListener {
                 adapter = adAdapter
                 addItemDecoration(GridSpacingItemDecoration(2, 25, false))
             }
-
-            showLoadingScreen(true)
 
             try {
                 data = db.getData<Advertisement>("Advertisements")
