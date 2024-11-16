@@ -16,6 +16,7 @@ import com.example.purrfectfinder.DataModel
 import com.example.purrfectfinder.DbHelper
 import com.example.purrfectfinder.MainActivity
 import com.example.purrfectfinder.R
+import com.example.purrfectfinder.TitleProvider
 import com.example.purrfectfinder.databinding.FragmentFiltersBinding
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
@@ -23,7 +24,7 @@ import io.github.jan.supabase.postgrest.query.filter.PostgrestFilterBuilder
 import kotlinx.coroutines.launch
 import kotlin.reflect.jvm.internal.impl.util.Check
 
-class FiltersFragment : Fragment() {
+class FiltersFragment : Fragment(), TitleProvider {
     private val dataModel: DataModel by activityViewModels()
 
     private var _binding: FragmentFiltersBinding? = null
@@ -84,8 +85,10 @@ class FiltersFragment : Fragment() {
 
         // обработка нажатия на кнопку "Подтвердить фильтры"
         binding.btnConfirmFilters.setOnClickListener{
+            (activity as MainActivity).updateLoadingFragmentText("Применяем фильтры...")
             // показываем экран загрузки
             showLoadingScreen(true)
+
 
             lifecycleScope.launch {
                 // получаем список всех элементов CheckBox для каждой из доступных категорий фильтров
@@ -117,16 +120,8 @@ class FiltersFragment : Fragment() {
 
                 dataModel.filteredAds.value = resultAds
 
-//                parentFragmentManager.setFragmentResult("requestKey", bundleOf("filteredAds" to ArrayList(resultAds)))
-//                parentFragmentManager.beginTransaction().apply {
-//                    replace(R.id.fragmentLayout, AdvertisementsFragment.newInstance())
-//                    commit()
-//                }
-
-//                (activity as? MainActivity)?.setFragment(R.id.fragmentLayout, null)
-                // (activity as? MainActivity)?.setFragment(R.id.fragmentLayout, AdvertisementsFragment.newInstance())
+//                showLoadingScreen(false)
             }
-            showLoadingScreen(false)
         }
     }
 
@@ -172,6 +167,10 @@ class FiltersFragment : Fragment() {
             rvColors.visibility = visibility
             btnConfirmFilters.visibility = visibility
         }
+    }
+
+    override fun getTitle(): String {
+        return "Фильтры"
     }
 
     // Функция для показа/скрытия загрузочного экрана

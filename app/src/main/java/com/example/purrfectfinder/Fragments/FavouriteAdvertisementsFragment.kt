@@ -14,12 +14,13 @@ import com.example.purrfectfinder.GridSpacingItemDecoration
 import com.example.purrfectfinder.MainActivity
 import com.example.purrfectfinder.R
 import com.example.purrfectfinder.SerializableDataClasses.Advertisement
+import com.example.purrfectfinder.TitleProvider
 import com.example.purrfectfinder.databinding.FragmentFavouriteAdvertisementsBinding
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.launch
 
-class FavouriteAdvertisementsFragment : Fragment(), FavouriteActionListener {
+class FavouriteAdvertisementsFragment : Fragment(), FavouriteActionListener, TitleProvider {
 
     private var _binding: FragmentFavouriteAdvertisementsBinding? = null
     private val binding
@@ -96,6 +97,10 @@ class FavouriteAdvertisementsFragment : Fragment(), FavouriteActionListener {
             currentAdapter.updateData(data, allFavs)
             viewHolder.isFavButton.setBackgroundResource(R.drawable.ic_fav_icon_inactive)
         }
+    }
+
+    override fun getTitle(): String {
+        return "Избранное"
     }
 
     private fun showLoadingScreen(isLoading: Boolean) {

@@ -67,7 +67,7 @@
 
     <!--profileLayout-->
 
-    <FrameLayout
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/profileLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -78,7 +78,7 @@
 
     <!--fragmentlayout-->
 
-    <FrameLayout
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"

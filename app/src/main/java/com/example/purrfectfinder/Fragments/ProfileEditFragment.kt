@@ -7,9 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.purrfectfinder.MainActivity
+import com.example.purrfectfinder.TitleProvider
 import com.example.purrfectfinder.databinding.FragmentProfileEditBinding
 
-class ProfileEditFragment : Fragment() {
+class ProfileEditFragment : Fragment(), TitleProvider {
     private var _binding: FragmentProfileEditBinding? = null
     private val binding
         get() = _binding
@@ -31,6 +32,10 @@ class ProfileEditFragment : Fragment() {
 
         binding.lChangeName.prefixTextView.text = "${MainActivity.currentUserSecondName} ${MainActivity.currentUserFirstName}"
         binding.lChangeEmail.prefixTextView.text = "${MainActivity.currentUserEmail}"
+    }
+
+    override fun getTitle(): String {
+        return "Редактировать профиль"
     }
 
     companion object {

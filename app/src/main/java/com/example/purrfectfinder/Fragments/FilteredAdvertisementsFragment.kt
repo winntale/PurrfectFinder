@@ -20,11 +20,12 @@ import com.example.purrfectfinder.GridSpacingItemDecoration
 import com.example.purrfectfinder.MainActivity
 import com.example.purrfectfinder.R
 import com.example.purrfectfinder.SerializableDataClasses.Advertisement
+import com.example.purrfectfinder.TitleProvider
 import com.example.purrfectfinder.databinding.FragmentFilteredAdvertisementsBinding
 import io.github.jan.supabase.postgrest.postgrest
 import kotlinx.coroutines.launch
 
-class FilteredAdvertisementsFragment : Fragment(), FavouriteActionListener {
+class FilteredAdvertisementsFragment : Fragment(), FavouriteActionListener, TitleProvider {
     private val dataModel: DataModel by activityViewModels()
 
     private var _binding: FragmentFilteredAdvertisementsBinding? = null
@@ -56,7 +57,7 @@ class FilteredAdvertisementsFragment : Fragment(), FavouriteActionListener {
         val db = DbHelper()
 
         dataModel.filteredAds.observe(activity as LifecycleOwner) {
-            showLoadingScreen(true)
+//            showLoadingScreen(true)
 
             lifecycleScope.launch {
                 try {
@@ -107,6 +108,10 @@ class FilteredAdvertisementsFragment : Fragment(), FavouriteActionListener {
             currentAdapter.updateData(data, allFavs)
             viewHolder.isFavButton.setBackgroundResource(R.drawable.ic_fav_icon_inactive)
         }
+    }
+
+    override fun getTitle(): String {
+        return "Результаты поиска"
     }
 
     private fun showLoadingScreen(isLoading: Boolean) {

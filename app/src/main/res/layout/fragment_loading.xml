@@ -13,12 +13,13 @@
         android:src="@drawable/gif_cat_loading" />
 
     <TextView
+        android:id="@+id/loadingTextView"
         style="@style/RegularText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="80dp"
-        android:text="Идет поиск котиков..."
+        android:text="Загрузка..."
         android:textSize="18sp" />
 
 </FrameLayout>

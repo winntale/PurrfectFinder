@@ -9,9 +9,10 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.example.purrfectfinder.MainActivity
 import com.example.purrfectfinder.R
+import com.example.purrfectfinder.TitleProvider
 import com.example.purrfectfinder.databinding.FragmentProfileDescriptionBinding
 
-class ProfileDescriptionFragment : Fragment() {
+class ProfileDescriptionFragment : Fragment(), TitleProvider {
 
     private var _binding: FragmentProfileDescriptionBinding? = null
     private val binding
@@ -42,12 +43,10 @@ class ProfileDescriptionFragment : Fragment() {
 
         binding.btnEdit.setOnClickListener {
             with(activity as? MainActivity) {
-                this?.updateHeaderOnEdit("Редактировать профиль")
+                this?.updateHeaderOnEdit()
                 this?.addFragment(
                     listOf(R.id.profileLayout, R.id.fragmentLayout),
-                    listOf(ProfileDescHorizontalFragment.newInstance(), ProfileEditFragment.newInstance()),
-                    null,
-                    MainActivity.titleChangesStack
+                    listOf(ProfileDescHorizontalFragment.newInstance(), ProfileEditFragment.newInstance())
                 )
             }
         }
@@ -60,6 +59,10 @@ class ProfileDescriptionFragment : Fragment() {
 //                    commit()
 //                }
 
+    }
+
+    override fun getTitle(): String {
+        return "Редактировать профиль"
     }
 
     companion object {

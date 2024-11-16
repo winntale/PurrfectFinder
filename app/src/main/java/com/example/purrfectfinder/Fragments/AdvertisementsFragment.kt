@@ -14,6 +14,7 @@ import com.example.purrfectfinder.GridSpacingItemDecoration
 import com.example.purrfectfinder.MainActivity
 import com.example.purrfectfinder.R
 import com.example.purrfectfinder.SerializableDataClasses.Advertisement
+import com.example.purrfectfinder.TitleProvider
 import com.example.purrfectfinder.databinding.FragmentAdvertisementsBinding
 import kotlinx.coroutines.launch
 
@@ -22,7 +23,7 @@ interface FavouriteActionListener {
     fun onRemoveFromFavourites(advertisementId: Int, viewHolder: AdvertisementAdapter.ViewHolder, currentAdapter: AdvertisementAdapter)
 }
 
-class AdvertisementsFragment : Fragment(), FavouriteActionListener {
+class AdvertisementsFragment : Fragment(), FavouriteActionListener, TitleProvider {
 
     private var _binding: FragmentAdvertisementsBinding? = null
     private val binding
@@ -90,6 +91,10 @@ class AdvertisementsFragment : Fragment(), FavouriteActionListener {
             currentAdapter.updateData(data, allFavs)
             viewHolder.isFavButton.setBackgroundResource(R.drawable.ic_fav_icon_inactive)
         }
+    }
+
+    override fun getTitle(): String {
+        return "Объявления"
     }
 
     // Функция для показа/скрытия загрузочного экрана
