@@ -36,6 +36,4 @@ class AuthorizationActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
-
-
 }

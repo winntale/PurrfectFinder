@@ -14,14 +14,11 @@ import com.example.purrfectfinder.GridSpacingItemDecoration
 import com.example.purrfectfinder.MainActivity
 import com.example.purrfectfinder.R
 import com.example.purrfectfinder.SerializableDataClasses.Advertisement
-import com.example.purrfectfinder.TitleProvider
 import com.example.purrfectfinder.databinding.FragmentAdvertisementsBinding
+import com.example.purrfectfinder.interfaces.FavouriteActionListener
+import com.example.purrfectfinder.interfaces.TitleProvider
 import kotlinx.coroutines.launch
 
-interface FavouriteActionListener {
-    fun onAddToFavourites(advertisementId: Int, viewHolder: AdvertisementAdapter.ViewHolder, currentAdapter: AdvertisementAdapter)
-    fun onRemoveFromFavourites(advertisementId: Int, viewHolder: AdvertisementAdapter.ViewHolder, currentAdapter: AdvertisementAdapter)
-}
 
 class AdvertisementsFragment : Fragment(), FavouriteActionListener, TitleProvider {
 

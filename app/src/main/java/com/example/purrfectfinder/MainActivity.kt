@@ -1,5 +1,6 @@
 package com.example.purrfectfinder
 
+import android.icu.text.CaseMap.Title
 import android.os.Bundle
 import android.provider.ContactsContract.Data
 import android.util.Log
@@ -24,11 +25,8 @@ import com.example.purrfectfinder.Fragments.ProfileDescriptionFragment
 import com.example.purrfectfinder.Fragments.ProfileFragment
 import com.example.purrfectfinder.Fragments.SettingsFragment
 import com.example.purrfectfinder.databinding.ActivityMainBinding
+import com.example.purrfectfinder.interfaces.TitleProvider
 import java.io.File
-
-interface TitleProvider {
-    fun getTitle(): String
-}
 
 class MainActivity : AppCompatActivity() {
     private val dataModel: DataModel by viewModels()
@@ -73,6 +71,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         setFragment(R.id.fragmentLayout, AdvertisementsFragment.newInstance())
+
         binding.navigationView.selectedItemId = R.id.petshop
 
         binding.btnPrev.setOnClickListener {
@@ -83,17 +82,14 @@ class MainActivity : AppCompatActivity() {
             binding.btnPrev.visibility = VISIBLE
             binding.btnSettings.visibility = GONE
 
-            binding.tvWinTitle.text = ContextCompat.getString(
-                this@MainActivity,
-                R.string.settings
-            )
-            binding.tvWinTitle.textSize = 23f
-            binding.tvWinTitle.setPadding(0, 0, 0, 0)
 
-            addFragment(
+            setFragment(
                 listOf(R.id.profileLayout, R.id.fragmentLayout),
-                listOf(ProfileDescHorizontalFragment.newInstance(), SettingsFragment.newInstance())
+                listOf(ProfileDescHorizontalFragment.newInstance(), SettingsFragment.newInstance()),
+                true
             )
+
+            Log.e("BackstackSettings", supportFragmentManager.backStackEntryCount.toString())
         }
 
         binding.btnFilters.setOnClickListener {
@@ -101,25 +97,17 @@ class MainActivity : AppCompatActivity() {
             binding.btnSettings.visibility = GONE
             binding.btnFilters.visibility = GONE
 
-            binding.tvWinTitle.text = "Фильтры"
-            binding.tvWinTitle.textSize = 23f
-            binding.tvWinTitle.setPadding(0, 0, 0, 0)
-
 
             setFragment(R.id.profileLayout, null)
-            setFragment(R.id.fragmentLayout, FiltersFragment.newInstance(), true)
+            setFragment(R.id.fragmentLayout, FiltersFragment.newInstance(), false, true)
 
             updateLoadingFragmentText("Загружаем доступные фильтры...");
-//            addFragment(
-//                listOf(R.id.profileLayout, R.id.fragmentLayout),
-//                listOf(null, FiltersFragment.newInstance())
-//            )
 
             Log.e("CURRENT BACKSTACK FILTERS", supportFragmentManager.backStackEntryCount.toString())
         }
 
         binding.navigationView.setOnItemSelectedListener { item ->
-            while (supportFragmentManager.backStackEntryCount > 0) {
+            while (supportFragmentManager.backStackEntryCount > 1) {
                 supportFragmentManager.popBackStackImmediate()
             }
             binding.btnPrev.visibility = GONE
@@ -163,6 +151,7 @@ class MainActivity : AppCompatActivity() {
                     binding.btnFilters.visibility = GONE
                     binding.btnSettings.visibility = VISIBLE
 
+                    showLoadingScreen(false)
                     setFragment(R.id.profileLayout, ProfileDescriptionFragment.newInstance())
                     setFragment(R.id.fragmentLayout, ProfileFragment.newInstance())
                 }
@@ -175,6 +164,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         supportFragmentManager.addOnBackStackChangedListener {
+            // Если в стеке только один фрагмент, скрываем кнопку "Назад"
+            if (supportFragmentManager.backStackEntryCount == 0) {
+                binding.btnPrev.visibility = GONE
+            }
+
             val activeFragment = supportFragmentManager.fragments.lastOrNull {
                 it.isVisible && it is TitleProvider
             }
@@ -208,17 +202,23 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun setFragment(layout: Int, fragment: Fragment?, addToBackStack: Boolean = false) {
+    fun setFragment(layout: Int, fragment: Fragment?, isAdding: Boolean = false, addToBackStack: Boolean = false) {
         supportFragmentManager
             .beginTransaction().apply {
                 if (fragment != null) {
-                    replace(layout, fragment)
+                    if (isAdding) {
+                        if (supportFragmentManager.findFragmentById(layout) != null) {
+                            hide(supportFragmentManager.findFragmentById(layout)!!)
+                        }
+
+                        add(layout, fragment)
+                    }
+                    else replace(layout, fragment)
 
                     if (fragment is TitleProvider) {
                         binding.tvWinTitle.text = fragment.getTitle()
                     }
 
-                    setPrimaryNavigationFragment(fragment)
                     if (addToBackStack) addToBackStack(null)
                 } else {
                     // Если передан null, удаляем все фрагменты из контейнера
@@ -232,47 +232,34 @@ class MainActivity : AppCompatActivity() {
         Log.e("CURRENT BACKSTACK", supportFragmentManager.backStackEntryCount.toString())
     }
 
-    fun addFragment(layout: Int, fragment: Fragment) {
-        supportFragmentManager
-            .beginTransaction().apply {
-                if (supportFragmentManager.findFragmentById(layout) != null) {
-                    hide(supportFragmentManager.findFragmentById(layout)!!)
-                }
-
-                add(layout, fragment)
-                addToBackStack(null)
-
-                commit()
-            }
-        Log.e("CURRENT BACKSTACK", supportFragmentManager.backStackEntryCount.toString())
-    }
-
-    // перегрузка функции, для того, чтобы добавить в стэк один уровень,
-    // но отрисовать фрагменты на нескольких layouts
-    fun addFragment(layouts: List<Int>, fragments: List<Fragment?>) {
+    fun setFragment(layouts: List<Int>, fragments: List<Fragment?>, isAdding: Boolean = false) {
         supportFragmentManager
             .beginTransaction().apply {
                 for (i in 1..layouts.size) {
-                    // если текущий фрагмент рассматриваемого layout'а не null
-                    // прячем его
-                    if (supportFragmentManager.findFragmentById(layouts[i - 1]) != null) {
-                        hide(supportFragmentManager.findFragmentById(layouts[i - 1])!!)
-                    }
+                    if (fragments[i - 1] != null) {
+                        if (isAdding) {
+                            if (supportFragmentManager.findFragmentById(layouts[i - 1]) != null) {
+                                hide(supportFragmentManager.findFragmentById(layouts[i - 1])!!)
+                            }
 
-                    // далее, если текущий фрагмент не null, добавляем его на текущий layout
-                    if (fragments[i - 1] != null)
-                        fragments[i - 1]?.let { add(layouts[i - 1], it) }
-                    // иначе удаляем текущий фрагмент
-                    else
+                            fragments[i - 1]?.let { add(layouts[i - 1], it) }
+                        } else fragments[i - 1]?.let { replace(layouts[i - 1], it) }
+
+                        fragments[i - 1]?.let {
+                            if (it is TitleProvider) {
+                                binding.tvWinTitle.text = it.getTitle()
+                            }
+                        }
+                    } else {
+                        // Если передан null, удаляем все фрагменты из контейнера
                         supportFragmentManager.findFragmentById(layouts[i - 1])?.let {
                             remove(it)
                         }
+                    }
                 }
                 addToBackStack(null)
-
                 commit()
             }
-
     }
 
     fun updateLoadingFragmentText(text: String) {
@@ -291,45 +278,21 @@ class MainActivity : AppCompatActivity() {
 
     // Логика для того, что должно произойти при нажатии кнопки "Назад"
     private fun handleBackPressed() {
-        // Если в стеке только один фрагмент, скрываем кнопку "Назад"
-        if (supportFragmentManager.backStackEntryCount <= 1) {
-            binding.btnPrev.visibility = GONE
-        }
-
         updateLoadingFragmentText("Откатываемся назад...")
 
-        // Устанавливаем размер текста и отступы в зависимости от длины заголовка
-        if (binding.tvWinTitle.text.length < 20) {
-            binding.tvWinTitle.textSize = 23f
-            binding.tvWinTitle.setPadding(0, 0, 0, 0)
-        } else {
-            binding.tvWinTitle.textSize = 17f
-            binding.tvWinTitle.setPadding(0, 13, 0, 0)
-        }
-
-        // Обновляем видимость кнопок в зависимости от текущего заголовка
-
-
         // Возврат на предыдущий фрагмент из стека
-        if (supportFragmentManager.backStackEntryCount > 0) {
+        if (supportFragmentManager.backStackEntryCount >= 0) {
             val currentFragment = supportFragmentManager.fragments.lastOrNull()
 
             if (currentFragment is FilteredAdvertisementsFragment) {
                 // Заменяем фрагмент результатов поиска на объявления
-                setFragment(
-                    R.id.fragmentLayout,
-                    AdvertisementsFragment.newInstance(),
-                    addToBackStack = false
-                )
+                setFragment(R.id.fragmentLayout, AdvertisementsFragment.newInstance(), false, addToBackStack = false)
             }
             supportFragmentManager.popBackStack()
         } else {
             // Важно вызвать super.onBackPressed(), чтобы сохранить стандартное поведение
             super.onBackPressed() // В этом случае, если стек пуст, вызываем стандартное поведение для выхода из активности
         }
-
-
-        Log.e("CURRENT BACKSTACK", supportFragmentManager.backStackEntryCount.toString())
     }
 
     companion object {

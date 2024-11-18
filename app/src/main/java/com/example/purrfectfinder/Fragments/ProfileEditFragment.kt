@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.purrfectfinder.MainActivity
-import com.example.purrfectfinder.TitleProvider
+import com.example.purrfectfinder.interfaces.TitleProvider
 import com.example.purrfectfinder.databinding.FragmentProfileEditBinding
 
 class ProfileEditFragment : Fragment(), TitleProvider {

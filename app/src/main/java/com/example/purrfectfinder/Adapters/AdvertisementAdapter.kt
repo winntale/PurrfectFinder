@@ -9,8 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.purrfectfinder.Fragments.FavouriteActionListener
-import com.example.purrfectfinder.MainActivity
+import com.example.purrfectfinder.interfaces.FavouriteActionListener
 import com.example.purrfectfinder.R
 import com.example.purrfectfinder.SerializableDataClasses.Advertisement
 

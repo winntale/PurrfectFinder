@@ -8,7 +8,7 @@ import android.view.View.MeasureSpec
 import android.view.ViewGroup
 import androidx.viewpager2.widget.ViewPager2
 import com.example.purrfectfinder.TabsPagerAdapter
-import com.example.purrfectfinder.TitleProvider
+import com.example.purrfectfinder.interfaces.TitleProvider
 import com.example.purrfectfinder.databinding.FragmentProfileBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator

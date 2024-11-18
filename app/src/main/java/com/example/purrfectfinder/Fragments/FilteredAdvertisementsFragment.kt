@@ -20,7 +20,8 @@ import com.example.purrfectfinder.GridSpacingItemDecoration
 import com.example.purrfectfinder.MainActivity
 import com.example.purrfectfinder.R
 import com.example.purrfectfinder.SerializableDataClasses.Advertisement
-import com.example.purrfectfinder.TitleProvider
+import com.example.purrfectfinder.interfaces.FavouriteActionListener
+import com.example.purrfectfinder.interfaces.TitleProvider
 import com.example.purrfectfinder.databinding.FragmentFilteredAdvertisementsBinding
 import io.github.jan.supabase.postgrest.postgrest
 import kotlinx.coroutines.launch

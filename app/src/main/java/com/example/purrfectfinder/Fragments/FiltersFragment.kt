@@ -16,7 +16,7 @@ import com.example.purrfectfinder.DataModel
 import com.example.purrfectfinder.DbHelper
 import com.example.purrfectfinder.MainActivity
 import com.example.purrfectfinder.R
-import com.example.purrfectfinder.TitleProvider
+import com.example.purrfectfinder.interfaces.TitleProvider
 import com.example.purrfectfinder.databinding.FragmentFiltersBinding
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns

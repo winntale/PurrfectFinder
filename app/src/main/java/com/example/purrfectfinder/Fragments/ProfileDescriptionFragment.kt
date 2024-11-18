@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.example.purrfectfinder.MainActivity
 import com.example.purrfectfinder.R
-import com.example.purrfectfinder.TitleProvider
+import com.example.purrfectfinder.interfaces.TitleProvider
 import com.example.purrfectfinder.databinding.FragmentProfileDescriptionBinding
 
 class ProfileDescriptionFragment : Fragment(), TitleProvider {
@@ -44,10 +44,8 @@ class ProfileDescriptionFragment : Fragment(), TitleProvider {
         binding.btnEdit.setOnClickListener {
             with(activity as? MainActivity) {
                 this?.updateHeaderOnEdit()
-                this?.addFragment(
-                    listOf(R.id.profileLayout, R.id.fragmentLayout),
-                    listOf(ProfileDescHorizontalFragment.newInstance(), ProfileEditFragment.newInstance())
-                )
+                this?.setFragment(R.id.profileLayout, ProfileDescHorizontalFragment.newInstance())
+                this?.setFragment(R.id.fragmentLayout, ProfileEditFragment.newInstance(), true, true)
             }
         }
 
