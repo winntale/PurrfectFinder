@@ -8,7 +8,7 @@ import android.net.NetworkCapabilities
 import android.widget.Toast
 
 
-private class NetworkChangeReceiver : BroadcastReceiver() {
+class NetworkChangeReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
         if (isInternetAvailable(context)) {
             Toast.makeText(context, "Интернет доступен", Toast.LENGTH_SHORT).show()

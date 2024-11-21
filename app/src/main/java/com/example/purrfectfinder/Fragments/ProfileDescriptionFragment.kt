@@ -43,9 +43,11 @@ class ProfileDescriptionFragment : Fragment(), TitleProvider {
 
         binding.btnEdit.setOnClickListener {
             with(activity as? MainActivity) {
-                this?.updateHeaderOnEdit()
-                this?.setFragment(R.id.profileLayout, ProfileDescHorizontalFragment.newInstance())
-                this?.setFragment(R.id.fragmentLayout, ProfileEditFragment.newInstance(), true, true)
+                this?.setFragment(
+                    listOf(R.id.profileLayout, R.id.fragmentLayout),
+                    listOf(ProfileDescHorizontalFragment.newInstance(), ProfileEditFragment.newInstance()),
+                    true
+                )
             }
         }
 

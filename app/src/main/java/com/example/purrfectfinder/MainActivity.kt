@@ -15,17 +15,24 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.example.purrfectfinder.Fragments.AdvertisementsFragment
 import com.example.purrfectfinder.Fragments.FavouriteAdvertisementsFragment
+import com.example.purrfectfinder.Fragments.FavouriteAdvertisementsFragment.Companion.allFavs
 import com.example.purrfectfinder.Fragments.FilteredAdvertisementsFragment
 import com.example.purrfectfinder.Fragments.FiltersFragment
 import com.example.purrfectfinder.Fragments.LoadingFragment
 import com.example.purrfectfinder.Fragments.ProfileDescHorizontalFragment
 import com.example.purrfectfinder.Fragments.ProfileDescriptionFragment
+import com.example.purrfectfinder.Fragments.ProfileEditFragment
 import com.example.purrfectfinder.Fragments.ProfileFragment
 import com.example.purrfectfinder.Fragments.SettingsFragment
+import com.example.purrfectfinder.SerializableDataClasses.Advertisement
+import com.example.purrfectfinder.SerializableDataClasses.DBStamp
 import com.example.purrfectfinder.databinding.ActivityMainBinding
 import com.example.purrfectfinder.interfaces.TitleProvider
+import io.github.jan.supabase.postgrest.postgrest
+import kotlinx.coroutines.launch
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
@@ -43,6 +50,8 @@ class MainActivity : AppCompatActivity() {
             // Обрабатываем кнопку "Назад"
             handleBackPressed()
         }
+
+//        val dbStamp = DBStamp()
 
         setFragment(R.id.loadingLayout, LoadingFragment.newInstance())
 
@@ -63,6 +72,27 @@ class MainActivity : AppCompatActivity() {
         currentUserFirstName = bundleReceived?.getString(FIRSTNAME)
         currentUserCreatedAt = bundleReceived?.getString(CREATEDAT)
         currentUserPFP = bundleReceived?.getString(PFP)
+
+        val db = DbHelper()
+
+
+        showLoadingScreen(true)
+        lifecycleScope.launch {
+            dataModel.allAds.value = db.getAllData<Advertisement>("Advertisements")
+            dataModel.favAdsIds.value = db.getAllFavAds(currentUserId!!)
+            dataModel.favAds.value = db.getClient().postgrest["Advertisements"]
+                .select() {
+                    filter {
+                        isIn("id", dataModel.favAdsIds.value!!) // фильтруем по списку advertisementId
+                    }
+                }
+                .decodeList<Advertisement>()
+
+            Log.e("FAVOURITES", dataModel.favAds.value.toString())
+
+            return@launch
+        }
+        showLoadingScreen(false)
 
         // navigationview
         ViewCompat.setOnApplyWindowInsetsListener(binding.navigationView) { view, insets ->
@@ -122,17 +152,11 @@ class MainActivity : AppCompatActivity() {
                     setFragment(R.id.fragmentLayout, null)
                 }
                 R.id.favourites -> {
-                    binding.btnFilters.visibility = VISIBLE
-                    binding.btnSettings.visibility = GONE
-
                     setFragment(R.id.profileLayout, null)
                     setFragment(R.id.fragmentLayout, FavouriteAdvertisementsFragment.newInstance())
                     updateLoadingFragmentText("Загружаем избранные объявления...")
                 }
                 R.id.petshop -> {
-                    binding.btnFilters.visibility = VISIBLE
-                    binding.btnSettings.visibility = GONE
-
                     setFragment(R.id.profileLayout, null)
                     setFragment(R.id.fragmentLayout, AdvertisementsFragment.newInstance())
                     updateLoadingFragmentText("Ищем котиков...")
@@ -148,9 +172,6 @@ class MainActivity : AppCompatActivity() {
                     setFragment(R.id.fragmentLayout, null)
                 }
                 R.id.profile -> {
-                    binding.btnFilters.visibility = GONE
-                    binding.btnSettings.visibility = VISIBLE
-
                     showLoadingScreen(false)
                     setFragment(R.id.profileLayout, ProfileDescriptionFragment.newInstance())
                     setFragment(R.id.fragmentLayout, ProfileFragment.newInstance())
@@ -173,6 +194,8 @@ class MainActivity : AppCompatActivity() {
                 it.isVisible && it is TitleProvider
             }
             binding.tvWinTitle.text = (activeFragment as? TitleProvider)?.getTitle() ?: "Главная"
+            updateUIForFragment(activeFragment)
+            Log.e("LAST FRAGMENT", activeFragment.toString())
 
             // Устанавливаем размер текста и отступы в зависимости от длины заголовка
             if (binding.tvWinTitle.text.length < 20) {
@@ -191,15 +214,66 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun updateUIForFragment(fragment: Fragment?) {
+        when (fragment) {
+            // главная
 
-    fun updateHeaderOnEdit() {
-            binding.btnPrev.visibility = VISIBLE
-            binding.btnSettings.visibility = GONE
-            binding.btnFilters.visibility = GONE
+            // избранное
+            is FavouriteAdvertisementsFragment -> {
+                binding.btnFilters.visibility = VISIBLE
+                binding.btnSettings.visibility = GONE
 
-            binding.tvWinTitle.textSize = 17f
-            binding.tvWinTitle.setPadding(0, 13, 0, 0)
+                binding.tvWinTitle.textSize = 23f
+                binding.tvWinTitle.setPadding(0, 0, 0, 0)
+            }
+            // объявления
+            is AdvertisementsFragment -> {
+                binding.btnFilters.visibility = VISIBLE
+                binding.btnSettings.visibility = GONE
 
+                binding.tvWinTitle.textSize = 23f
+                binding.tvWinTitle.setPadding(0, 0, 0, 0)
+            }
+            // котоклипы
+
+            // профиль
+            is ProfileFragment -> {
+                binding.btnFilters.visibility = GONE
+                binding.btnSettings.visibility = VISIBLE
+
+                binding.tvWinTitle.textSize = 23f
+                binding.tvWinTitle.setPadding(0, 0, 0, 0)
+            }
+            // фильтры
+            is FiltersFragment -> {
+                binding.btnFilters.visibility = GONE
+                binding.btnSettings.visibility = GONE
+
+                binding.tvWinTitle.textSize = 23f
+                binding.tvWinTitle.setPadding(0, 0, 0, 0)
+            }
+            // настройки
+            is SettingsFragment -> {
+                binding.btnFilters.visibility = GONE
+                binding.btnSettings.visibility = GONE
+
+                binding.tvWinTitle.textSize = 23f
+                binding.tvWinTitle.setPadding(0, 0, 0, 0)
+            }
+            // редактирование
+            is ProfileEditFragment -> {
+                binding.btnPrev.visibility = VISIBLE
+                binding.btnFilters.visibility = GONE
+                binding.btnSettings.visibility = GONE
+
+                binding.tvWinTitle.textSize = 17f
+                binding.tvWinTitle.setPadding(0, 13, 0, 0)
+            }
+            else -> {
+                binding.btnFilters.visibility = GONE
+                binding.btnSettings.visibility = GONE
+            }
+        }
     }
 
     fun setFragment(layout: Int, fragment: Fragment?, isAdding: Boolean = false, addToBackStack: Boolean = false) {
@@ -217,6 +291,7 @@ class MainActivity : AppCompatActivity() {
 
                     if (fragment is TitleProvider) {
                         binding.tvWinTitle.text = fragment.getTitle()
+                        updateUIForFragment(fragment)
                     }
 
                     if (addToBackStack) addToBackStack(null)
@@ -228,8 +303,6 @@ class MainActivity : AppCompatActivity() {
                 }
                 commit()
             }
-
-        Log.e("CURRENT BACKSTACK", supportFragmentManager.backStackEntryCount.toString())
     }
 
     fun setFragment(layouts: List<Int>, fragments: List<Fragment?>, isAdding: Boolean = false) {
@@ -248,6 +321,7 @@ class MainActivity : AppCompatActivity() {
                         fragments[i - 1]?.let {
                             if (it is TitleProvider) {
                                 binding.tvWinTitle.text = it.getTitle()
+                                updateUIForFragment(it)
                             }
                         }
                     } else {

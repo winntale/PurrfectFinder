@@ -6,9 +6,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.viewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.purrfectfinder.Adapters.AdvertisementAdapter
+import com.example.purrfectfinder.DataModel
 import com.example.purrfectfinder.DbHelper
 import com.example.purrfectfinder.GridSpacingItemDecoration
 import com.example.purrfectfinder.MainActivity
@@ -22,6 +25,7 @@ import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.launch
 
 class FavouriteAdvertisementsFragment : Fragment(), FavouriteActionListener, TitleProvider {
+//    private val dataModel: DataModel by viewModels()
 
     private var _binding: FragmentFavouriteAdvertisementsBinding? = null
     private val binding
@@ -42,12 +46,22 @@ class FavouriteAdvertisementsFragment : Fragment(), FavouriteActionListener, Tit
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adAdapter = AdvertisementAdapter(emptyList(), allFavs, this)
+        adAdapter = AdvertisementAdapter(emptyList(), allFavs, newInstance())
         binding.rvFavAds.apply {
             layoutManager = GridLayoutManager(context, 2)
             adapter = adAdapter
             addItemDecoration(GridSpacingItemDecoration(2, 25, false))
         }
+
+
+//        dataModel.favAds.observe(viewLifecycleOwner) {
+//            Log.e("RECEIVED FAVOURITES", dataModel.favAds.value.toString())
+//        }
+
+//        data = dataModel.favAds.value.orEmpty()!!
+//        allFavs = dataModel.favAdsIds.value!!
+//
+//        adAdapter.updateData(data, allFavs)
 
         showLoadingScreen(true)
 

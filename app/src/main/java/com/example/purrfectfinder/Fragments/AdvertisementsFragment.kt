@@ -58,7 +58,7 @@ class AdvertisementsFragment : Fragment(), FavouriteActionListener, TitleProvide
             }
 
             try {
-                data = db.getData<Advertisement>("Advertisements")
+                data = db.getAllData<Advertisement>("Advertisements")
                 adAdapter.updateData(data, allFavs)
                 binding.tvAdsFound.text = "Найдено объявлений: " + adAdapter.itemCount.toString()
             } catch (e: Exception) {

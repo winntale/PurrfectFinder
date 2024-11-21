@@ -119,14 +119,12 @@ class FiltersFragment : Fragment(), TitleProvider {
                 Log.e("RESULT ADS", ArrayList(resultAds).toString())
 
                 dataModel.filteredAds.value = resultAds
-
-//                showLoadingScreen(false)
             }
         }
     }
 
     private suspend fun getFilteredAds(db: DbHelper, allCheckBox: List<List<CheckBox>>, filterIds: List<String>) : List<Int> {
-        var allCheckedIndexes: MutableList<MutableList<Int>> = mutableListOf()
+        val allCheckedIndexes: MutableList<MutableList<Int>> = mutableListOf()
 
         for (i in 1..allCheckBox.size) {
             allCheckedIndexes.add(mutableListOf())

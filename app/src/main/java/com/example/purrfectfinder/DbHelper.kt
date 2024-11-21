@@ -77,7 +77,7 @@ class DbHelper () {
         }
     }
 
-    suspend inline fun <reified T : Any> getData(tableName: String): List<T> {
+    suspend inline fun <reified T : Any> getAllData(tableName: String): List<T> {
         val client = getClient()
         val supabaseResponse = client.postgrest[tableName].select()
         Log.e("supabase", supabaseResponse.decodeList<T>().toString())
