@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Fragments.AdCardFragment">
+
+    <ImageView
+        android:id="@+id/ivAdPicture"
+        android:layout_width="match_parent"
+        android:layout_height="402dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvAdPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="21dp"
+        android:layout_marginStart="18dp"
+        android:text="price"
+        style="@style/BoldText"
+        app:layout_constraintTop_toBottomOf="@id/ivAdPicture"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvAdName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="name"
+        style="@style/RegularText"
+        app:layout_constraintTop_toBottomOf="@id/tvAdPrice"
+        app:layout_constraintStart_toStartOf="@id/tvAdPrice"/>
+
+
+    <LinearLayout
+        android:id="@+id/llInfoBlockList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tvAdName"
+        app:layout_constraintStart_toStartOf="@id/tvAdName">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/shape_light_button_body"
+            android:backgroundTint="#EBEBEB">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="5dp"
+                android:drawablePadding="5dp"
+                android:drawableStart="@drawable/ic_star_bnw"
+                android:text="4.8 — рейтинг продавца"
+                style="@style/BoldText"
+                android:textSize="8dp"/>
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="13dp"
+            android:background="@drawable/shape_light_button_body"
+            android:backgroundTint="#EBEBEB">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="5dp"
+                android:drawablePadding="5dp"
+                android:drawableStart="@drawable/ic_verified_12"
+                android:text="Подтверждённая порода"
+                style="@style/BoldText"
+                android:textSize="8dp"
+                />
+        </FrameLayout>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:text="Продавец"
+        style="@style/RegularText"
+        app:layout_constraintTop_toBottomOf="@id/llInfoBlockList"
+        app:layout_constraintStart_toStartOf="@id/llInfoBlockList"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.example.purrfectfinder.Fragments.AdCardFragment
 import com.example.purrfectfinder.Fragments.AdvertisementsFragment
 import com.example.purrfectfinder.Fragments.FavouriteAdvertisementsFragment
 import com.example.purrfectfinder.Fragments.FavouriteAdvertisementsFragment.Companion.allFavs
@@ -30,6 +31,7 @@ import com.example.purrfectfinder.Fragments.SettingsFragment
 import com.example.purrfectfinder.SerializableDataClasses.Advertisement
 import com.example.purrfectfinder.SerializableDataClasses.DBStamp
 import com.example.purrfectfinder.databinding.ActivityMainBinding
+import com.example.purrfectfinder.databinding.AdItemBinding
 import com.example.purrfectfinder.interfaces.TitleProvider
 import io.github.jan.supabase.postgrest.postgrest
 import kotlinx.coroutines.launch
@@ -269,6 +271,13 @@ class MainActivity : AppCompatActivity() {
                 binding.tvWinTitle.textSize = 17f
                 binding.tvWinTitle.setPadding(0, 13, 0, 0)
             }
+            // карточка объявления
+            is AdCardFragment -> {
+                binding.btnPrev.visibility = VISIBLE
+                binding.btnFilters.visibility = GONE
+                binding.btnSettings.visibility = GONE
+            }
+
             else -> {
                 binding.btnFilters.visibility = GONE
                 binding.btnSettings.visibility = GONE

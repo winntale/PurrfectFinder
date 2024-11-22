@@ -7,8 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.purrfectfinder.MainActivity
 import com.example.purrfectfinder.interfaces.FavouriteActionListener
 import com.example.purrfectfinder.R
 import com.example.purrfectfinder.SerializableDataClasses.Advertisement
@@ -16,10 +18,13 @@ import com.example.purrfectfinder.SerializableDataClasses.Advertisement
 class AdvertisementAdapter(
     private var mAdvertisements: List<Advertisement>,
     private var allFavs: List<Int>,
-    private val listener: FavouriteActionListener
+    private val listener: FavouriteActionListener,
+    private val onCardClicked: () -> Unit
 ) : RecyclerView.Adapter<AdvertisementAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val adv =  itemView.findViewById<CardView>(R.id.ad)
+
         val nameTextView = itemView.findViewById<TextView>(R.id.tvAdName)
         val priceTextView = itemView.findViewById<TextView>(R.id.tvAdPrice)
         val pictureImageView = itemView.findViewById<ImageView>(R.id.ivAdPicture)
@@ -70,6 +75,10 @@ class AdvertisementAdapter(
 
             Log.e("current advertisement", advertisement.id.toString())
             Log.e("AllFavs", allFavs.toString())
+        }
+
+        viewHolder.adv.setOnClickListener {
+            onCardClicked()
         }
     }
 
