@@ -11,6 +11,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
@@ -36,6 +37,7 @@ import com.example.purrfectfinder.interfaces.TitleProvider
 import io.github.jan.supabase.postgrest.postgrest
 import kotlinx.coroutines.launch
 import java.io.File
+import java.util.ArrayList
 
 class MainActivity : AppCompatActivity() {
     private val dataModel: DataModel by viewModels()
@@ -55,7 +57,7 @@ class MainActivity : AppCompatActivity() {
 
 //        val dbStamp = DBStamp()
 
-        setFragment(R.id.loadingLayout, LoadingFragment.newInstance())
+        setFragment(R.id.loadingLayout, LoadingFragment.newInstance(), null)
 
         _binding = ActivityMainBinding.inflate(layoutInflater)
         enableEdgeToEdge()
@@ -102,7 +104,7 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        setFragment(R.id.fragmentLayout, AdvertisementsFragment.newInstance())
+        setFragment(R.id.fragmentLayout, AdvertisementsFragment.newInstance(), null)
 
         binding.navigationView.selectedItemId = R.id.petshop
 
@@ -118,6 +120,7 @@ class MainActivity : AppCompatActivity() {
             setFragment(
                 listOf(R.id.profileLayout, R.id.fragmentLayout),
                 listOf(ProfileDescHorizontalFragment.newInstance(), SettingsFragment.newInstance()),
+                null,
                 true
             )
 
@@ -130,8 +133,8 @@ class MainActivity : AppCompatActivity() {
             binding.btnFilters.visibility = GONE
 
 
-            setFragment(R.id.profileLayout, null)
-            setFragment(R.id.fragmentLayout, FiltersFragment.newInstance(), false, true)
+            setFragment(R.id.profileLayout, null, null)
+            setFragment(R.id.fragmentLayout, FiltersFragment.newInstance(), null, false, true)
 
             updateLoadingFragmentText("Загружаем доступные фильтры...");
 
@@ -150,17 +153,17 @@ class MainActivity : AppCompatActivity() {
                     binding.btnFilters.visibility = GONE
                     binding.btnSettings.visibility = GONE
 
-                    setFragment(R.id.profileLayout, null)
-                    setFragment(R.id.fragmentLayout, null)
+                    setFragment(R.id.profileLayout, null, null)
+                    setFragment(R.id.fragmentLayout, null, null)
                 }
                 R.id.favourites -> {
-                    setFragment(R.id.profileLayout, null)
-                    setFragment(R.id.fragmentLayout, FavouriteAdvertisementsFragment.newInstance())
+                    setFragment(R.id.profileLayout, null, null)
+                    setFragment(R.id.fragmentLayout, FavouriteAdvertisementsFragment.newInstance(), null)
                     updateLoadingFragmentText("Загружаем избранные объявления...")
                 }
                 R.id.petshop -> {
-                    setFragment(R.id.profileLayout, null)
-                    setFragment(R.id.fragmentLayout, AdvertisementsFragment.newInstance())
+                    setFragment(R.id.profileLayout, null, null)
+                    setFragment(R.id.fragmentLayout, AdvertisementsFragment.newInstance(), null)
                     updateLoadingFragmentText("Ищем котиков...")
 
                     Log.e("CURRENT BACKSTACK", supportFragmentManager.backStackEntryCount.toString())
@@ -170,20 +173,20 @@ class MainActivity : AppCompatActivity() {
                     binding.btnFilters.visibility = GONE
                     binding.btnSettings.visibility = GONE
 
-                    setFragment(R.id.profileLayout, null)
-                    setFragment(R.id.fragmentLayout, null)
+                    setFragment(R.id.profileLayout, null, null)
+                    setFragment(R.id.fragmentLayout, null, null)
                 }
                 R.id.profile -> {
                     showLoadingScreen(false)
-                    setFragment(R.id.profileLayout, ProfileDescriptionFragment.newInstance())
-                    setFragment(R.id.fragmentLayout, ProfileFragment.newInstance())
+                    setFragment(R.id.profileLayout, ProfileDescriptionFragment.newInstance(), null)
+                    setFragment(R.id.fragmentLayout, ProfileFragment.newInstance(), null)
                 }
             }
             true
         }
 
         dataModel.filteredAds.observe(this) {
-            setFragment(R.id.fragmentLayout, FilteredAdvertisementsFragment.newInstance())
+            setFragment(R.id.fragmentLayout, FilteredAdvertisementsFragment.newInstance(), null)
         }
 
         supportFragmentManager.addOnBackStackChangedListener {
@@ -285,10 +288,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun setFragment(layout: Int, fragment: Fragment?, isAdding: Boolean = false, addToBackStack: Boolean = false) {
+    fun setFragment(layout: Int, fragment: Fragment?, args: List<String>?, isAdding: Boolean = false, addToBackStack: Boolean = false) {
         supportFragmentManager
             .beginTransaction().apply {
                 if (fragment != null) {
+                    val argsArrayList = args?.let { ArrayList(it) } // Преобразуем в ArrayList
+                    fragment.arguments = bundleOf("args" to argsArrayList)
+
+                    Log.e("args", fragment.arguments.toString())
+
                     if (isAdding) {
                         if (supportFragmentManager.findFragmentById(layout) != null) {
                             hide(supportFragmentManager.findFragmentById(layout)!!)
@@ -314,11 +322,16 @@ class MainActivity : AppCompatActivity() {
             }
     }
 
-    fun setFragment(layouts: List<Int>, fragments: List<Fragment?>, isAdding: Boolean = false) {
+    // always will be added to back stack
+    fun setFragment(layouts: List<Int>, fragments: List<Fragment?>, args: List<String>?, isAdding: Boolean = false) {
         supportFragmentManager
             .beginTransaction().apply {
                 for (i in 1..layouts.size) {
                     if (fragments[i - 1] != null) {
+                        if (args != emptyList<String>()) {
+                            fragments[i - 1]!!.arguments = bundleOf("args" to args)
+                        }
+
                         if (isAdding) {
                             if (supportFragmentManager.findFragmentById(layouts[i - 1]) != null) {
                                 hide(supportFragmentManager.findFragmentById(layouts[i - 1])!!)
@@ -369,7 +382,7 @@ class MainActivity : AppCompatActivity() {
 
             if (currentFragment is FilteredAdvertisementsFragment) {
                 // Заменяем фрагмент результатов поиска на объявления
-                setFragment(R.id.fragmentLayout, AdvertisementsFragment.newInstance(), false, addToBackStack = false)
+                setFragment(R.id.fragmentLayout, AdvertisementsFragment.newInstance(), null, false, addToBackStack = false)
             }
             supportFragmentManager.popBackStack()
         } else {

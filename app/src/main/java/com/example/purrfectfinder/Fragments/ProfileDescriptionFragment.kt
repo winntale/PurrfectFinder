@@ -46,6 +46,7 @@ class ProfileDescriptionFragment : Fragment(), TitleProvider {
                 this?.setFragment(
                     listOf(R.id.profileLayout, R.id.fragmentLayout),
                     listOf(ProfileDescHorizontalFragment.newInstance(), ProfileEditFragment.newInstance()),
+                    null,
                     true
                 )
             }

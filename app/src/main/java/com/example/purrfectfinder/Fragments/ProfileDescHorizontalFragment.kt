@@ -43,7 +43,7 @@ class ProfileDescHorizontalFragment : Fragment(), TitleProvider {
 
         binding.btnEdit.setOnClickListener{
             with(activity as? MainActivity) {
-                this?.setFragment(R.id.fragmentLayout, ProfileEditFragment.newInstance(), true, true)
+                this?.setFragment(R.id.fragmentLayout, ProfileEditFragment.newInstance(), null, true, true)
             }
 
 //            parentFragmentManager

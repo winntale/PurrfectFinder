@@ -19,7 +19,7 @@ class AdvertisementAdapter(
     private var mAdvertisements: List<Advertisement>,
     private var allFavs: List<Int>,
     private val listener: FavouriteActionListener,
-    private val onCardClicked: () -> Unit
+    private val onCardClicked: (String, String, String) -> Unit
 ) : RecyclerView.Adapter<AdvertisementAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -78,7 +78,7 @@ class AdvertisementAdapter(
         }
 
         viewHolder.adv.setOnClickListener {
-            onCardClicked()
+            onCardClicked(advertisement.picture, advertisement.name, viewHolder.priceTextView.text.toString())
         }
     }
 

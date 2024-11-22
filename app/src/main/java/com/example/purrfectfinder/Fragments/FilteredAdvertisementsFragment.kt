@@ -48,11 +48,10 @@ class FilteredAdvertisementsFragment : Fragment(), FavouriteActionListener, Titl
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adAdapter = AdvertisementAdapter(emptyList(), allFavs, this) {
+        adAdapter = AdvertisementAdapter(emptyList(), allFavs, this) { adPic, adName, adPrice ->
             with(activity as? MainActivity) {
-                this?.setFragment(R.id.fragmentLayout, AdCardFragment.newInstance(), true, true)
+                this?.setFragment(R.id.fragmentLayout, AdCardFragment.newInstance(), listOf(adPic, adName, adPrice), false, true)
             }
-            Log.e("srabotalo?", R.id.fragmentLayout.toString())
         }
         binding.rvFilteredAds.apply {
             layoutManager = GridLayoutManager(context, 2)

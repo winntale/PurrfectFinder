@@ -50,11 +50,10 @@ class AdvertisementsFragment : Fragment(), FavouriteActionListener, TitleProvide
             allFavs = db.getAllFavAds(MainActivity.currentUserId!!)
 
             // Инициализируем RecyclerView и адаптер
-            adAdapter = AdvertisementAdapter(emptyList(), allFavs, newInstance()) {
+            adAdapter = AdvertisementAdapter(emptyList(), allFavs, newInstance()) { adPic, adName, adPrice ->
                 with(activity as? MainActivity) {
-                    this?.setFragment(R.id.fragmentLayout, AdCardFragment.newInstance(), false, true)
+                    this?.setFragment(R.id.fragmentLayout, AdCardFragment.newInstance(), listOf(adPic, adName, adPrice), false, true)
                 }
-                Log.e("srabotalo?", R.id.fragmentLayout.toString())
             }
             binding.rvAds.apply {
                 layoutManager = GridLayoutManager(context, 2)
