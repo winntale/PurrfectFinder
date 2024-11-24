@@ -18,16 +18,22 @@
         android:layout_marginStart="27dp"
         android:layout_marginTop="48dp"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvAds"
+    <ViewSwitcher
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:layout_marginHorizontal="22dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvAdsFound"
-        tools:listitem="@layout/ad_item"
-        android:visibility="gone"/>
+        app:layout_constraintTop_toBottomOf="@id/tvAdsFound">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvAds"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/ad_item"
+            android:visibility="gone"/>
+
+    </ViewSwitcher>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

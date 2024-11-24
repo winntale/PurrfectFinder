@@ -3,13 +3,16 @@ package com.example.purrfectfinder
 import android.icu.text.CaseMap.Title
 import android.os.Bundle
 import android.provider.ContactsContract.Data
+import android.transition.Visibility
 import android.util.Log
 import android.view.View.GONE
+import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
@@ -195,14 +198,14 @@ class MainActivity : AppCompatActivity() {
                 binding.btnPrev.visibility = GONE
             }
 
+            // меняем тайтл
             val activeFragment = supportFragmentManager.fragments.lastOrNull {
                 it.isVisible && it is TitleProvider
             }
             binding.tvWinTitle.text = (activeFragment as? TitleProvider)?.getTitle() ?: "Главная"
             updateUIForFragment(activeFragment)
-            Log.e("LAST FRAGMENT", activeFragment.toString())
 
-            // Устанавливаем размер текста и отступы в зависимости от длины заголовка
+            // устанавливаем размер текста и отступы в зависимости от длины заголовка
             if (binding.tvWinTitle.text.length < 20) {
                 binding.tvWinTitle.textSize = 23f
                 binding.tvWinTitle.setPadding(0, 0, 0, 0)
@@ -217,6 +220,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // кнопки из других фрагментов, привязанные к низу экрана
+        binding.btnBuyNow.setOnClickListener {
+            setFragment(R.id.fragmentLayout, /* TODO EBANI FRAGMENT KUPIT KASHAKA */null, AdCardFragment.args, false, true)
+        }
+
     }
 
     private fun updateUIForFragment(fragment: Fragment?) {
@@ -227,6 +235,12 @@ class MainActivity : AppCompatActivity() {
             is FavouriteAdvertisementsFragment -> {
                 binding.btnFilters.visibility = VISIBLE
                 binding.btnSettings.visibility = GONE
+                changeBottomMenuVisibility(VISIBLE)
+                binding.llActionBtns.visibility = GONE
+                changeMarginTop(
+                    listOf(binding.profileLayout.id, binding.fragmentLayout.id),
+                    listOf(0, 20)
+                )
 
                 binding.tvWinTitle.textSize = 23f
                 binding.tvWinTitle.setPadding(0, 0, 0, 0)
@@ -235,6 +249,12 @@ class MainActivity : AppCompatActivity() {
             is AdvertisementsFragment -> {
                 binding.btnFilters.visibility = VISIBLE
                 binding.btnSettings.visibility = GONE
+                changeBottomMenuVisibility(VISIBLE)
+                binding.llActionBtns.visibility = GONE
+                changeMarginTop(
+                    listOf(binding.profileLayout.id, binding.fragmentLayout.id),
+                    listOf(0, 0)
+                )
 
                 binding.tvWinTitle.textSize = 23f
                 binding.tvWinTitle.setPadding(0, 0, 0, 0)
@@ -245,6 +265,12 @@ class MainActivity : AppCompatActivity() {
             is ProfileFragment -> {
                 binding.btnFilters.visibility = GONE
                 binding.btnSettings.visibility = VISIBLE
+                changeBottomMenuVisibility(VISIBLE)
+                binding.llActionBtns.visibility = GONE
+                changeMarginTop(
+                    listOf(binding.profileLayout.id, binding.fragmentLayout.id),
+                    listOf(10, 25)
+                )
 
                 binding.tvWinTitle.textSize = 23f
                 binding.tvWinTitle.setPadding(0, 0, 0, 0)
@@ -253,6 +279,12 @@ class MainActivity : AppCompatActivity() {
             is FiltersFragment -> {
                 binding.btnFilters.visibility = GONE
                 binding.btnSettings.visibility = GONE
+                changeBottomMenuVisibility(VISIBLE)
+                binding.llActionBtns.visibility = GONE
+                changeMarginTop(
+                    listOf(binding.profileLayout.id, binding.fragmentLayout.id),
+                    listOf(0, 0)
+                )
 
                 binding.tvWinTitle.textSize = 23f
                 binding.tvWinTitle.setPadding(0, 0, 0, 0)
@@ -261,6 +293,12 @@ class MainActivity : AppCompatActivity() {
             is SettingsFragment -> {
                 binding.btnFilters.visibility = GONE
                 binding.btnSettings.visibility = GONE
+                changeBottomMenuVisibility(VISIBLE)
+                binding.llActionBtns.visibility = GONE
+                changeMarginTop(
+                    listOf(binding.profileLayout.id, binding.fragmentLayout.id),
+                    listOf(0, 20)
+                )
 
                 binding.tvWinTitle.textSize = 23f
                 binding.tvWinTitle.setPadding(0, 0, 0, 0)
@@ -270,6 +308,12 @@ class MainActivity : AppCompatActivity() {
                 binding.btnPrev.visibility = VISIBLE
                 binding.btnFilters.visibility = GONE
                 binding.btnSettings.visibility = GONE
+                changeBottomMenuVisibility(VISIBLE)
+                binding.llActionBtns.visibility = GONE
+                changeMarginTop(
+                    listOf(binding.profileLayout.id, binding.fragmentLayout.id),
+                    listOf(0, 80)
+                )
 
                 binding.tvWinTitle.textSize = 17f
                 binding.tvWinTitle.setPadding(0, 13, 0, 0)
@@ -279,24 +323,51 @@ class MainActivity : AppCompatActivity() {
                 binding.btnPrev.visibility = VISIBLE
                 binding.btnFilters.visibility = GONE
                 binding.btnSettings.visibility = GONE
+                changeBottomMenuVisibility(GONE)
+                binding.llActionBtns.visibility = VISIBLE
+                changeMarginTop(
+                    listOf(binding.profileLayout.id, binding.fragmentLayout.id),
+                    listOf(0, 40)
+                )
             }
 
             else -> {
                 binding.btnFilters.visibility = GONE
                 binding.btnSettings.visibility = GONE
+                changeBottomMenuVisibility(VISIBLE)
+                binding.llActionBtns.visibility = GONE
+                changeMarginTop(
+                    listOf(binding.profileLayout.id, binding.fragmentLayout.id),
+                    listOf(0, 0)
+                )
             }
         }
+    }
+
+    private fun changeBottomMenuVisibility(visibility: Int) {
+        binding.navigationView.visibility = visibility
+        binding.ivAdvertisements.visibility = visibility
+        binding.flBottomShadow.visibility = visibility
+    }
+
+    private fun changeMarginTop(viewIds: List<Int>, values: List<Int>) {
+        val constraintSet = ConstraintSet()
+        constraintSet.clone(binding.main)
+        for (i in 1..viewIds.size)
+            constraintSet.setMargin(viewIds[i - 1], ConstraintSet.TOP, values[i - 1])
+
+        constraintSet.applyTo(binding.main)
     }
 
     fun setFragment(layout: Int, fragment: Fragment?, args: List<String>?, isAdding: Boolean = false, addToBackStack: Boolean = false) {
         supportFragmentManager
             .beginTransaction().apply {
                 if (fragment != null) {
-                    val argsArrayList = args?.let { ArrayList(it) } // Преобразуем в ArrayList
+                    // перекидываем аргументы
+                    val argsArrayList = args?.let { ArrayList(it) }
                     fragment.arguments = bundleOf("args" to argsArrayList)
 
-                    Log.e("args", fragment.arguments.toString())
-
+                    // если добавляем, то хайдим старый
                     if (isAdding) {
                         if (supportFragmentManager.findFragmentById(layout) != null) {
                             hide(supportFragmentManager.findFragmentById(layout)!!)

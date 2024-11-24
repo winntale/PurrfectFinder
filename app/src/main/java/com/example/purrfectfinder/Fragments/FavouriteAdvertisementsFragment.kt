@@ -46,9 +46,9 @@ class FavouriteAdvertisementsFragment : Fragment(), FavouriteActionListener, Tit
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adAdapter = AdvertisementAdapter(emptyList(), allFavs, newInstance()) { adPic, adName, adPrice ->
+        adAdapter = AdvertisementAdapter(emptyList(), allFavs, newInstance()) { adSellerId, adPic, adName, adPrice ->
             with(activity as? MainActivity) {
-                this?.setFragment(R.id.fragmentLayout, AdCardFragment.newInstance(), listOf(adPic, adName, adPrice), false, true)
+                this?.setFragment(R.id.fragmentLayout, AdCardFragment.newInstance(), listOf(adSellerId, adPic, adName, adPrice), false, true)
             }
         }
         binding.rvFavAds.apply {

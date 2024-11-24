@@ -56,6 +56,7 @@ dependencies {
     // views
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.viewpager2)
+    implementation(libs.shimmer)
 
     // DB
     implementation(libs.postgrest.kt)

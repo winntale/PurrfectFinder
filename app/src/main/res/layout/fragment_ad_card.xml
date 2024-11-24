@@ -9,7 +9,7 @@
     <ImageView
         android:id="@+id/ivAdPicture"
         android:layout_width="match_parent"
-        android:layout_height="402dp"
+        android:layout_height="410dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -18,7 +18,7 @@
         android:id="@+id/tvAdPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="21dp"
+        android:layout_marginTop="10dp"
         android:layout_marginStart="18dp"
         android:text="price"
         style="@style/BoldText"
@@ -82,6 +82,7 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/tvSeller"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
@@ -89,5 +90,151 @@
         style="@style/RegularText"
         app:layout_constraintTop_toBottomOf="@id/llInfoBlockList"
         app:layout_constraintStart_toStartOf="@id/llInfoBlockList"/>
+
+
+    <ViewSwitcher
+        android:id="@+id/sellerInfoSwitcher"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="17dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/tvSeller"
+        app:layout_constraintStart_toStartOf="@id/tvSeller">
+
+        <!-- шиммер -->
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:shimmer_auto_start="true"
+            app:shimmer_duration="1000">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <!-- Добавьте фейковые компоненты для визуального отображения шиммера -->
+                <View
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:background="#E0E0E0"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="15dp"
+                        android:background="#E0E0E0"
+                        android:layout_marginBottom="8dp"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="15dp"
+                        android:background="#E0E0E0"
+                        android:layout_marginBottom="8dp"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+            
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <!-- информация о продавце -->
+
+        <LinearLayout
+            android:id="@+id/llSellerInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!--pfp-->
+
+            <FrameLayout
+                android:id="@+id/flPFPhoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/ivSellerPFP"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:src="@drawable/ic_user_pfp"
+                    app:shapeAppearanceOverlay="@style/SmallCircleCorners"/>
+
+            </FrameLayout>
+
+            <!--pfname-->
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvSellerName"
+                    style="@style/SemiBoldText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:text="Егорова Елена "
+                    android:textAlignment="center"
+                    app:drawableEndCompat="@drawable/ic_verified_28" />
+
+                <!--date descs-->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvRating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/BoldText"
+                        android:text="4.8"
+                        android:textSize="11sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvStars"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        tools:listitem="@layout/star_item"
+                        app:layout_constraintStart_toEndOf="@id/tvRating"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    <TextView
+                        android:id="@+id/tvReviews"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        style="@style/BoldText"
+                        android:text="| 71 отзыв"
+                        android:textSize="11sp"
+                        app:layout_constraintStart_toEndOf="@id/rvStars"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ViewSwitcher>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
