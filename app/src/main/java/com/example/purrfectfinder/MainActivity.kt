@@ -20,8 +20,10 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.example.purrfectfinder.Fragments.AdCardFragment
 import com.example.purrfectfinder.Fragments.AdvertisementsFragment
+import com.example.purrfectfinder.Fragments.ChatFragment
 import com.example.purrfectfinder.Fragments.FavouriteAdvertisementsFragment
 import com.example.purrfectfinder.Fragments.FavouriteAdvertisementsFragment.Companion.allFavs
 import com.example.purrfectfinder.Fragments.FilteredAdvertisementsFragment
@@ -221,8 +223,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         // кнопки из других фрагментов, привязанные к низу экрана
-        binding.btnBuyNow.setOnClickListener {
-            setFragment(R.id.fragmentLayout, /* TODO EBANI FRAGMENT KUPIT KASHAKA */null, AdCardFragment.args, false, true)
+        binding.btnChatSeller.setOnClickListener {
+            Log.e("chat args", AdCardFragment.args.toString())
+            setFragment(R.id.fragmentLayout, ChatFragment.newInstance(), null, false, true)
         }
 
     }
@@ -235,8 +238,8 @@ class MainActivity : AppCompatActivity() {
             is FavouriteAdvertisementsFragment -> {
                 binding.btnFilters.visibility = VISIBLE
                 binding.btnSettings.visibility = GONE
-                changeBottomMenuVisibility(VISIBLE)
-                binding.llActionBtns.visibility = GONE
+                binding.headerFlipper.displayedChild = 0
+                binding.bottomFlipper.displayedChild = 0
                 changeMarginTop(
                     listOf(binding.profileLayout.id, binding.fragmentLayout.id),
                     listOf(0, 20)
@@ -249,8 +252,8 @@ class MainActivity : AppCompatActivity() {
             is AdvertisementsFragment -> {
                 binding.btnFilters.visibility = VISIBLE
                 binding.btnSettings.visibility = GONE
-                changeBottomMenuVisibility(VISIBLE)
-                binding.llActionBtns.visibility = GONE
+                binding.headerFlipper.displayedChild = 0
+                binding.bottomFlipper.displayedChild = 0
                 changeMarginTop(
                     listOf(binding.profileLayout.id, binding.fragmentLayout.id),
                     listOf(0, 0)
@@ -265,8 +268,8 @@ class MainActivity : AppCompatActivity() {
             is ProfileFragment -> {
                 binding.btnFilters.visibility = GONE
                 binding.btnSettings.visibility = VISIBLE
-                changeBottomMenuVisibility(VISIBLE)
-                binding.llActionBtns.visibility = GONE
+                binding.headerFlipper.displayedChild = 0
+                binding.bottomFlipper.displayedChild = 0
                 changeMarginTop(
                     listOf(binding.profileLayout.id, binding.fragmentLayout.id),
                     listOf(10, 25)
@@ -279,8 +282,8 @@ class MainActivity : AppCompatActivity() {
             is FiltersFragment -> {
                 binding.btnFilters.visibility = GONE
                 binding.btnSettings.visibility = GONE
-                changeBottomMenuVisibility(VISIBLE)
-                binding.llActionBtns.visibility = GONE
+                binding.headerFlipper.displayedChild = 0
+                binding.bottomFlipper.displayedChild = 0
                 changeMarginTop(
                     listOf(binding.profileLayout.id, binding.fragmentLayout.id),
                     listOf(0, 0)
@@ -293,8 +296,8 @@ class MainActivity : AppCompatActivity() {
             is SettingsFragment -> {
                 binding.btnFilters.visibility = GONE
                 binding.btnSettings.visibility = GONE
-                changeBottomMenuVisibility(VISIBLE)
-                binding.llActionBtns.visibility = GONE
+                binding.headerFlipper.displayedChild = 0
+                binding.bottomFlipper.displayedChild = 0
                 changeMarginTop(
                     listOf(binding.profileLayout.id, binding.fragmentLayout.id),
                     listOf(0, 20)
@@ -308,8 +311,8 @@ class MainActivity : AppCompatActivity() {
                 binding.btnPrev.visibility = VISIBLE
                 binding.btnFilters.visibility = GONE
                 binding.btnSettings.visibility = GONE
-                changeBottomMenuVisibility(VISIBLE)
-                binding.llActionBtns.visibility = GONE
+                binding.headerFlipper.displayedChild = 0
+                binding.bottomFlipper.displayedChild = 0
                 changeMarginTop(
                     listOf(binding.profileLayout.id, binding.fragmentLayout.id),
                     listOf(0, 80)
@@ -323,18 +326,43 @@ class MainActivity : AppCompatActivity() {
                 binding.btnPrev.visibility = VISIBLE
                 binding.btnFilters.visibility = GONE
                 binding.btnSettings.visibility = GONE
-                changeBottomMenuVisibility(GONE)
-                binding.llActionBtns.visibility = VISIBLE
+                binding.headerFlipper.displayedChild = 0
+                binding.bottomFlipper.displayedChild = 1
                 changeMarginTop(
                     listOf(binding.profileLayout.id, binding.fragmentLayout.id),
                     listOf(0, 40)
                 )
             }
+            // чат
+            is ChatFragment -> {
+                binding.btnPrev.visibility = VISIBLE
+                binding.btnFilters.visibility = GONE
+                binding.btnSettings.visibility = GONE
+                binding.headerFlipper.displayedChild = 1
+                binding.bottomFlipper.displayedChild = 2
+                changeMarginTop(
+                    listOf(binding.profileLayout.id, binding.fragmentLayout.id),
+                    listOf(0, 60)
+                )
+
+                val pfp = AdCardFragment.seller.find { it.first == "pfp" }!!.second
+
+                // информация о продавце
+                if (pfp != null)
+                    Glide.with(binding.ivSellerPFP.context)
+                        .load(pfp) // Загрузка изображения по ссылке
+                        .into(binding.ivSellerPFP) // Установка изображения в ImageView
+                else
+                    binding.ivSellerPFP.setImageResource(R.drawable.ic_user_pfp)
+
+                binding.tvSellerName.text = AdCardFragment.seller.find { it.first == "name" }!!.second
+            }
 
             else -> {
                 binding.btnFilters.visibility = GONE
                 binding.btnSettings.visibility = GONE
-                changeBottomMenuVisibility(VISIBLE)
+                binding.headerFlipper.displayedChild = 0
+                binding.bottomFlipper.displayedChild = 0
                 binding.llActionBtns.visibility = GONE
                 changeMarginTop(
                     listOf(binding.profileLayout.id, binding.fragmentLayout.id),
@@ -342,12 +370,6 @@ class MainActivity : AppCompatActivity() {
                 )
             }
         }
-    }
-
-    private fun changeBottomMenuVisibility(visibility: Int) {
-        binding.navigationView.visibility = visibility
-        binding.ivAdvertisements.visibility = visibility
-        binding.flBottomShadow.visibility = visibility
     }
 
     private fun changeMarginTop(viewIds: List<Int>, values: List<Int>) {

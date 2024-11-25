@@ -59,7 +59,7 @@
         app:boxStrokeErrorColor="@color/errorColor"
         app:errorEnabled="true"
         app:helperTextTextColor="@color/errorColor"
-        app:placeholderTextAppearance="@font/comfortaa"
+        app:placeholderTextAppearance="@style/PlaceholderTextStyle"
         app:placeholderTextColor="@color/textInputColor">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -99,7 +99,7 @@
         app:boxStrokeErrorColor="@color/errorColor"
         app:errorEnabled="true"
         app:helperTextTextColor="@color/errorColor"
-        app:placeholderTextAppearance="@font/comfortaa"
+        app:placeholderTextAppearance="@style/PlaceholderTextStyle"
         app:placeholderTextColor="@color/textInputColor"
 
         app:endIconMode="password_toggle"

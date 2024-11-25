@@ -37,10 +37,10 @@ class AdCardFragment : Fragment(), TitleProvider {
     ): View {
 
         val bundle = arguments
-        Log.e("args received", arguments.toString())
         args = bundle!!.getStringArrayList("args")!!.toList()
-
-        _binding =  FragmentAdCardBinding.inflate(inflater, container, false)
+        // 1. sellerId; 2. adImage; 3. adName; 4. adPrice
+        Log.e("args received", args.toString())
+        _binding = FragmentAdCardBinding.inflate(inflater, container, false)
         // Inflate the layout for this fragment
         return binding.root
     }
@@ -63,8 +63,12 @@ class AdCardFragment : Fragment(), TitleProvider {
         binding.sellerInfoSwitcher.displayedChild = 0 // отображение шиммера
 
         lifecycleScope.launch {
+            seller = mutableListOf()
+
             val adSeller = db.getAllData<Seller>("Sellers").find { it.id == args[0].toInt() }
+            Log.e("seller", adSeller.toString())
             val adSellerInfo = db.getAllData<User>("Users").find { it.id == adSeller!!.id }
+            Log.e("seller info", adSellerInfo.toString())
 
             // фото
             if (adSellerInfo!!.pfp != null) {
@@ -74,7 +78,10 @@ class AdCardFragment : Fragment(), TitleProvider {
             }
 
             // имя фамилия
-            binding.tvSellerName.text = "${adSellerInfo.secondName} ${adSellerInfo.firstName} "
+            seller.add("name" to "${adSellerInfo.secondName} ${adSellerInfo.firstName}")
+            seller.add("pfp" to adSellerInfo.pfp)
+
+            binding.tvSellerName.text = seller.find { it.first == "name"}!!.second + " "
 
             var sumStarRate = adSeller!!.starrate
 
@@ -118,5 +125,6 @@ class AdCardFragment : Fragment(), TitleProvider {
     companion object {
         fun newInstance() = AdCardFragment()
         var args: List<String> = emptyList()
+        var seller: MutableList<Pair<String, String?>> = mutableListOf()
     }
 }

@@ -52,17 +52,81 @@
             android:fontFamily="@font/comfortaa"
             android:textColor="@color/textColor" />
 
-        <TextView
-            android:id="@+id/tvWinTitle"
-            style="@style/SemiBoldText"
+        <ViewFlipper
+            android:id="@+id/headerFlipper"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="26dp"
-            android:text="@string/advertisements"
-            android:textAlignment="center"
-            android:textSize="23sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="wrap_content">
+
+            <!-- заголовок -->
+
+            <TextView
+                android:id="@+id/tvWinTitle"
+                style="@style/SemiBoldText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="26dp"
+                android:text="@string/advertisements"
+                android:textAlignment="center"
+                android:textSize="23sp"/>
+
+            <!-- информация о продавце (чат) -->
+
+            <LinearLayout
+                android:id="@+id/llSellerInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginStart="69dp"
+                android:orientation="horizontal">
+
+                <!--pfp-->
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/ivSellerPFP"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="#CCC"
+                        android:src="@drawable/ic_user_pfp"
+                        app:shapeAppearanceOverlay="@style/TinyCircleCorners"/>
+                </FrameLayout>
+
+                <!--pfname-->
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="20dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvSellerName"
+                        style="@style/SemiBoldText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Фамилия Имя"
+                        android:textSize="14sp"
+                        android:textAlignment="center"/>
+
+                    <TextView
+                        android:id="@+id/tvSellerStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/RegularText"
+                        android:text="в сети"
+                        android:textSize="12sp"
+                        android:textColor="#838383"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ViewFlipper>
+
+
     </FrameLayout>
 
     <!--profileLayout-->
@@ -97,85 +161,134 @@
         android:layout_marginVertical="80dp"/>
 
 
-    <!--тень для боттом меню бара-->
-
-    <FrameLayout
-        android:id="@+id/flBottomShadow"
+    <ViewFlipper
+        android:id="@+id/bottomFlipper"
         android:layout_width="match_parent"
-        android:layout_height="105dp"
-        android:background="@drawable/shape_dropshadow"
-        app:layout_constraintBottom_toBottomOf="@+id/navigationView"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-    </FrameLayout>
+        <!--боттом меню бар-->
 
-    <!--боттом меню бар-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/ivAdvertisements"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginBottom="15dp"
-        android:elevation="4dp"
-        android:src="@drawable/ic_petshop"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+            <!--тень для боттом меню бара-->
+            <FrameLayout
+                android:id="@+id/flBottomShadow"
+                android:layout_width="match_parent"
+                android:layout_height="105dp"
+                android:background="@drawable/shape_dropshadow"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/navigationView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="?android:attr/windowBackground"
-        app:itemBackground="?android:attr/windowBackground"
-        app:itemIconTint="#000"
-        app:labelVisibilityMode="unlabeled"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:menu="@menu/bottom_nav_menu" />
+            <ImageView
+                android:id="@+id/ivAdvertisements"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginBottom="15dp"
+                android:elevation="4dp"
+                android:src="@drawable/ic_petshop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/navigationView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/windowBackground"
+                app:itemBackground="?android:attr/windowBackground"
+                app:itemIconTint="#000"
+                app:labelVisibilityMode="unlabeled"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:menu="@menu/bottom_nav_menu" />
 
-    <!--кнопки внизу для объявления-->
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
-        android:id="@+id/llActionBtns"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:paddingVertical="10dp"
-        android:layout_marginBottom="20dp"
-        android:orientation="horizontal"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        <!--кнопки внизу для объявления-->
 
-        <android.widget.Button
-            android:id="@+id/btnBuyNow"
-            style="@style/ButtonLightText"
-            android:textSize="14sp"
-            android:layout_width="181dp"
+        <LinearLayout
+            android:id="@+id/llActionBtns"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/shape_button_body"
-            android:backgroundTint="#289E5D"
-            android:text="Купить сейчас"/>
+            android:gravity="center"
+            android:paddingVertical="10dp"
+            android:layout_marginBottom="20dp"
+            android:orientation="horizontal"
+            android:clipChildren="false"
+            android:clipToPadding="false">
 
-        <android.widget.Button
-            android:id="@+id/btnChatSeller"
-            style="@style/ButtonDarkText"
-            android:textSize="14sp"
-            android:layout_width="181dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="7dp"
-            android:background="@drawable/shape_button_body"
-            android:backgroundTint="#DCDCDC"
-            android:text="Написать продавцу" />
+            <android.widget.Button
+                android:id="@+id/btnBuyNow"
+                style="@style/ButtonLightText"
+                android:textSize="14sp"
+                android:layout_width="181dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_button_body"
+                android:backgroundTint="#289E5D"
+                android:text="Позвонить продавцу"/>
 
-    </LinearLayout>
+            <android.widget.Button
+                android:id="@+id/btnChatSeller"
+                style="@style/ButtonDarkText"
+                android:textSize="14sp"
+                android:layout_width="181dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="7dp"
+                android:background="@drawable/shape_button_body"
+                android:backgroundTint="#DCDCDC"
+                android:text="Написать продавцу" />
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- Тень -->
+            <View
+                android:id="@+id/bottomShadow"
+                android:layout_width="match_parent"
+                android:layout_height="15dp"
+                android:background="@drawable/shape_light_dropshadow"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/l_message"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/l_message"
+                style="@style/ChatInputBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="8dp"
+                app:placeholderText="Введите сообщение"
+                app:boxStrokeErrorColor="@color/errorColor"
+                app:errorEnabled="true"
+                app:helperTextTextColor="@color/errorColor"
+                app:placeholderTextAppearance="@style/PlaceholderTextStyle"
+                app:placeholderTextColor="@color/textInputColor"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_message"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/comfortaa"
+                    android:inputType="text"
+                    android:textColor="#525252"
+                    android:textSize="14sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ViewFlipper>
 
 
 

@@ -62,7 +62,7 @@ class FilteredAdvertisementsFragment : Fragment(), FavouriteActionListener, Titl
         val db = DbHelper()
 
         dataModel.filteredAds.observe(activity as LifecycleOwner) {
-//            showLoadingScreen(true)
+            showLoadingScreen(true)
 
             lifecycleScope.launch {
                 try {

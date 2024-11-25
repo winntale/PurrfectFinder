@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Fragments.ChatFragment">
+
+    <LinearLayout
+        android:id="@+id/llCatInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="27dp"
+        android:orientation="horizontal">
+
+        <!--pfp-->
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivAdPicture"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:background="#CCC"
+            app:shapeAppearanceOverlay="@style/RoundedCorners"/>
+        </FrameLayout>
+
+        <!--pfname-->
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvAdName"
+                style="@style/SemiBoldText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Кот"
+                android:textAlignment="center"/>
+
+            <TextView
+                android:id="@+id/tvAdPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/RegularText"
+                android:text="4000р"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_marginHorizontal="41dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="15dp"
+        android:backgroundTint="#C1C1C1"
+        android:background="@drawable/shape_add_post_body"
+        app:layout_constraintTop_toBottomOf="@id/llCatInfo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ImageView
+        android:id="@+id/background"
+        android:background="@drawable/bg_chat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/divider"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
