@@ -202,8 +202,8 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.profile -> {
                     showLoadingScreen(false)
-                    setFragment(R.id.profileLayout, ProfileDescriptionFragment.newInstance(), null)
-                    setFragment(R.id.fragmentLayout, ProfileFragment.newInstance(), null)
+                    setFragment(R.id.profileLayout, ProfileDescriptionFragment.newInstance(), args = listOf(currentUserId.toString()))
+                    setFragment(R.id.fragmentLayout, ProfileFragment.newInstance(), args = listOf(currentUserId.toString()))
                 }
             }
             true
@@ -302,7 +302,7 @@ class MainActivity : AppCompatActivity() {
                 binding.bottomFlipper.displayedChild = 0
                 changeMarginTop(
                     listOf(binding.profileLayout.id, binding.fragmentLayout.id),
-                    listOf(10, 25)
+                    listOf(10, -20)
                 )
 
                 binding.tvWinTitle.textSize = 23f

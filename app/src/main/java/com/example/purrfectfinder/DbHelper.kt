@@ -2,6 +2,7 @@ package com.example.purrfectfinder
 
 import android.util.Log
 import com.example.purrfectfinder.SerializableDataClasses.Advertisement
+import com.example.purrfectfinder.SerializableDataClasses.Post
 import com.example.purrfectfinder.SerializableDataClasses.User
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.Auth
@@ -60,10 +61,25 @@ class DbHelper () {
             val client = getClient()
 
             client
-                .postgrest["Advertisements"]  // Указываем таблицу, в которую будем вставлять
+                .postgrest["Advertisements"]
                 .insert(
                     createdAd
-                ) // добавление объект user в бд
+                )
+
+        } catch (e: Exception) {
+            println("Exception occurred: ${e.message}")
+        }
+    }
+
+    suspend fun insertPost(createdPost: Post) {
+        try {
+            val client = getClient()
+
+            client
+                .postgrest["Posts"]
+                .insert(
+                    createdPost
+                )
 
         } catch (e: Exception) {
             println("Exception occurred: ${e.message}")
@@ -124,7 +140,6 @@ class DbHelper () {
 
     suspend fun getAllFavAds(id: Int): List<Int> {
         val client = getClient()
-//        listEQs.add(eq())
         val data = client.postgrest["Favourites"]
             .select(columns = Columns.list("advertisementId"))
             {
@@ -135,6 +150,19 @@ class DbHelper () {
             .mapNotNull { it["advertisementId"] }
 
         Log.e("Favourites", data.toString())
+        return data
+    }
+
+    suspend fun getAllPosts(id: Int): List<Post> {
+        val client = getClient()
+        val data = client.postgrest["Posts"]
+            .select()
+            {
+                filter {
+                    eq("sellerId", id)
+                }
+            }.decodeList<Post>()
+
         return data
     }
 
@@ -163,13 +191,13 @@ class DbHelper () {
         return session != null
     }
 
-    suspend fun uploadFile(client: SupabaseClient, bucketName: String, fileName: String, byteArray: ByteArray): String {
+    suspend fun uploadFile(client: SupabaseClient, bucketName: String, folderName: String, fileName: String, byteArray: ByteArray): String {
 
         val bucket = client.storage[bucketName]
-        bucket.upload("public/$fileName.jpg", byteArray)
+        bucket.upload("$folderName/$fileName.jpg", byteArray)
 
         val projectUrl = "https://apddnnxfhleknlnmxwqz.supabase.co"
-        return "$projectUrl/storage/v1/object/public/$bucketName/public/$fileName.jpg"
+        return "$projectUrl/storage/v1/object/public/$bucketName/$folderName/$fileName.jpg"
     }
 
     suspend fun readFile(client: SupabaseClient, bucketName: String, fileName: String, onImageUrlRetrieved:(url: String) -> Unit,) {

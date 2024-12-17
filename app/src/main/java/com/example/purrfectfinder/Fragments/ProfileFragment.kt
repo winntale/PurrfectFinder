@@ -7,7 +7,7 @@ import android.view.View
 import android.view.View.MeasureSpec
 import android.view.ViewGroup
 import androidx.viewpager2.widget.ViewPager2
-import com.example.purrfectfinder.TabsPagerAdapter
+import com.example.purrfectfinder.Adapters.TabsPagerAdapter
 import com.example.purrfectfinder.interfaces.TitleProvider
 import com.example.purrfectfinder.databinding.FragmentProfileBinding
 import com.google.android.material.tabs.TabLayout
@@ -28,6 +28,9 @@ class ProfileFragment : Fragment(), TitleProvider {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        val bundle = arguments
+        args = bundle!!.getStringArrayList("args")!!.toList()
+
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         // Inflate the layout for this fragment
         return binding.root
@@ -40,7 +43,7 @@ class ProfileFragment : Fragment(), TitleProvider {
         binding.tabLayout.tabMode = TabLayout.MODE_FIXED
         binding.tabLayout.isInlineLabel = true
 
-        val adapter = TabsPagerAdapter(parentFragmentManager, lifecycle, numberOfTabs)
+        val adapter = TabsPagerAdapter(parentFragmentManager, lifecycle, numberOfTabs, args[0].toInt())
         binding.tabsViewpager.adapter = adapter
         binding.tabsViewpager.isUserInputEnabled = true
 
@@ -58,20 +61,6 @@ class ProfileFragment : Fragment(), TitleProvider {
         binding.tabsViewpager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-
-                val view = // get the view
-                    view.post {
-                        val wMeasureSpec = MeasureSpec.makeMeasureSpec(view.width, MeasureSpec.EXACTLY)
-                        val hMeasureSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
-                        view.measure(wMeasureSpec, hMeasureSpec)
-
-                        if (binding.tabsViewpager.layoutParams.height != view.measuredHeight) {
-                            // ParentViewGroup is, for example, LinearLayout
-                            // ... or whatever the parent of the ViewPager2 is
-                            binding.tabsViewpager.layoutParams = (binding.tabsViewpager.layoutParams as ViewGroup.LayoutParams)
-                                .also { lp -> lp.height = view.measuredHeight }
-                        }
-                    }
             }
         })
     }
@@ -82,5 +71,6 @@ class ProfileFragment : Fragment(), TitleProvider {
 
     companion object {
         fun newInstance() = ProfileFragment()
+        var args: List<String> = emptyList()
     }
 }

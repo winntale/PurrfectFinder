@@ -66,8 +66,8 @@
 
     <string name="your_role">Ваша роль</string>
     <string-array name="roles_array">
-        <item>Покупатель</item>
-        <item>Продавец</item>
+        <item id="1">Покупатель</item>
+        <item id="2">Продавец</item>
     </string-array>
 
     <string name="gender">Пол</string>

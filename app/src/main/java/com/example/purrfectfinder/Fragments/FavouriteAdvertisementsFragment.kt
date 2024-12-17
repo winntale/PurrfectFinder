@@ -75,9 +75,10 @@ class FavouriteAdvertisementsFragment : Fragment(), FavouriteActionListener, Tit
             try {
                 val client = db.getClient()
 
+                // все фавы текущего юзера
                 allFavs = db.getAllFavAds(MainActivity.currentUserId!!)
 
-                // Получаем все объявления, которые совпадают с advertisementId
+                // забираем фавы по айди из allFavs
                 data = client.postgrest["Advertisements"]
                     .select() {
                         filter {

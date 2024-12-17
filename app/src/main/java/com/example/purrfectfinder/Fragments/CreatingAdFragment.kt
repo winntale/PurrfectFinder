@@ -11,10 +11,14 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.purrfectfinder.Adapters.CatPhotosAdapter
 import com.example.purrfectfinder.DataModel
 import com.example.purrfectfinder.DbHelper
 import com.example.purrfectfinder.MainActivity
@@ -24,6 +28,8 @@ import com.example.purrfectfinder.databinding.FragmentCreatingAdBinding
 import com.example.purrfectfinder.databinding.FragmentFilteredAdvertisementsBinding
 import com.example.purrfectfinder.interfaces.TitleProvider
 import com.example.purrfectfinder.uriToByteArray
+import com.google.android.material.checkbox.MaterialCheckBox.OnCheckedStateChangedListener
+import com.google.android.material.checkbox.MaterialCheckBox.STATE_CHECKED
 import io.github.jan.supabase.postgrest.postgrest
 import kotlinx.coroutines.launch
 
@@ -37,6 +43,8 @@ class CreatingAdFragment : Fragment(), TitleProvider {
         get() = _binding
             ?: throw IllegalStateException("Binding for FragmentCreatingAdBinding must not be null")
 
+    private lateinit var catPhotosAdapter: CatPhotosAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -49,60 +57,85 @@ class CreatingAdFragment : Fragment(), TitleProvider {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        getContentLauncher = registerForActivityResult(
-            ActivityResultContracts.GetMultipleContents()
-        ) { uris: List<Uri> ->
-            if (uris.isNotEmpty()) {
-                // Сохранение списка изображений в вашей `DataModel` или обработка их
-                dataModel.imageUris.value = uris
-            }
+        catPhotosAdapter = CatPhotosAdapter(dataModel.imageUris.value ?: emptyList())
+
+        binding.rvPhotos.apply {
+            val layout = LinearLayoutManager(context)
+            layout.orientation = RecyclerView.HORIZONTAL
+            layoutManager = layout
+            adapter = catPhotosAdapter
         }
 
-        val db = DbHelper()
+        binding.cbGiveaway.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (binding.cbGiveaway.isChecked) {
+                binding.tvPrice.setTextColor(
+                    ContextCompat.getColor(
+                        activity as MainActivity,
+                        R.color.lightButtonColor
+                    )
+                )
+            }
+            else {
+                binding.tvPrice.setTextColor(
+                    ContextCompat.getColor(
+                        activity as MainActivity,
+                        R.color.textColor
+                    )
+                )
+            }
+            binding.lPrice.isEnabled = !isChecked
+        }
+
+        getContentLauncher = registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris: List<Uri> ->
+            if (uris.isNotEmpty()) {
+                val currentUris = dataModel.imageUris.value ?: emptyList() //Get current URIs, default to emptyList if null
+                val newUris = currentUris + uris //Concatenate the lists
+                dataModel.imageUris.value = newUris.distinct() // Remove any duplicates
+            }
+        }
 
         binding.btnAddPetPhoto.setOnClickListener {
             getContentLauncher.launch("image/*")
         }
 
+        dataModel.imageUris.observe(viewLifecycleOwner) {
+            if (it != null) {
+                catPhotosAdapter.updatePhotos(it)
+            }
+        }
+
         binding.btnAddAdvertisement.setOnClickListener {
-            dsfij()
+            val seller = MainActivity.currentUserId!!.toLong()
+            val adName = binding.etName.text.toString()
+            val price = binding.etPrice.text.toString().toDouble()
+            val breedName = binding.etBreed.text.toString().toLong()
+            val colorName = binding.etColor.text.toString().toLong()
+            val gender =
+                if (binding.radioTomcat.isChecked) "Кот"
+                else "Кошка"
+            val age = binding.etAgeYears.text.toString().toInt() * 12 + binding.etAgeMonths.text.toString().toInt()
+
+            lifecycleScope.launch {
+                val uploadedImageUrls = saveAdvertisementToDB()
+
+                val createdAd = Advertisement(
+                    id = null,
+                    sellerId = seller,
+                    name = adName,
+                    price = price,
+                    picture = uploadedImageUrls,
+                    verifiedBreed = false,
+                    breedId = breedName,
+                    colorId = colorName,
+                    gender = gender,
+                    age = age.toLong()
+                )
+
+                DbHelper().insertAdvertisement(createdAd)
+            }
         }
 
 
-    }
-
-    private fun dsfij() {
-        val isGiveaway = binding.cbGiveaway.isChecked
-        val seller = MainActivity.currentUserId!!.toLong()
-        val adName = binding.etName.text.toString()
-        val price = binding.etPrice.text.toString().toDouble()
-        val breedName = binding.etBreed.text.toString().toLong()
-        val colorName = binding.etColor.text.toString().toLong()
-        val gender =
-            if (binding.radioTomcat.isChecked) "Кот"
-            else "Кошка"
-        val age = binding.etAgeYears.text.toString().toInt() * 12 + binding.etAgeMonths.text.toString().toInt()
-
-        lifecycleScope.launch {
-            val uploadedImageUrls = saveAdvertisementToDB()
-
-            val createdAd = Advertisement(
-                id = null,
-                sellerId = seller,
-                name = adName,
-                price = price,
-                picture = uploadedImageUrls,
-                verifiedBreed = false,
-                breedId = breedName,
-                colorId = colorName,
-                gender = gender,
-                age = age.toLong()
-            )
-
-            Log.e("createdAd", createdAd.toString())
-
-            DbHelper().insertAdvertisement(createdAd)
-        }
     }
 
     suspend fun saveAdvertisementToDB(): List<String> {
@@ -126,11 +159,10 @@ class CreatingAdFragment : Fragment(), TitleProvider {
                     val fileName = "cat_${System.currentTimeMillis()}_$index"
                     val imageByteArray = uri.uriToByteArray(activity as MainActivity)!!
 
-                    val imageUrl = db.uploadFile(client,"petphotos", fileName, imageByteArray)
+                    val imageUrl = db.uploadFile(client,"petphotos", "public", fileName, imageByteArray)
                     uploadedImagesUrls.add(imageUrl)
                 } catch (e: Exception) {
                     Toast.makeText(activity as MainActivity, "Ошибка загрузки изображений", Toast.LENGTH_SHORT).show()
-                    Log.e("PIZDA VSEM", e.message.toString())
                 }
             }
 

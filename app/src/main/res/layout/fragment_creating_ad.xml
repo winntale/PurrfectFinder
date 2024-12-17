@@ -107,7 +107,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/comfortaa"
-            android:inputType="textPassword"
+            android:inputType="number"
             android:textColor="#525252"
             android:textSize="14sp" />
 
@@ -145,7 +145,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/comfortaa"
-            android:inputType="textPassword"
+            android:inputType="text"
             android:textColor="#525252"
             android:textSize="14sp" />
 
@@ -183,7 +183,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/comfortaa"
-            android:inputType="textPassword"
+            android:inputType="text"
             android:textColor="#525252"
             android:textSize="14sp" />
 
@@ -273,7 +273,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fontFamily="@font/comfortaa"
-                android:inputType="textPassword"
+                android:inputType="text"
                 android:textColor="#525252"
                 android:textSize="14sp" />
 
@@ -304,7 +304,7 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/comfortaa"
-                android:inputType="textPassword"
+                android:inputType="text"
                 android:textColor="#525252"
                 android:textSize="14sp" />
 
@@ -347,7 +347,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/comfortaa"
-            android:inputType="textPassword"
+            android:inputType="text"
             android:textColor="#525252"
             android:textSize="14sp" />
 
@@ -357,7 +357,7 @@
         android:id="@+id/llAddPhotos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:layout_marginStart="29dp"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
@@ -370,12 +370,23 @@
             android:layout_gravity="center"
             android:text="Добавить фото"/>
 
-        <android.widget.Button
+        <ImageButton
             android:id="@+id/btnAddPetPhoto"
             android:layout_width="30dp"
-            android:layout_height="40dp"
-            android:text="+"/>
+            android:layout_height="30dp"
+            android:backgroundTint="@android:color/transparent"
+            android:src="@drawable/ic_plus_v2"/>
     </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvPhotos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="5dp"
+        tools:listitem="@layout/catphoto_item"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/llAddPhotos"/>
 
     <android.widget.Button
         android:id="@+id/btnAddAdvertisement"
@@ -387,7 +398,7 @@
         android:text="Опубликовать объявление"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/llAddPhotos"/>
+        app:layout_constraintTop_toBottomOf="@+id/rvPhotos"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

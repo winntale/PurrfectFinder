@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/post"
+    android:layout_width="133dp"
+    android:layout_height="230dp">
+
+    <ImageView
+        android:id="@+id/ivPostPhoto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:background="@color/textColor"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="end|bottom">
+
+        <ImageView
+            android:id="@+id/ivViewIcon"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="2dp"
+            android:src="@drawable/ic_views"/>
+
+        <TextView
+            android:id="@+id/tvViewsQuantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/ButtonLightText"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:shadowRadius="20"
+            android:shadowDx="0"
+            android:shadowDy="2"
+            android:shadowColor="@color/black"
+            android:layout_marginEnd="6dp"/>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

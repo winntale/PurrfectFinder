@@ -29,4 +29,8 @@ open class DataModel : ViewModel() {
     val imageUris: MutableLiveData<List<Uri>> by lazy {
         MutableLiveData<List<Uri>>(null)
     }
+
+    val postPhotoUris: MutableLiveData<List<Uri>> by lazy {
+        MutableLiveData<List<Uri>>(null)
+    }
 }

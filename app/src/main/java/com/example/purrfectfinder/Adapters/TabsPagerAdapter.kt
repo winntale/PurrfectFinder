@@ -1,4 +1,4 @@
-package com.example.purrfectfinder
+package com.example.purrfectfinder.Adapters
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,7 +9,12 @@ import com.example.purrfectfinder.Fragments.ProfileAboutFragment
 import com.example.purrfectfinder.Fragments.ProfilePhotoFragment
 import java.lang.IllegalStateException
 
-class TabsPagerAdapter(fm: FragmentManager, lifecycle: Lifecycle, private var numberOfTabs: Int) : FragmentStateAdapter(fm, lifecycle) {
+class TabsPagerAdapter(
+    fm: FragmentManager,
+    lifecycle: Lifecycle,
+    private var numberOfTabs: Int,
+    private var userId: Int
+) : FragmentStateAdapter(fm, lifecycle) {
 
 
     private var _createdFragList : MutableList<Fragment>? = null
@@ -21,18 +26,18 @@ class TabsPagerAdapter(fm: FragmentManager, lifecycle: Lifecycle, private var nu
     override fun createFragment(position: Int): Fragment {
         when (position) {
             0 -> {
-                // # Photo Fragment
+                // Photo Fragment
                 val bundle = Bundle()
-                bundle.putString("fragmentName", "Photo Fragment")
+                bundle.putInt("userId", userId)
                 val photoFragment = ProfilePhotoFragment.newInstance()
                 photoFragment.arguments = bundle
                 _createdFragList?.add(photoFragment)
                 return photoFragment
             }
             1 -> {
-                // # About Fragment
+                // About Fragment
                 val bundle = Bundle()
-                bundle.putString("fragmentName", "About Fragment")
+                bundle.putInt("userId", userId)
                 val aboutFragment = ProfileAboutFragment.newInstance()
                 aboutFragment.arguments = bundle
                 _createdFragList?.add(aboutFragment)

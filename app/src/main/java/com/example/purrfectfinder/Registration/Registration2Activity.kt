@@ -74,8 +74,6 @@ class Registration2Activity : AppCompatActivity() {
         binding.btnNext.setOnClickListener {
             val emailReceived = bundleReceived?.getString("EMAIL") ?: ""
             val passwordReceived = bundleReceived?.getString("PASSWORD") ?: ""
-
-
             val secondName = binding.etSecondName.text.toString().trim()
             val firstName = binding.etFirstName.text.toString().trim()
             val middleName = binding.etMiddleName.text.toString().trim()
