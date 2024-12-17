@@ -15,6 +15,8 @@ import com.example.purrfectfinder.MainActivity
 import com.example.purrfectfinder.R
 import com.example.purrfectfinder.Registration.RegistrationActivity
 import com.example.purrfectfinder.databinding.ActivityLoginBinding
+import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.auth.providers.builtin.Email
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
@@ -41,20 +43,27 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.btnLogin.setOnClickListener {
-            val email = binding.etEmail.text.toString().trim()
-            val password = binding.etPassword.text.toString().trim()
+            val inputedEmail = binding.etEmail.text.toString().trim()
+            val inputedPassword = binding.etPassword.text.toString().trim()
 
-            if (isFieldsValid(email, password)) {
+            if (isFieldsValid(inputedEmail, inputedPassword)) {
                 val db = DbHelper()
 
                 lifecycleScope.launch {
-                    val user = db.getUser(email, password)
+                    val client = db.getClient()
 
-                    Log.e("userid", user?.id.toString())
-                    Log.e("user", user.toString())
-                    if (user != null) {
+                    client.auth.signInWith(Email) {
+                        email = inputedEmail
+                        password = inputedPassword
+                    }
+
+                    val session = client.auth.currentSessionOrNull()
+                    Log.e("session", session.toString())
+                    if (session != null) {
+                        val user = db.getUser(inputedEmail, inputedPassword)!!
                         userBundle.putInt(MainActivity.ID, user.id!!)
                         userBundle.putString(MainActivity.EMAIL, user.email)
+                        userBundle.putString(MainActivity.PASSWORD, user.password)
                         userBundle.putString(MainActivity.SECONDNAME, user.secondName)
                         userBundle.putString(MainActivity.FIRSTNAME, user.firstName)
                         userBundle.putString(MainActivity.CREATEDAT, user.createdAt)

@@ -1,13 +1,15 @@
 package com.example.purrfectfinder.SerializableDataClasses
 
 @kotlinx.serialization.Serializable
-data class Advertisement(val id: Int?,
-                         val sellerId: Int,
-                         val name: String = "",
-                         val price: Float? = null,
-                         val picture: String = "",
-                         val verifiedBreed: Boolean = false,
-                         val breedId: Int? = null,
-                         val colorId: Int? = null,
-                         val gender: String = "",
-                         val age: Int? = null)
+data class Advertisement(
+    val id: Int? = null,
+    val sellerId: Long,
+    val name: String = "",
+    val price: Double? = null,
+    val picture: List<String> = emptyList(),
+    val verifiedBreed: Boolean = false,
+    val breedId: Long? = null,
+    val colorId: Long? = null,
+    val gender: String = "",
+    val age: Long? = null
+)

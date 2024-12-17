@@ -59,8 +59,10 @@ class AdvertisementAdapter(
         viewHolder.nameTextView.text = advertisement.name
         viewHolder.priceTextView.text = formatPrice(advertisement.price.toString(), " ₽")
 
+        val firstImageUrl = advertisement.picture.first()
+
         Glide.with(viewHolder.itemView.context)
-            .load(advertisement.picture) // Загрузка изображения по ссылке
+            .load(firstImageUrl) // Загрузка изображения по ссылке
             .into(viewHolder.pictureImageView) // Установка изображения в ImageView
 
         viewHolder.isFavButton.setOnClickListener {
@@ -78,7 +80,7 @@ class AdvertisementAdapter(
         }
 
         viewHolder.adv.setOnClickListener {
-            onCardClicked(advertisement.sellerId.toString(), advertisement.picture, advertisement.name, viewHolder.priceTextView.text.toString())
+            onCardClicked(advertisement.sellerId.toString(), firstImageUrl, advertisement.name, viewHolder.priceTextView.text.toString())
         }
     }
 

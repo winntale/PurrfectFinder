@@ -1,6 +1,8 @@
 package com.example.purrfectfinder
 
+import android.content.Context
 import android.icu.text.CaseMap.Title
+import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract.Data
 import android.transition.Visibility
@@ -8,10 +10,20 @@ import android.util.Log
 import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
+import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
@@ -24,6 +36,7 @@ import com.bumptech.glide.Glide
 import com.example.purrfectfinder.Fragments.AdCardFragment
 import com.example.purrfectfinder.Fragments.AdvertisementsFragment
 import com.example.purrfectfinder.Fragments.ChatFragment
+import com.example.purrfectfinder.Fragments.CreatingAdFragment
 import com.example.purrfectfinder.Fragments.FavouriteAdvertisementsFragment
 import com.example.purrfectfinder.Fragments.FavouriteAdvertisementsFragment.Companion.allFavs
 import com.example.purrfectfinder.Fragments.FilteredAdvertisementsFragment
@@ -39,6 +52,7 @@ import com.example.purrfectfinder.SerializableDataClasses.DBStamp
 import com.example.purrfectfinder.databinding.ActivityMainBinding
 import com.example.purrfectfinder.databinding.AdItemBinding
 import com.example.purrfectfinder.interfaces.TitleProvider
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.github.jan.supabase.postgrest.postgrest
 import kotlinx.coroutines.launch
 import java.io.File
@@ -56,7 +70,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         onBackPressedDispatcher.addCallback(this) {
-            // Обрабатываем кнопку "Назад"
             handleBackPressed()
         }
 
@@ -77,13 +90,13 @@ class MainActivity : AppCompatActivity() {
         val bundleReceived = intent.getBundleExtra("BUNDLE")
         currentUserId = bundleReceived?.getInt(ID)
         currentUserEmail = bundleReceived?.getString(EMAIL)
+        currentUserPassword = bundleReceived?.getString(PASSWORD)
         currentUserSecondName = bundleReceived?.getString(SECONDNAME)
         currentUserFirstName = bundleReceived?.getString(FIRSTNAME)
         currentUserCreatedAt = bundleReceived?.getString(CREATEDAT)
         currentUserPFP = bundleReceived?.getString(PFP)
 
         val db = DbHelper()
-
 
         showLoadingScreen(true)
         lifecycleScope.launch {
@@ -137,13 +150,17 @@ class MainActivity : AppCompatActivity() {
             binding.btnSettings.visibility = GONE
             binding.btnFilters.visibility = GONE
 
-
             setFragment(R.id.profileLayout, null, null)
             setFragment(R.id.fragmentLayout, FiltersFragment.newInstance(), null, false, true)
 
             updateLoadingFragmentText("Загружаем доступные фильтры...");
 
             Log.e("CURRENT BACKSTACK FILTERS", supportFragmentManager.backStackEntryCount.toString())
+        }
+
+        binding.btnCreateAd.setOnClickListener {
+            setFragment(R.id.profileLayout, null, null)
+            setFragment(R.id.fragmentLayout, CreatingAdFragment.newInstance(), null, false, true)
         }
 
         binding.navigationView.setOnItemSelectedListener { item ->
@@ -157,6 +174,7 @@ class MainActivity : AppCompatActivity() {
                     binding.tvWinTitle.text = "Главная"
                     binding.btnFilters.visibility = GONE
                     binding.btnSettings.visibility = GONE
+                    binding.btnCreateAd.visibility = GONE
 
                     setFragment(R.id.profileLayout, null, null)
                     setFragment(R.id.fragmentLayout, null, null)
@@ -177,6 +195,7 @@ class MainActivity : AppCompatActivity() {
                     binding.tvWinTitle.text = "Котоклипы"
                     binding.btnFilters.visibility = GONE
                     binding.btnSettings.visibility = GONE
+                    binding.btnCreateAd.visibility = GONE
 
                     setFragment(R.id.profileLayout, null, null)
                     setFragment(R.id.fragmentLayout, null, null)
@@ -188,10 +207,18 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             true
+
+
         }
 
         dataModel.filteredAds.observe(this) {
             setFragment(R.id.fragmentLayout, FilteredAdvertisementsFragment.newInstance(), null)
+        }
+
+        dataModel.isAdsLoaded.observe(this) {
+            if (it == true) {
+                binding.btnCreateAd.visibility = VISIBLE
+            }
         }
 
         supportFragmentManager.addOnBackStackChangedListener {
@@ -238,6 +265,7 @@ class MainActivity : AppCompatActivity() {
             is FavouriteAdvertisementsFragment -> {
                 binding.btnFilters.visibility = VISIBLE
                 binding.btnSettings.visibility = GONE
+                binding.btnCreateAd.visibility = GONE
                 binding.headerFlipper.displayedChild = 0
                 binding.bottomFlipper.displayedChild = 0
                 changeMarginTop(
@@ -250,6 +278,7 @@ class MainActivity : AppCompatActivity() {
             }
             // объявления
             is AdvertisementsFragment -> {
+                binding.btnPrev.visibility = GONE
                 binding.btnFilters.visibility = VISIBLE
                 binding.btnSettings.visibility = GONE
                 binding.headerFlipper.displayedChild = 0
@@ -268,6 +297,7 @@ class MainActivity : AppCompatActivity() {
             is ProfileFragment -> {
                 binding.btnFilters.visibility = GONE
                 binding.btnSettings.visibility = VISIBLE
+                binding.btnCreateAd.visibility = GONE
                 binding.headerFlipper.displayedChild = 0
                 binding.bottomFlipper.displayedChild = 0
                 changeMarginTop(
@@ -282,6 +312,7 @@ class MainActivity : AppCompatActivity() {
             is FiltersFragment -> {
                 binding.btnFilters.visibility = GONE
                 binding.btnSettings.visibility = GONE
+                binding.btnCreateAd.visibility = GONE
                 binding.headerFlipper.displayedChild = 0
                 binding.bottomFlipper.displayedChild = 0
                 changeMarginTop(
@@ -296,6 +327,7 @@ class MainActivity : AppCompatActivity() {
             is SettingsFragment -> {
                 binding.btnFilters.visibility = GONE
                 binding.btnSettings.visibility = GONE
+                binding.btnCreateAd.visibility = GONE
                 binding.headerFlipper.displayedChild = 0
                 binding.bottomFlipper.displayedChild = 0
                 changeMarginTop(
@@ -311,6 +343,7 @@ class MainActivity : AppCompatActivity() {
                 binding.btnPrev.visibility = VISIBLE
                 binding.btnFilters.visibility = GONE
                 binding.btnSettings.visibility = GONE
+                binding.btnCreateAd.visibility = GONE
                 binding.headerFlipper.displayedChild = 0
                 binding.bottomFlipper.displayedChild = 0
                 changeMarginTop(
@@ -326,6 +359,7 @@ class MainActivity : AppCompatActivity() {
                 binding.btnPrev.visibility = VISIBLE
                 binding.btnFilters.visibility = GONE
                 binding.btnSettings.visibility = GONE
+                binding.btnCreateAd.visibility = GONE
                 binding.headerFlipper.displayedChild = 0
                 binding.bottomFlipper.displayedChild = 1
                 changeMarginTop(
@@ -338,6 +372,7 @@ class MainActivity : AppCompatActivity() {
                 binding.btnPrev.visibility = VISIBLE
                 binding.btnFilters.visibility = GONE
                 binding.btnSettings.visibility = GONE
+                binding.btnCreateAd.visibility = GONE
                 binding.headerFlipper.displayedChild = 1
                 binding.bottomFlipper.displayedChild = 2
                 changeMarginTop(
@@ -357,10 +392,24 @@ class MainActivity : AppCompatActivity() {
 
                 binding.tvSellerName.text = AdCardFragment.seller.find { it.first == "name" }!!.second
             }
+            // создание объявления
+            is CreatingAdFragment -> {
+                binding.btnPrev.visibility = VISIBLE
+                binding.btnFilters.visibility = GONE
+                binding.btnSettings.visibility = GONE
+                binding.btnCreateAd.visibility = GONE
+                binding.headerFlipper.displayedChild = 0
+                binding.bottomFlipper.displayedChild = 0
+                changeMarginTop(
+                    listOf(binding.profileLayout.id, binding.fragmentLayout.id),
+                    listOf(0, 40)
+                )
+            }
 
             else -> {
                 binding.btnFilters.visibility = GONE
                 binding.btnSettings.visibility = GONE
+                binding.btnCreateAd.visibility = GONE
                 binding.headerFlipper.displayedChild = 0
                 binding.bottomFlipper.displayedChild = 0
                 binding.llActionBtns.visibility = GONE
@@ -487,6 +536,7 @@ class MainActivity : AppCompatActivity() {
     companion object {
         const val ID = "id"
         const val EMAIL = "email"
+        const val PASSWORD = "password"
         const val SECONDNAME = "secondName"
         const val FIRSTNAME = "firstName"
         const val CREATEDAT = "createdAt"
@@ -494,6 +544,7 @@ class MainActivity : AppCompatActivity() {
 
         var currentUserId: Int? = null
         var currentUserEmail: String? = null
+        var currentUserPassword: String? = null
         var currentUserSecondName: String? = null
         var currentUserFirstName: String? = null
         var currentUserCreatedAt: String? = null

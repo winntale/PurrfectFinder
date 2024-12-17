@@ -1,7 +1,9 @@
 package com.example.purrfectfinder.SerializableDataClasses
 
+
 @kotlinx.serialization.Serializable
 data class User(val id: Int? = null,
+                val uuid: String = "",
                 val email: String = "",
                 val password: String = "",
                 val secondName: String = "",

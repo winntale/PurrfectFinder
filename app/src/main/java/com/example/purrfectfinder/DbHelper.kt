@@ -1,12 +1,19 @@
 package com.example.purrfectfinder
 
 import android.util.Log
+import com.example.purrfectfinder.SerializableDataClasses.Advertisement
 import com.example.purrfectfinder.SerializableDataClasses.User
 import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.auth.Auth
+import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.auth.providers.builtin.Email
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
+import io.github.jan.supabase.storage.Storage
+import io.github.jan.supabase.storage.storage
+import kotlin.time.Duration.Companion.minutes
 
 
 class DbHelper () {
@@ -16,16 +23,20 @@ class DbHelper () {
             supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFwZGRubnhmaGxla25sbm14d3F6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzAyMjY2MTQsImV4cCI6MjA0NTgwMjYxNH0.SfqbR3q5mLvL_1B-4uxoqAp_IpXTIV70-x_5Y5g68UU",
         ) {
             install(Postgrest)
+            install(Storage)
+            install(Auth)
         }
     }
 
     suspend fun insertUser(user: User) {
         try {
             val client = getClient()
+
             client
                 .postgrest["Users"]  // Указываем таблицу, в которую будем вставлять
                 .insert(
                     mapOf(
+                        "uuid" to user.uuid,
                         "email" to user.email,
                         "password" to user.password,
                         "secondName" to user.secondName,
@@ -37,7 +48,22 @@ class DbHelper () {
                         "createdAt" to user.createdAt,
                         "pfp" to user.pfp
                     )
-                ) // Вставляем объект user
+                ) // добавление объект user в бд
+
+        } catch (e: Exception) {
+            println("Exception occurred: ${e.message}")
+        }
+    }
+
+    suspend fun insertAdvertisement(createdAd: Advertisement) {
+        try {
+            val client = getClient()
+
+            client
+                .postgrest["Advertisements"]  // Указываем таблицу, в которую будем вставлять
+                .insert(
+                    createdAd
+                ) // добавление объект user в бд
 
         } catch (e: Exception) {
             println("Exception occurred: ${e.message}")
@@ -122,6 +148,34 @@ class DbHelper () {
 
         Log.e(filterName, data.toString())
         return data
+    }
+
+    suspend fun isUserAuthenticated(): Boolean {
+        val client = getClient()
+
+        client.auth.signInWith(Email) {
+            email = MainActivity.currentUserEmail!!
+            password = MainActivity.currentUserPassword!!
+        }
+
+        val session = client.auth.currentSessionOrNull()
+        Log.e("session", session.toString())
+        return session != null
+    }
+
+    suspend fun uploadFile(client: SupabaseClient, bucketName: String, fileName: String, byteArray: ByteArray): String {
+
+        val bucket = client.storage[bucketName]
+        bucket.upload("public/$fileName.jpg", byteArray)
+
+        val projectUrl = "https://apddnnxfhleknlnmxwqz.supabase.co"
+        return "$projectUrl/storage/v1/object/public/$bucketName/public/$fileName.jpg"
+    }
+
+    suspend fun readFile(client: SupabaseClient, bucketName: String, fileName: String, onImageUrlRetrieved:(url: String) -> Unit,) {
+        val bucket = client.storage[bucketName]
+        val url = bucket.createSignedUrl("public/$fileName.jpg", expiresIn = 20.minutes)
+        onImageUrlRetrieved(url)
     }
 
 }

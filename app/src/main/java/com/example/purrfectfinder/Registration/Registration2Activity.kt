@@ -15,6 +15,11 @@ import com.example.purrfectfinder.DbHelper
 import com.example.purrfectfinder.R
 import com.example.purrfectfinder.SerializableDataClasses.User
 import com.example.purrfectfinder.databinding.ActivityRegistration2Binding
+import io.github.jan.supabase.auth.admin.LinkType
+import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.auth.providers.AuthProvider
+import io.github.jan.supabase.auth.providers.builtin.Email
+import io.github.jan.supabase.auth.status.SessionSource
 import io.github.jan.supabase.postgrest.postgrest
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -86,27 +91,32 @@ class Registration2Activity : AppCompatActivity() {
 
 
             if (isFieldsValid(secondName, firstName, middleName, birthday)) {
-                val user = User(
-                    null,
-                    emailReceived,
-                    passwordReceived,
-                    secondName,
-                    firstName,
-                    middleName ?: "",
-                    birthday,
-                    role,
-                    gender,
-                    formattedDate,
-                    null
-                )
-
                 lifecycleScope.launch {
                     val db = DbHelper()
-                    db.insertUser(user)
                     val client = db.getClient()
-                    val supabaseResponse = client.postgrest["Users"].select()
-                    val data = supabaseResponse.decodeList<User>()
-                    Log.e("supabase", data.toString())
+                    val result = client.auth.signUpWith(Email) {
+                        email = emailReceived
+                        password = passwordReceived
+                    }
+
+                    val user = User(
+                        null,
+                        result!!.id,
+                        emailReceived,
+                        passwordReceived,
+                        secondName,
+                        firstName,
+                        middleName ?: "",
+                        birthday,
+                        role,
+                        gender,
+                        formattedDate,
+                        null
+                    )
+
+                    db.insertUser(user)
+
+                    Log.e("supabase", result.toString())
                     Log.e("userdata", user.toString())
                 }
 

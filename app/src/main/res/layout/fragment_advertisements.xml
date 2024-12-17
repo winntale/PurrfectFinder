@@ -31,6 +31,7 @@
             android:id="@+id/rvAds"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingBottom="116dp"
             tools:listitem="@layout/ad_item"
             android:visibility="gone"/>
 

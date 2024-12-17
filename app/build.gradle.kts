@@ -62,6 +62,9 @@ dependencies {
     implementation(libs.postgrest.kt)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.ktor.client.cio)
+    implementation("io.github.jan-tennert.supabase:storage-kt:3.0.3")
+    implementation("io.coil-kt.coil3:coil-compose:3.0.4")
+    implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.4")
 
     // media features
     implementation(libs.glide)

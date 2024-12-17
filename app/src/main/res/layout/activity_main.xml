@@ -290,6 +290,17 @@
 
     </ViewFlipper>
 
+    <android.widget.Button
+        android:id="@+id/btnCreateAd"
+        android:visibility="gone"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        style="@style/ButtonLightText"
+        android:background="@drawable/shape_button_body"
+        android:text="Создать объявление"
+        app:layout_constraintBottom_toTopOf="@id/bottomFlipper"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 
 

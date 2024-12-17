@@ -6,9 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.purrfectfinder.Adapters.AdvertisementAdapter
+import com.example.purrfectfinder.DataModel
 import com.example.purrfectfinder.DbHelper
 import com.example.purrfectfinder.GridSpacingItemDecoration
 import com.example.purrfectfinder.MainActivity
@@ -21,6 +23,7 @@ import kotlinx.coroutines.launch
 
 
 class AdvertisementsFragment : Fragment(), FavouriteActionListener, TitleProvider {
+    private val dataModel: DataModel by activityViewModels()
 
     private var _binding: FragmentAdvertisementsBinding? = null
     private val binding
@@ -69,6 +72,7 @@ class AdvertisementsFragment : Fragment(), FavouriteActionListener, TitleProvide
                 Log.e("Error", "Failed to load data: ${e.message}")
             } finally {
                 showLoadingScreen(false)
+                dataModel.isAdsLoaded.value = true
             }
         }
     }
