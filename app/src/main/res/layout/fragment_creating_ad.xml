@@ -7,9 +7,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.CreatingAdFragment">
 <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/clAllContent"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Fragments.CreatingAdFragment">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/llGiveaway"
@@ -124,70 +124,43 @@
         app:layout_constraintTop_toBottomOf="@id/l_price" />
 
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/l_breed"
-        style="@style/TextInputBox"
+    <Spinner
+        android:id="@+id/breedSpinner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="54dp"
         android:layout_marginStart="29dp"
         android:layout_marginEnd="31dp"
+        android:layout_marginTop="5dp"
+        android:foreground="@drawable/shape_spinner_stroke"
+        android:paddingHorizontal="10dp"
+
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvBreed"
-        app:placeholderText="Введите название породы"
-        app:boxStrokeErrorColor="@color/errorColor"
-        app:errorEnabled="true"
-        app:helperTextTextColor="@color/errorColor"
-        app:placeholderTextAppearance="@style/PlaceholderTextStyle"
-        app:placeholderTextColor="@color/textInputColor">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_breed"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/comfortaa"
-            android:inputType="text"
-            android:textColor="#525252"
-            android:textSize="14sp" />
-
-    </com.google.android.material.textfield.TextInputLayout>
+        app:layout_constraintTop_toBottomOf="@+id/tvBreed" />
 
     <TextView
         android:id="@+id/tvColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:layout_marginStart="29dp"
         android:text="Цвет"
         style="@style/RegularText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/l_breed" />
+        app:layout_constraintTop_toBottomOf="@id/breedSpinner" />
 
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/l_color"
-        style="@style/TextInputBox"
+    <Spinner
+        android:id="@+id/colorSpinner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="54dp"
         android:layout_marginStart="29dp"
         android:layout_marginEnd="31dp"
+        android:layout_marginTop="5dp"
+        android:foreground="@drawable/shape_spinner_stroke"
+        android:paddingHorizontal="10dp"
+
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvColor"
-        app:placeholderText="Введите цвет"
-        app:boxStrokeErrorColor="@color/errorColor"
-        app:errorEnabled="true"
-        app:helperTextTextColor="@color/errorColor"
-        app:placeholderTextAppearance="@style/PlaceholderTextStyle"
-        app:placeholderTextColor="@color/textInputColor">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_color"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/comfortaa"
-            android:inputType="text"
-            android:textColor="#525252"
-            android:textSize="14sp" />
-
-    </com.google.android.material.textfield.TextInputLayout>
+        app:layout_constraintTop_toBottomOf="@+id/tvColor" />
 
     <TextView
         android:id="@+id/tvGender"
@@ -198,7 +171,7 @@
         android:layout_marginStart="29dp"
         android:text="@string/gender"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/l_color" />
+        app:layout_constraintTop_toBottomOf="@id/colorSpinner" />
 
     <!--Пол-->
 

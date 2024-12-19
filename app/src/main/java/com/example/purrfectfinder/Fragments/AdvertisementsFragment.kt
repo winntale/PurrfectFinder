@@ -45,12 +45,10 @@ class AdvertisementsFragment : Fragment(), FavouriteActionListener, TitleProvide
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val db = DbHelper()
-
         showLoadingScreen(true)
 
         lifecycleScope.launch {
-            allFavs = db.getAllFavAds(MainActivity.currentUserId!!)
+            allFavs = DbHelper.getInstance().getAllFavAds(MainActivity.currentUserId!!)
 
             // Инициализируем RecyclerView и адаптер
             adAdapter = AdvertisementAdapter(emptyList(), allFavs, newInstance()) { adSellerId, adPic, adName, adPrice ->
@@ -65,7 +63,7 @@ class AdvertisementsFragment : Fragment(), FavouriteActionListener, TitleProvide
             }
 
             try {
-                data = db.getAllData<Advertisement>("Advertisements")
+                data = DbHelper.getInstance().getAllData<Advertisement>("Advertisements")
                 adAdapter.updateData(data, allFavs)
                 binding.tvAdsFound.text = "Найдено объявлений: " + adAdapter.itemCount.toString()
             } catch (e: Exception) {
@@ -80,8 +78,8 @@ class AdvertisementsFragment : Fragment(), FavouriteActionListener, TitleProvide
     override fun onAddToFavourites(advertisementId: Int, viewHolder: AdvertisementAdapter.ViewHolder, currentAdapter: AdvertisementAdapter) {
         lifecycleScope.launch {
             val userId = MainActivity.currentUserId!!  // Метод получения текущего userId
-            DbHelper().insertFavourite(userId, advertisementId)
-            allFavs = DbHelper().getAllFavAds(userId)
+            DbHelper.getInstance().insertFavourite(userId, advertisementId)
+            allFavs = DbHelper.getInstance().getAllFavAds(userId)
             currentAdapter.updateData(data, allFavs)
             viewHolder.isFavButton.setBackgroundResource(R.drawable.ic_fav_icon_active)
 
@@ -91,8 +89,8 @@ class AdvertisementsFragment : Fragment(), FavouriteActionListener, TitleProvide
     override fun onRemoveFromFavourites(advertisementId: Int, viewHolder: AdvertisementAdapter.ViewHolder, currentAdapter: AdvertisementAdapter) {
         lifecycleScope.launch {
             val userId = MainActivity.currentUserId!!  // Метод получения текущего userId
-            DbHelper().deleteFavourite(userId, advertisementId)
-            allFavs = DbHelper().getAllFavAds(userId)
+            DbHelper.getInstance().deleteFavourite(userId, advertisementId)
+            allFavs = DbHelper.getInstance().getAllFavAds(userId)
             currentAdapter.updateData(data, allFavs)
             viewHolder.isFavButton.setBackgroundResource(R.drawable.ic_fav_icon_inactive)
         }

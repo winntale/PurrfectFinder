@@ -69,14 +69,13 @@ class FavouriteAdvertisementsFragment : Fragment(), FavouriteActionListener, Tit
 
         showLoadingScreen(true)
 
-        val db = DbHelper()
 
         lifecycleScope.launch {
             try {
-                val client = db.getClient()
+                val client = DbHelper.getInstance().getClient()
 
                 // все фавы текущего юзера
-                allFavs = db.getAllFavAds(MainActivity.currentUserId!!)
+                allFavs = DbHelper.getInstance().getAllFavAds(MainActivity.currentUserId!!)
 
                 // забираем фавы по айди из allFavs
                 data = client.postgrest["Advertisements"]
@@ -101,8 +100,8 @@ class FavouriteAdvertisementsFragment : Fragment(), FavouriteActionListener, Tit
     override fun onAddToFavourites(advertisementId: Int, viewHolder: AdvertisementAdapter.ViewHolder, currentAdapter: AdvertisementAdapter) {
         lifecycleScope.launch {
             val userId = MainActivity.currentUserId!!  // Метод получения текущего userId
-            DbHelper().insertFavourite(userId, advertisementId)
-            allFavs = DbHelper().getAllFavAds(userId)
+            DbHelper.getInstance().insertFavourite(userId, advertisementId)
+            allFavs = DbHelper.getInstance().getAllFavAds(userId)
             currentAdapter.updateData(data, allFavs)
             viewHolder.isFavButton.setBackgroundResource(R.drawable.ic_fav_icon_active)
 
@@ -112,8 +111,8 @@ class FavouriteAdvertisementsFragment : Fragment(), FavouriteActionListener, Tit
     override fun onRemoveFromFavourites(advertisementId: Int, viewHolder: AdvertisementAdapter.ViewHolder, currentAdapter: AdvertisementAdapter) {
         lifecycleScope.launch {
             val userId = MainActivity.currentUserId!!  // Метод получения текущего userId
-            DbHelper().deleteFavourite(userId, advertisementId)
-            allFavs = DbHelper().getAllFavAds(userId)
+            DbHelper.getInstance().deleteFavourite(userId, advertisementId)
+            allFavs = DbHelper.getInstance().getAllFavAds(userId)
             currentAdapter.updateData(data, allFavs)
             viewHolder.isFavButton.setBackgroundResource(R.drawable.ic_fav_icon_inactive)
         }

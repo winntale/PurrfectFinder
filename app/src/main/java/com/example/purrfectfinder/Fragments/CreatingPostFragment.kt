@@ -96,7 +96,7 @@ class CreatingPostFragment : Fragment() {
                     views = 0
                 )
 
-                DbHelper().insertPost(createdPost)
+                DbHelper.getInstance().insertPost(createdPost)
             }
 
             with(activity as? MainActivity) {
@@ -117,21 +117,20 @@ class CreatingPostFragment : Fragment() {
 
         if (uris != emptyList<Uri>()) {
             // проверяем, что пользователь аутентифицирован
-            val db = DbHelper()
-            val isAuthenticated = db.isUserAuthenticated()
+            val isAuthenticated = DbHelper.getInstance().isUserAuthenticated()
             if (!isAuthenticated) {
                 Toast.makeText((activity as MainActivity), "Пользователь не аутентифицирован", Toast.LENGTH_SHORT).show()
                 return emptyList()
             }
 
             // продолжаем загрузку файла
-            val client = db.getClient()
+            val client = DbHelper.getInstance().getClient()
             for ((index, uri) in uris.withIndex()) {
                 try {
                     val fileName = "post_${System.currentTimeMillis()}_$index"
                     val imageByteArray = uri.uriToByteArray(activity as MainActivity)!!
 
-                    val imageUrl = db.uploadFile(client,"petphotos", "posts", fileName, imageByteArray)
+                    val imageUrl = DbHelper.getInstance().uploadFile(client,"petphotos", "posts", fileName, imageByteArray)
                     uploadedImagesUrls.add(imageUrl)
                 } catch (e: Exception) {
                     Toast.makeText(activity as MainActivity, "Ошибка загрузки изображений", Toast.LENGTH_SHORT).show()

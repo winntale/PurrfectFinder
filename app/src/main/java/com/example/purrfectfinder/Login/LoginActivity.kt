@@ -47,10 +47,8 @@ class LoginActivity : AppCompatActivity() {
             val inputedPassword = binding.etPassword.text.toString().trim()
 
             if (isFieldsValid(inputedEmail, inputedPassword)) {
-                val db = DbHelper()
-
                 lifecycleScope.launch {
-                    val client = db.getClient()
+                    val client = DbHelper.getInstance().getClient()
 
                     client.auth.signInWith(Email) {
                         email = inputedEmail
@@ -60,7 +58,7 @@ class LoginActivity : AppCompatActivity() {
                     val session = client.auth.currentSessionOrNull()
                     Log.e("session", session.toString())
                     if (session != null) {
-                        val user = db.getUser(inputedEmail, inputedPassword)!!
+                        val user = DbHelper.getInstance().getUser(inputedEmail, inputedPassword)!!
                         userBundle.putInt(MainActivity.ID, user.id!!)
                         userBundle.putString(MainActivity.EMAIL, user.email)
                         userBundle.putString(MainActivity.PASSWORD, user.password)

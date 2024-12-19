@@ -52,14 +52,6 @@ class ProfileDescriptionFragment : Fragment(), TitleProvider {
             }
         }
 
-
-//            parentFragmentManager
-//                .beginTransaction().apply {
-//                    replace(R.id.profileLayout, ProfileDescHorizontalFragment.newInstance())
-//                    replace(R.id.fragmentLayout, ProfileEditFragment.newInstance())
-//                    commit()
-//                }
-
     }
 
     override fun getTitle(): String {

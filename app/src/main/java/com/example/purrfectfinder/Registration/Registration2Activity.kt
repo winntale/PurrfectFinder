@@ -90,8 +90,7 @@ class Registration2Activity : AppCompatActivity() {
 
             if (isFieldsValid(secondName, firstName, middleName, birthday)) {
                 lifecycleScope.launch {
-                    val db = DbHelper()
-                    val client = db.getClient()
+                    val client = DbHelper.getInstance().getClient()
                     val result = client.auth.signUpWith(Email) {
                         email = emailReceived
                         password = passwordReceived
@@ -112,7 +111,7 @@ class Registration2Activity : AppCompatActivity() {
                         null
                     )
 
-                    db.insertUser(user)
+                    DbHelper.getInstance().insertUser(user)
 
                     Log.e("supabase", result.toString())
                     Log.e("userdata", user.toString())

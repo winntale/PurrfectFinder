@@ -55,8 +55,6 @@ class ProfilePhotoFragment : Fragment() {
         }
 
         lifecycleScope.launch {
-            val db = DbHelper()
-
             // пост пустышка под добавление
             val post = Post(
                 sellerId = -1,
@@ -66,7 +64,7 @@ class ProfilePhotoFragment : Fragment() {
                 views = -1
             )
 
-            val userPosts = db.getAllPosts(userId) + post
+            val userPosts = DbHelper.getInstance().getAllPosts(userId) + post
             Log.e("posts", userPosts.toString())
             postsAdapter.updatePhotos(userPosts)
 

@@ -17,9 +17,21 @@ import io.github.jan.supabase.storage.storage
 import kotlin.time.Duration.Companion.minutes
 
 
-class DbHelper () {
-    fun getClient(): SupabaseClient {
-        return createSupabaseClient(
+class DbHelper private constructor() {
+
+    companion object {
+        private var INSTANCE: DbHelper? = null
+
+        fun getInstance(): DbHelper {
+            if (INSTANCE == null) {
+                INSTANCE = DbHelper()
+            }
+            return INSTANCE!!
+        }
+    }
+
+    private var client: SupabaseClient =
+        createSupabaseClient(
             supabaseUrl = "https://apddnnxfhleknlnmxwqz.supabase.co",
             supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFwZGRubnhmaGxla25sbm14d3F6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzAyMjY2MTQsImV4cCI6MjA0NTgwMjYxNH0.SfqbR3q5mLvL_1B-4uxoqAp_IpXTIV70-x_5Y5g68UU",
         ) {
@@ -27,6 +39,9 @@ class DbHelper () {
             install(Storage)
             install(Auth)
         }
+
+    fun getClient(): SupabaseClient {
+        return client
     }
 
     suspend fun insertUser(user: User) {
@@ -126,6 +141,19 @@ class DbHelper () {
         return supabaseResponse.decodeList<T>()
     }
 
+    suspend inline fun <reified T : Any> getColumnFrom(
+        tableName: String,
+        columnName: String
+    ): List<T> {
+        val client = getClient()
+        val supabaseResponse =
+            client.postgrest[tableName].select(columns = Columns.list(columnName))
+                .decodeList<Map<String, T>>()
+                .mapNotNull { it[columnName] }
+        Log.e("supabase", supabaseResponse.toString())
+        return supabaseResponse
+    }
+
     suspend fun getUser(email: String, password: String): User? {
         val client = getClient()
         return client.postgrest["Users"]
@@ -191,7 +219,13 @@ class DbHelper () {
         return session != null
     }
 
-    suspend fun uploadFile(client: SupabaseClient, bucketName: String, folderName: String, fileName: String, byteArray: ByteArray): String {
+    suspend fun uploadFile(
+        client: SupabaseClient,
+        bucketName: String,
+        folderName: String,
+        fileName: String,
+        byteArray: ByteArray
+    ): String {
 
         val bucket = client.storage[bucketName]
         bucket.upload("$folderName/$fileName.jpg", byteArray)
@@ -200,7 +234,12 @@ class DbHelper () {
         return "$projectUrl/storage/v1/object/public/$bucketName/$folderName/$fileName.jpg"
     }
 
-    suspend fun readFile(client: SupabaseClient, bucketName: String, fileName: String, onImageUrlRetrieved:(url: String) -> Unit,) {
+    suspend fun readFile(
+        client: SupabaseClient,
+        bucketName: String,
+        fileName: String,
+        onImageUrlRetrieved: (url: String) -> Unit,
+    ) {
         val bucket = client.storage[bucketName]
         val url = bucket.createSignedUrl("public/$fileName.jpg", expiresIn = 20.minutes)
         onImageUrlRetrieved(url)

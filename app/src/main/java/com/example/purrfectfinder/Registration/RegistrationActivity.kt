@@ -47,8 +47,7 @@ class RegistrationActivity : AppCompatActivity() {
             val passwordConfirm = binding.etRepeatPassword.text.toString().trim()
 
             lifecycleScope.launch {
-                val db = DbHelper()
-                val user = db.getUser(email, password)
+                val user = DbHelper.getInstance().getUser(email, password)
 
                 if (isFieldsValid(email, password, passwordConfirm)) {
                     if (user != null) {

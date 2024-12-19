@@ -58,16 +58,14 @@ class AdCardFragment : Fragment(), TitleProvider {
             adapter = starsAdapter
         }
 
-        val db = DbHelper()
-
         binding.sellerInfoSwitcher.displayedChild = 0 // отображение шиммера
 
         lifecycleScope.launch {
             seller = mutableListOf()
 
-            val adSeller = db.getAllData<Seller>("Sellers").find { it.id == args[0].toInt() }
+            val adSeller = DbHelper.getInstance().getAllData<Seller>("Sellers").find { it.id == args[0].toInt() }
             Log.e("seller", adSeller.toString())
-            val adSellerInfo = db.getAllData<User>("Users").find { it.id == adSeller!!.id }
+            val adSellerInfo = DbHelper.getInstance().getAllData<User>("Users").find { it.id == adSeller!!.id }
             Log.e("seller info", adSellerInfo.toString())
 
             // фото

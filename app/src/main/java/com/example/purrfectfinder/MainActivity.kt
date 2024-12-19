@@ -96,13 +96,12 @@ class MainActivity : AppCompatActivity() {
         currentUserCreatedAt = bundleReceived?.getString(CREATEDAT)
         currentUserPFP = bundleReceived?.getString(PFP)
 
-        val db = DbHelper()
 
         showLoadingScreen(true)
         lifecycleScope.launch {
-            dataModel.allAds.value = db.getAllData<Advertisement>("Advertisements")
-            dataModel.favAdsIds.value = db.getAllFavAds(currentUserId!!)
-            dataModel.favAds.value = db.getClient().postgrest["Advertisements"]
+            dataModel.allAds.value = DbHelper.getInstance().getAllData<Advertisement>("Advertisements")
+            dataModel.favAdsIds.value = DbHelper.getInstance().getAllFavAds(currentUserId!!)
+            dataModel.favAds.value = DbHelper.getInstance().getClient().postgrest["Advertisements"]
                 .select() {
                     filter {
                         isIn("id", dataModel.favAdsIds.value!!) // фильтруем по списку advertisementId
@@ -153,7 +152,7 @@ class MainActivity : AppCompatActivity() {
             setFragment(R.id.profileLayout, null, null)
             setFragment(R.id.fragmentLayout, FiltersFragment.newInstance(), null, false, true)
 
-            updateLoadingFragmentText("Загружаем доступные фильтры...");
+            updateLoadingFragmentText("Загружаем доступные фильтры...")
 
             Log.e("CURRENT BACKSTACK FILTERS", supportFragmentManager.backStackEntryCount.toString())
         }
@@ -161,6 +160,9 @@ class MainActivity : AppCompatActivity() {
         binding.btnCreateAd.setOnClickListener {
             setFragment(R.id.profileLayout, null, null)
             setFragment(R.id.fragmentLayout, CreatingAdFragment.newInstance(), null, false, true)
+
+            updateLoadingFragmentText("Подготавливаем данные...")
+
         }
 
         binding.navigationView.setOnItemSelectedListener { item ->

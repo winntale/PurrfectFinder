@@ -66,8 +66,20 @@
 
     <string name="your_role">Ваша роль</string>
     <string-array name="roles_array">
-        <item id="1">Покупатель</item>
-        <item id="2">Продавец</item>
+        <item >Покупатель</item>
+        <item >Продавец</item>
+    </string-array>
+
+    <string-array name="breeds_array">
+        <item >Без породы</item>
+        <item >Манчкин</item>
+        <item >Тойгер</item>
+    </string-array>
+
+    <string-array name="colors_array">
+        <item >Разноцветный</item>
+        <item >Серый</item>
+        <item >Персиковый</item>
     </string-array>
 
     <string name="gender">Пол</string>

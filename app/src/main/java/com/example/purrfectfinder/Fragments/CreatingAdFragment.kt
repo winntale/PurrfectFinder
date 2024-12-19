@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -56,6 +57,40 @@ class CreatingAdFragment : Fragment(), TitleProvider {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        (activity as MainActivity).updateLoadingFragmentText("Подготавливаем данные...")
+        // показываем экран загрузки
+        showLoadingScreen(true)
+
+        lifecycleScope.launch {
+
+            val allBreedNames = DbHelper.getInstance().getColumnFrom<String>("Breeds", "name")
+            val allColorNames = DbHelper.getInstance().getColumnFrom<String>("Colors", "name")
+
+            val breedAdapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_spinner_item,
+                allBreedNames
+            ).apply {
+                setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            }
+
+            val colorAdapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_spinner_item,
+                allColorNames
+            ).apply {
+                setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            }
+
+            binding.breedSpinner.adapter = breedAdapter
+            binding.colorSpinner.adapter = colorAdapter
+
+            showLoadingScreen(false)
+            Log.e("current db", DbHelper.getInstance().toString())
+            Log.e("current client", DbHelper.getInstance().getClient().toString())
+        }
+
 
         catPhotosAdapter = CatPhotosAdapter(dataModel.imageUris.value ?: emptyList())
 
@@ -108,8 +143,8 @@ class CreatingAdFragment : Fragment(), TitleProvider {
             val seller = MainActivity.currentUserId!!.toLong()
             val adName = binding.etName.text.toString()
             val price = binding.etPrice.text.toString().toDouble()
-            val breedName = binding.etBreed.text.toString().toLong()
-            val colorName = binding.etColor.text.toString().toLong()
+            val breedName = binding.breedSpinner.selectedItemPosition.toLong() + 1
+            val colorName = binding.colorSpinner.selectedItemPosition.toLong() + 1
             val gender =
                 if (binding.radioTomcat.isChecked) "Кот"
                 else "Кошка"
@@ -131,7 +166,7 @@ class CreatingAdFragment : Fragment(), TitleProvider {
                     age = age.toLong()
                 )
 
-                DbHelper().insertAdvertisement(createdAd)
+                DbHelper.getInstance().insertAdvertisement(createdAd)
             }
         }
 
@@ -145,21 +180,20 @@ class CreatingAdFragment : Fragment(), TitleProvider {
 
         if (uris != emptyList<Uri>()) {
             // проверяем, что пользователь аутентифицирован
-            val db = DbHelper()
-            val isAuthenticated = db.isUserAuthenticated()
+            val isAuthenticated = DbHelper.getInstance().isUserAuthenticated()
             if (!isAuthenticated) {
                 Toast.makeText((activity as MainActivity), "Пользователь не аутентифицирован", Toast.LENGTH_SHORT).show()
                 return emptyList()
             }
 
             // продолжаем загрузку файла
-            val client = db.getClient()
+            val client = DbHelper.getInstance().getClient()
             for ((index, uri) in uris.withIndex()) {
                 try {
                     val fileName = "cat_${System.currentTimeMillis()}_$index"
                     val imageByteArray = uri.uriToByteArray(activity as MainActivity)!!
 
-                    val imageUrl = db.uploadFile(client,"petphotos", "public", fileName, imageByteArray)
+                    val imageUrl = DbHelper.getInstance().uploadFile(client,"petphotos", "public", fileName, imageByteArray)
                     uploadedImagesUrls.add(imageUrl)
                 } catch (e: Exception) {
                     Toast.makeText(activity as MainActivity, "Ошибка загрузки изображений", Toast.LENGTH_SHORT).show()
@@ -169,6 +203,20 @@ class CreatingAdFragment : Fragment(), TitleProvider {
         }
 
         return uploadedImagesUrls
+    }
+
+    private fun onLoadingChange(visibility: Int) {
+        binding.clAllContent.visibility = visibility
+    }
+
+    private fun showLoadingScreen(isLoading: Boolean) {
+        (activity as MainActivity).showLoadingScreen(isLoading)
+
+        if (isLoading) {
+            onLoadingChange(View.GONE)
+        } else {
+            onLoadingChange(View.VISIBLE)
+        }
     }
 
     override fun getTitle(): String {

@@ -61,15 +61,14 @@ class FiltersFragment : Fragment(), TitleProvider {
         }
 
         showLoadingScreen(true)
-        val db = DbHelper()
 
         // показываем экран загрузки
 
         lifecycleScope.launch {
             try {
                 // получаем все названия фильтров для каждой категории
-                val breeds = db.getAllFilters("Breeds")
-                val colors = db.getAllFilters("Colors")
+                val breeds = DbHelper.getInstance().getAllFilters("Breeds")
+                val colors = DbHelper.getInstance().getAllFilters("Colors")
                 // обновляем адаптеры с полученными данными
                 breedsAdapter.updateData(breeds)
                 colorsAdapter.updateData(colors)
@@ -99,11 +98,11 @@ class FiltersFragment : Fragment(), TitleProvider {
 
                 val filterIds = listOf("breedId", "colorId")
 
-                val filteredData = getFilteredAds(db, allCheckBox, filterIds)
+                val filteredData = getFilteredAds(allCheckBox, filterIds)
 
                 Log.e("CURRENT FILTERS LIST MAP", filteredData.toString())
 
-                val client = db.getClient()
+                val client = DbHelper.getInstance().getClient()
 
                 val resultAds = client.postgrest["Advertisements"]
                     .select(columns = Columns.list("id")) {
@@ -123,7 +122,7 @@ class FiltersFragment : Fragment(), TitleProvider {
         }
     }
 
-    private suspend fun getFilteredAds(db: DbHelper, allCheckBox: List<List<CheckBox>>, filterIds: List<String>) : List<Int> {
+    private suspend fun getFilteredAds(allCheckBox: List<List<CheckBox>>, filterIds: List<String>) : List<Int> {
         val allCheckedIndexes: MutableList<MutableList<Int>> = mutableListOf()
 
         for (i in 1..allCheckBox.size) {
@@ -135,7 +134,7 @@ class FiltersFragment : Fragment(), TitleProvider {
             }
         }
 
-        val client = db.getClient()
+        val client = DbHelper.getInstance().getClient()
 
         val filteredData = client.postgrest["Advertisements"]
             .select(columns = Columns.list("id")) {
@@ -156,15 +155,17 @@ class FiltersFragment : Fragment(), TitleProvider {
     }
 
     private fun onLoadingChange(visibility: Int) {
-        with(binding) {
-            llVerifiedBreed.visibility = visibility
-            llBreed.visibility = visibility
-            rvBreeds.visibility = visibility
+//        with(binding) {
+//            llVerifiedBreed.visibility = visibility
+//            llBreed.visibility = visibility
+//            rvBreeds.visibility = visibility
+//
+//            llColors.visibility = visibility
+//            rvColors.visibility = visibility
+//            btnConfirmFilters.visibility = visibility
+//        }
 
-            llColors.visibility = visibility
-            rvColors.visibility = visibility
-            btnConfirmFilters.visibility = visibility
-        }
+        binding.clAllFiltersContent.visibility = visibility
     }
 
     override fun getTitle(): String {
