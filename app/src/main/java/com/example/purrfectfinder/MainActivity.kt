@@ -11,6 +11,7 @@ import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.FrameLayout
+import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
@@ -24,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
@@ -72,8 +74,6 @@ class MainActivity : AppCompatActivity() {
         onBackPressedDispatcher.addCallback(this) {
             handleBackPressed()
         }
-
-//        val dbStamp = DBStamp()
 
         setFragment(R.id.loadingLayout, LoadingFragment.newInstance(), null)
 
@@ -165,6 +165,14 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+        binding.btnCreateAdPlus.setOnClickListener {
+            setFragment(R.id.profileLayout, null, null)
+            setFragment(R.id.fragmentLayout, CreatingAdFragment.newInstance(), null, false, true)
+
+            updateLoadingFragmentText("Подготавливаем данные...")
+
+        }
+
         binding.navigationView.setOnItemSelectedListener { item ->
             while (supportFragmentManager.backStackEntryCount > 1) {
                 supportFragmentManager.popBackStackImmediate()
@@ -220,6 +228,11 @@ class MainActivity : AppCompatActivity() {
         dataModel.isAdsLoaded.observe(this) {
             if (it == true) {
                 binding.btnCreateAd.visibility = VISIBLE
+                binding.btnCreateAdPlus.visibility = VISIBLE
+            }
+            else {
+                binding.btnCreateAd.visibility = GONE
+                binding.btnCreateAdPlus.visibility = GONE
             }
         }
 
@@ -268,6 +281,7 @@ class MainActivity : AppCompatActivity() {
                 binding.btnFilters.visibility = VISIBLE
                 binding.btnSettings.visibility = GONE
                 binding.btnCreateAd.visibility = GONE
+                binding.btnCreateAdPlus.visibility = GONE
                 binding.headerFlipper.displayedChild = 0
                 binding.bottomFlipper.displayedChild = 0
                 changeMarginTop(
@@ -300,11 +314,12 @@ class MainActivity : AppCompatActivity() {
                 binding.btnFilters.visibility = GONE
                 binding.btnSettings.visibility = VISIBLE
                 binding.btnCreateAd.visibility = GONE
+                binding.btnCreateAdPlus.visibility = GONE
                 binding.headerFlipper.displayedChild = 0
                 binding.bottomFlipper.displayedChild = 0
                 changeMarginTop(
                     listOf(binding.profileLayout.id, binding.fragmentLayout.id),
-                    listOf(10, -20)
+                    listOf(0, 20)
                 )
 
                 binding.tvWinTitle.textSize = 23f
@@ -315,6 +330,7 @@ class MainActivity : AppCompatActivity() {
                 binding.btnFilters.visibility = GONE
                 binding.btnSettings.visibility = GONE
                 binding.btnCreateAd.visibility = GONE
+                binding.btnCreateAdPlus.visibility = GONE
                 binding.headerFlipper.displayedChild = 0
                 binding.bottomFlipper.displayedChild = 0
                 changeMarginTop(
@@ -330,6 +346,7 @@ class MainActivity : AppCompatActivity() {
                 binding.btnFilters.visibility = GONE
                 binding.btnSettings.visibility = GONE
                 binding.btnCreateAd.visibility = GONE
+                binding.btnCreateAdPlus.visibility = GONE
                 binding.headerFlipper.displayedChild = 0
                 binding.bottomFlipper.displayedChild = 0
                 changeMarginTop(
@@ -346,6 +363,7 @@ class MainActivity : AppCompatActivity() {
                 binding.btnFilters.visibility = GONE
                 binding.btnSettings.visibility = GONE
                 binding.btnCreateAd.visibility = GONE
+                binding.btnCreateAdPlus.visibility = GONE
                 binding.headerFlipper.displayedChild = 0
                 binding.bottomFlipper.displayedChild = 0
                 changeMarginTop(
@@ -362,6 +380,7 @@ class MainActivity : AppCompatActivity() {
                 binding.btnFilters.visibility = GONE
                 binding.btnSettings.visibility = GONE
                 binding.btnCreateAd.visibility = GONE
+                binding.btnCreateAdPlus.visibility = GONE
                 binding.headerFlipper.displayedChild = 0
                 binding.bottomFlipper.displayedChild = 1
                 changeMarginTop(
@@ -375,6 +394,7 @@ class MainActivity : AppCompatActivity() {
                 binding.btnFilters.visibility = GONE
                 binding.btnSettings.visibility = GONE
                 binding.btnCreateAd.visibility = GONE
+                binding.btnCreateAdPlus.visibility = GONE
                 binding.headerFlipper.displayedChild = 1
                 binding.bottomFlipper.displayedChild = 2
                 changeMarginTop(
@@ -400,6 +420,7 @@ class MainActivity : AppCompatActivity() {
                 binding.btnFilters.visibility = GONE
                 binding.btnSettings.visibility = GONE
                 binding.btnCreateAd.visibility = GONE
+                binding.btnCreateAdPlus.visibility = GONE
                 binding.headerFlipper.displayedChild = 0
                 binding.bottomFlipper.displayedChild = 0
                 changeMarginTop(
@@ -412,6 +433,7 @@ class MainActivity : AppCompatActivity() {
                 binding.btnFilters.visibility = GONE
                 binding.btnSettings.visibility = GONE
                 binding.btnCreateAd.visibility = GONE
+                binding.btnCreateAdPlus.visibility = GONE
                 binding.headerFlipper.displayedChild = 0
                 binding.bottomFlipper.displayedChild = 0
                 binding.llActionBtns.visibility = GONE
@@ -431,6 +453,18 @@ class MainActivity : AppCompatActivity() {
 
         constraintSet.applyTo(binding.main)
     }
+
+    fun showPlusButton(isScrolled: Boolean) {
+        if (isScrolled) {
+            binding.btnCreateAd.visibility = GONE
+            binding.btnCreateAdPlus.visibility = VISIBLE
+        }
+        else {
+            binding.btnCreateAd.visibility = VISIBLE
+            binding.btnCreateAdPlus.visibility = GONE
+        }
+    }
+
 
     fun setFragment(layout: Int, fragment: Fragment?, args: List<String>?, isAdding: Boolean = false, addToBackStack: Boolean = false) {
         supportFragmentManager

@@ -41,6 +41,8 @@ class ProfilePhotoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.photosSwitcher.displayedChild = 0
+
         postsAdapter = PostsAdapter {
             with(activity as? MainActivity) {
                 this?.setFragment(R.id.profileLayout, null, null)
@@ -51,7 +53,7 @@ class ProfilePhotoFragment : Fragment() {
         binding.rvPosts.apply {
             layoutManager = GridLayoutManager(context, 3)
             adapter = postsAdapter
-            addItemDecoration(GridSpacingItemDecoration(3, 75, false))
+            addItemDecoration(GridSpacingItemDecoration(3, 3, true))
         }
 
         lifecycleScope.launch {
@@ -68,6 +70,7 @@ class ProfilePhotoFragment : Fragment() {
             Log.e("posts", userPosts.toString())
             postsAdapter.updatePhotos(userPosts)
 
+            binding.photosSwitcher.displayedChild = 1
         }
     }
 

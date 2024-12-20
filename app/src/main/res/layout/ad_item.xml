@@ -20,6 +20,7 @@
                 android:id="@+id/ivAdPicture"
                 android:layout_width="163dp"
                 android:layout_height="163dp"
+                android:background="@color/textColor"
                 app:shapeAppearanceOverlay="@style/RoundedCorners"
                 />
             <android.widget.Button

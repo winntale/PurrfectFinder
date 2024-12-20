@@ -114,7 +114,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <!-- Добавьте фейковые компоненты для визуального отображения шиммера -->
                 <View
                     android:layout_width="65dp"
                     android:layout_height="65dp"

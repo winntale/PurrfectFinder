@@ -2,6 +2,7 @@ package com.example.purrfectfinder.Adapters
 
 import android.annotation.SuppressLint
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -30,6 +31,20 @@ class PostsAdapter(
         val context = parent.context
         val inflater = LayoutInflater.from(context)
         val contactView = inflater.inflate(R.layout.post_item, parent, false)
+
+        val screenWidth = context.resources.displayMetrics.widthPixels
+        var cardWidth = (screenWidth / 3f) - .33f
+        val delta = cardWidth - cardWidth.toInt()
+
+        cardWidth = cardWidth.toInt() - 3*delta
+        val aspectRatio = 230f / 133f // соотношение сторон
+
+        val cardHeight = (cardWidth * aspectRatio).toInt()
+
+        contactView.findViewById<CardView>(R.id.post).apply {
+            layoutParams.width = cardWidth.toInt()
+            layoutParams.height = cardHeight
+        }
 
         return ViewHolder(contactView)
     }

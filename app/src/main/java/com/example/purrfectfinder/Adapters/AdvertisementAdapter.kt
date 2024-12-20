@@ -37,6 +37,16 @@ class AdvertisementAdapter(
         val inflater = LayoutInflater.from(context)
         val contactView = inflater.inflate(R.layout.ad_item, parent, false)
 
+        val screenWidth = context.resources.displayMetrics.widthPixels
+        var cardWidth = (screenWidth / 2f) - (25 * 2)
+
+        val cardHeight = cardWidth
+
+        contactView.findViewById<ImageView>(R.id.ivAdPicture).apply {
+            layoutParams.width = cardWidth.toInt()
+            layoutParams.height = cardHeight.toInt()
+        }
+
         return ViewHolder(contactView)
     }
 

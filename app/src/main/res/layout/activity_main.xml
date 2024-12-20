@@ -147,7 +147,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="26dp"
-        android:paddingBottom="200dp"
+        android:paddingBottom="125dp"
         android:nestedScrollingEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -300,6 +300,17 @@
         android:text="Создать объявление"
         app:layout_constraintBottom_toTopOf="@id/bottomFlipper"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <android.widget.Button
+        android:id="@+id/btnCreateAdPlus"
+        android:visibility="gone"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="20dp"
+        style="@style/ButtonLightText"
+        android:background="@drawable/ic_plus_v2"
+        app:layout_constraintBottom_toTopOf="@id/bottomFlipper"
         app:layout_constraintEnd_toEndOf="parent"/>
 
 
