@@ -22,11 +22,12 @@ import com.example.purrfectfinder.MainActivity.Companion.currentUserId
 import com.example.purrfectfinder.R
 import com.example.purrfectfinder.SerializableDataClasses.Post
 import com.example.purrfectfinder.databinding.FragmentCreatingPostBinding
+import com.example.purrfectfinder.interfaces.TitleProvider
 import com.example.purrfectfinder.uriToByteArray
 import kotlinx.coroutines.launch
 
 
-class CreatingPostFragment : Fragment() {
+class CreatingPostFragment : Fragment(), TitleProvider {
     private val dataModel: DataModel by activityViewModels()
 
     private lateinit var getContentLauncher: ActivityResultLauncher<String>
@@ -140,6 +141,10 @@ class CreatingPostFragment : Fragment() {
         }
 
         return uploadedImagesUrls
+    }
+
+    override fun getTitle(): String {
+        return "Создание поста"
     }
 
     companion object {

@@ -1,23 +1,26 @@
 package com.example.purrfectfinder.Fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.MeasureSpec
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.example.purrfectfinder.Adapters.TabsPagerAdapter
+import com.example.purrfectfinder.DataModel
+import com.example.purrfectfinder.DbHelper
 import com.example.purrfectfinder.interfaces.TitleProvider
 import com.example.purrfectfinder.databinding.FragmentProfileBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.launch
 
 class ProfileFragment : Fragment(), TitleProvider {
-    private val fragList = listOf(
-        ProfilePhotoFragment.newInstance(),
-        ProfileAboutFragment.newInstance()
-    )
+    private val dataModel: DataModel by activityViewModels()
 
     private var _binding: FragmentProfileBinding? = null
     private val binding
@@ -29,6 +32,8 @@ class ProfileFragment : Fragment(), TitleProvider {
         savedInstanceState: Bundle?
     ): View {
         val bundle = arguments
+
+        // 0: userId
         args = bundle!!.getStringArrayList("args")!!.toList()
 
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
@@ -58,11 +63,16 @@ class ProfileFragment : Fragment(), TitleProvider {
             }
         }.attach()
 
-        binding.tabsViewpager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-            }
-        })
+        dataModel.isPostsLoaded.observe(viewLifecycleOwner) {
+            val context = requireContext()
+            val displayMetrics = context.resources.displayMetrics
+            val screenHeight = displayMetrics.heightPixels / displayMetrics.density
+
+            val paddingBottom = (screenHeight * 0.35 * displayMetrics.density).toInt()
+
+            binding.tabsViewpager.setPadding(0, 0, 0, paddingBottom)
+            binding.tabsViewpager.requestLayout()
+        }
     }
 
     override fun getTitle(): String {

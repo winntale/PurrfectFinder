@@ -26,6 +26,10 @@ open class DataModel : ViewModel() {
         MutableLiveData<Boolean>()
     }
 
+    val isPostsLoaded: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
+    }
+
     val imageUris: MutableLiveData<List<Uri>> by lazy {
         MutableLiveData<List<Uri>>(null)
     }

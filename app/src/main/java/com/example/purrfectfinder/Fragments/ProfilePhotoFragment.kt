@@ -6,9 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.purrfectfinder.Adapters.PostsAdapter
+import com.example.purrfectfinder.DataModel
 import com.example.purrfectfinder.DbHelper
 import com.example.purrfectfinder.GridSpacingItemDecoration
 import com.example.purrfectfinder.MainActivity
@@ -18,6 +20,7 @@ import com.example.purrfectfinder.databinding.FragmentProfilePhotoBinding
 import kotlinx.coroutines.launch
 
 class ProfilePhotoFragment : Fragment() {
+    private val dataModel: DataModel by activityViewModels()
 
     private var _binding: FragmentProfilePhotoBinding? = null
     private val binding
@@ -42,11 +45,17 @@ class ProfilePhotoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.photosSwitcher.displayedChild = 0
+        binding.shimmerFrameLayout.startShimmer()
+        binding.shimmerFrameLayout.visibility = View.VISIBLE
 
         postsAdapter = PostsAdapter {
             with(activity as? MainActivity) {
-                this?.setFragment(R.id.profileLayout, null, null)
-                this?.setFragment(R.id.fragmentLayout, CreatingPostFragment.newInstance(), null, false, true)
+                this?.setFragment(
+                    listOf(R.id.profileLayout, R.id.fragmentLayout),
+                    listOf(null, CreatingPostFragment.newInstance()),
+                    null,
+                    true
+                )
             }
         }
 
@@ -71,6 +80,12 @@ class ProfilePhotoFragment : Fragment() {
             postsAdapter.updatePhotos(userPosts)
 
             binding.photosSwitcher.displayedChild = 1
+            binding.shimmerFrameLayout.stopShimmer()
+            binding.shimmerFrameLayout.visibility = View.GONE
+
+            binding.rvPosts.requestLayout()
+
+            dataModel.isPostsLoaded.value = true
         }
     }
 

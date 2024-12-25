@@ -155,17 +155,15 @@ class FiltersFragment : Fragment(), TitleProvider {
     }
 
     private fun onLoadingChange(visibility: Int) {
-//        with(binding) {
-//            llVerifiedBreed.visibility = visibility
-//            llBreed.visibility = visibility
-//            rvBreeds.visibility = visibility
-//
-//            llColors.visibility = visibility
-//            rvColors.visibility = visibility
-//            btnConfirmFilters.visibility = visibility
-//        }
+        with(binding) {
+            llVerifiedBreed.visibility = visibility
+            llBreed.visibility = visibility
+            rvBreeds.visibility = visibility
 
-        binding.clAllFiltersContent.visibility = visibility
+            llColors.visibility = visibility
+            rvColors.visibility = visibility
+            btnConfirmFilters.visibility = visibility
+        }
     }
 
     override fun getTitle(): String {

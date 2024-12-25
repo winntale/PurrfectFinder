@@ -32,18 +32,20 @@ class PostsAdapter(
         val inflater = LayoutInflater.from(context)
         val contactView = inflater.inflate(R.layout.post_item, parent, false)
 
-        val screenWidth = context.resources.displayMetrics.widthPixels
+        val displayMetrics = context.resources.displayMetrics
+        val screenWidth = displayMetrics.widthPixels
         var cardWidth = (screenWidth / 3f) - .33f
         val delta = cardWidth - cardWidth.toInt()
 
-        cardWidth = cardWidth.toInt() - 3*delta
-        val aspectRatio = 230f / 133f // соотношение сторон
+        cardWidth = (cardWidth.toInt() - 3*delta) * displayMetrics.density
+        val aspectRatio = 212f / 133f // соотношение сторон (высота / ширина)
+        Log.e("cardHeightFloat", (cardWidth * aspectRatio).toString())
 
         val cardHeight = (cardWidth * aspectRatio).toInt()
 
         contactView.findViewById<CardView>(R.id.post).apply {
-            layoutParams.width = cardWidth.toInt()
-            layoutParams.height = cardHeight
+            layoutParams.width = (cardWidth / displayMetrics.density).toInt()
+            layoutParams.height = (cardHeight / displayMetrics.density).toInt()
         }
 
         return ViewHolder(contactView)

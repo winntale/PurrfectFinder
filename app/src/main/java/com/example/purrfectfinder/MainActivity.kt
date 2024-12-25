@@ -39,6 +39,7 @@ import com.example.purrfectfinder.Fragments.AdCardFragment
 import com.example.purrfectfinder.Fragments.AdvertisementsFragment
 import com.example.purrfectfinder.Fragments.ChatFragment
 import com.example.purrfectfinder.Fragments.CreatingAdFragment
+import com.example.purrfectfinder.Fragments.CreatingPostFragment
 import com.example.purrfectfinder.Fragments.FavouriteAdvertisementsFragment
 import com.example.purrfectfinder.Fragments.FavouriteAdvertisementsFragment.Companion.allFavs
 import com.example.purrfectfinder.Fragments.FilteredAdvertisementsFragment
@@ -311,6 +312,7 @@ class MainActivity : AppCompatActivity() {
 
             // профиль
             is ProfileFragment -> {
+                binding.btnPrev.visibility = GONE
                 binding.btnFilters.visibility = GONE
                 binding.btnSettings.visibility = VISIBLE
                 binding.btnCreateAd.visibility = GONE
@@ -429,6 +431,21 @@ class MainActivity : AppCompatActivity() {
                 )
             }
 
+            // создание объявления
+            is CreatingPostFragment -> {
+                binding.btnPrev.visibility = VISIBLE
+                binding.btnFilters.visibility = GONE
+                binding.btnSettings.visibility = GONE
+                binding.btnCreateAd.visibility = GONE
+                binding.btnCreateAdPlus.visibility = GONE
+                binding.headerFlipper.displayedChild = 0
+                binding.bottomFlipper.displayedChild = 0
+                changeMarginTop(
+                    listOf(binding.profileLayout.id, binding.fragmentLayout.id),
+                    listOf(0, 40)
+                )
+            }
+
             else -> {
                 binding.btnFilters.visibility = GONE
                 binding.btnSettings.visibility = GONE
@@ -506,6 +523,7 @@ class MainActivity : AppCompatActivity() {
             .beginTransaction().apply {
                 for (i in 1..layouts.size) {
                     if (fragments[i - 1] != null) {
+                        Log.e("зашел", "зашел")
                         if (args != emptyList<String>()) {
                             fragments[i - 1]!!.arguments = bundleOf("args" to args)
                         }
@@ -525,7 +543,7 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
                     } else {
-                        // Если передан null, удаляем все фрагменты из контейнера
+                        // если передан null, удаляем все фрагменты из контейнера
                         supportFragmentManager.findFragmentById(layouts[i - 1])?.let {
                             remove(it)
                         }
